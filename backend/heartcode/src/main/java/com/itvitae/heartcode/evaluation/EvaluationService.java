@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service;
 public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
     public Evaluation createEvaluation(Evaluation evaluation){
-        //if (evaluationRepository.findByEvaluatorAndEvaluateeAndLiked(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()).isPresent()) {
-        //    return null;
-        //}
-        //return evaluationRepository.save(new Evaluation(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()));
-        return null;
+        if (evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluateeAndLiked(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()).isPresent()) {
+            return null;
+        }
+        return evaluationRepository.save(new Evaluation(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()));
     }
 }

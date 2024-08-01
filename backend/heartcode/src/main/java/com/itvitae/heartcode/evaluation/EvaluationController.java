@@ -11,15 +11,16 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("http://localhost:5173")
 public class EvaluationController {
 
-    //private final EvaluationService evaluationService;
-    //private final MatchService matchService;
+    private final EvaluationService evaluationService;
+    private final MatchService matchService;
 
     @PostMapping("create-evaluation-and-check")
     public ResponseEntity<?> createEvaluationAndCheck (@RequestBody Evaluation newEvaluation) {
 
-        //if (evaluationService.createEvaluation(newEvaluation) != null) {
-            //matchService.createMatch(newEvaluation);
-        //};
+        if (evaluationService.createEvaluation(newEvaluation) != null) {
+            matchService.createMatch(newEvaluation);
+            return ResponseEntity.ok().build();
+        };
         return ResponseEntity.badRequest().build();
     }
 }

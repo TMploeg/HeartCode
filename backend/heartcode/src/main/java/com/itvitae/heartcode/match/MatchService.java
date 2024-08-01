@@ -13,7 +13,7 @@ public class MatchService {
     private final EvaluationRepository evaluationRepository;
 
     public Match createMatch (Evaluation evaluation) {
-        if(evaluationRepository.findByEvaluatorAndEvaluateeAndLiked(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()).isPresent()){
+        if(evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluateeAndLiked(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()).isPresent()){
              return matchRepository.save(new Match(evaluation.getEvaluator(), evaluation.getEvaluatee()));
         }
         return null;
