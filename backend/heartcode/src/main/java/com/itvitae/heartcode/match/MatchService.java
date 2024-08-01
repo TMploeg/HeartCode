@@ -12,9 +12,9 @@ public class MatchService {
     private  final MatchRepository matchRepository;
     private final EvaluationRepository evaluationRepository;
 
-    public Match createMatch (Evaluation evaluation) {
-        if(evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluateeAndLiked(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()).isPresent()){
-             return matchRepository.save(new Match(evaluation.getEvaluator(), evaluation.getEvaluatee()));
+    public Match createMatch (User evaluator, User evaluatee) {
+        if(evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(evaluator, evaluatee).isPresent()){
+             return matchRepository.save(new Match(evaluator, evaluatee));
         }
         return null;
     }

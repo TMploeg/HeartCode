@@ -4,14 +4,16 @@ import com.itvitae.heartcode.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
-    public Evaluation createEvaluation(Evaluation evaluation){
-        if (evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluateeAndLiked(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()).isPresent()) {
+    public Evaluation createEvaluation(User evaluator, User evaluatee, boolean isLiked){
+        if (evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(evaluator, evaluatee).isPresent()) {
             return null;
         }
-        return evaluationRepository.save(new Evaluation(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()));
+        return evaluationRepository.save(new Evaluation(evaluator, evaluatee, isLiked));
     }
 }
