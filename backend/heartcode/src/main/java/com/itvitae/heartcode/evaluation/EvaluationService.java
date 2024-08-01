@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class EvaluationService {
-    private Evaluation createEvaluation(User evaluator, User evaluatee, boolean liked){
-        Evaluation evaluation = new Evaluation(evaluator, evaluatee, liked);
-        return evaluation;
-    }
-
-    private String checkEvaluation(Evaluation evaluation){
-    return "";
+    private final EvaluationRepository evaluationRepository;
+    public Evaluation createEvaluation(Evaluation evaluation){
+        //if (evaluationRepository.findByEvaluatorAndEvaluateeAndLiked(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()).isPresent()) {
+        //    return null;
+        //}
+        //return evaluationRepository.save(new Evaluation(evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked()));
+        return null;
     }
 }
