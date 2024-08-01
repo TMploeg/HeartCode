@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class User {
+  public static final String TEST_USER_NAME =
+      "testuser"; // temporary, remove after implementing login
+
   @Id private String email;
 
   private String alias;
