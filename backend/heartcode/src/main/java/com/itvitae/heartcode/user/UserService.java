@@ -1,18 +1,18 @@
 package com.itvitae.heartcode.user;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
-    public Optional<User> findById(String address){
-        return userRepository.findById(address);
-    }
+  private final UserRepository userRepository;
+
+  public Optional<User> findById(String address) {
+    return userRepository.findById(address);
+  }
 
   public User save(User user) {
     if (user.getEmail() == null) {
@@ -22,7 +22,7 @@ public class UserService {
       throw new IllegalArgumentException("alias is null");
     }
 
-    if (!isValidEmail(user.getEmail()) || userWithEmailExists(user.getEmail())) {
+    if (isInvalidEmail(user.getEmail()) || userWithEmailExists(user.getEmail())) {
       throw new IllegalArgumentException("email is invalid");
     }
     if (user.getAlias().isBlank()) {
@@ -32,12 +32,12 @@ public class UserService {
     return userRepository.save(user);
   }
 
-  public boolean isValidEmail(String email) {
+  public boolean isInvalidEmail(String email) {
     if (email == null) {
       throw new IllegalArgumentException("email is null");
     }
 
-    return Pattern.compile("^(\\S+)@(\\S+)$").matcher(email).matches();
+    return !Pattern.compile("^(\\S+)@(\\S+)$").matcher(email).matches();
   }
 
   public boolean userWithEmailExists(String email) {

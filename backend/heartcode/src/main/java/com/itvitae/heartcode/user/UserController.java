@@ -15,7 +15,7 @@ public class UserController {
   public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
     if (registerDTO.email() == null) {
       return ResponseEntity.badRequest().body("email is required");
-    } else if (!userService.isValidEmail(registerDTO.email())
+    } else if (userService.isInvalidEmail(registerDTO.email())
         || userService.userWithEmailExists(registerDTO.email())) {
       return ResponseEntity.badRequest().body("email is invalid");
     }
