@@ -70,6 +70,8 @@ public class Seeder implements CommandLineRunner {
     matchRepository.saveAll(matches);
   }
 
+  // change the seeder so whenever two accounts happen to like each other a match should be made.
+
   private void seedEvaluations() {
     if (evaluationRepository.count() != 0) {
       return;
@@ -78,15 +80,25 @@ public class Seeder implements CommandLineRunner {
     List<User> users = userRepository.findAll();
     Random r = new Random();
     List<Evaluation> evaluations = new ArrayList<>();
-
-    for (int i = 0; i < users.size(); i++) {
-      for (int j = i + 1; j < users.size(); j++) {
-        if (r.nextInt(5) == 0) {
-          evaluations.add(new Evaluation(users.get(i), users.get(j), r.nextBoolean()));
-        }
-      }
-    }
-
-    evaluationRepository.saveAll(evaluations);
   }
+
+  //  private void seedEvaluations() {
+  //    if (evaluationRepository.count() != 0) {
+  //      return;
+  //    }
+  //
+  //    List<User> users = userRepository.findAll();
+  //    Random r = new Random();
+  //    List<Evaluation> evaluations = new ArrayList<>();
+  //
+  //    for (int i = 0; i < users.size(); i++) {
+  //      for (int j = i + 1; j < users.size(); j++) {
+  //        if (r.nextInt(5) == 0) {
+  //          evaluations.add(new Evaluation(users.get(i), users.get(j), r.nextBoolean()));
+  //        }
+  //      }
+  //    }
+  //
+  //    evaluationRepository.saveAll(evaluations);
+  //  }
 }
