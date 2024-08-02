@@ -15,17 +15,17 @@ public class MatchService {
 
     public Match createMatch (User evaluator, User evaluatee) {
         if(evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(evaluator, evaluatee).isPresent()){
-             return matchRepository.save(new Match(evaluator, evaluatee));
+            return matchRepository.save(new Match(evaluator, evaluatee));
         }
         return null;
     }
 
-  public List<Match> getAll() {
-    return matchRepository.findAll().stream().filter(this::containsTestUser).toList();
-  }
+    public List<Match> getAll() {
+        return matchRepository.findAll().stream().filter(this::containsTestUser).toList();
+    }
 
-  public boolean containsTestUser(Match match) {
-    return match.getUser1().getAlias().equals(User.TEST_USER_NAME)
-        || match.getUser2().getAlias().equals(User.TEST_USER_NAME);
-  }
+    public boolean containsTestUser(Match match) {
+        return match.getUser1().getAlias().equals(User.TEST_USER_NAME)
+                || match.getUser2().getAlias().equals(User.TEST_USER_NAME);
+    }
 }

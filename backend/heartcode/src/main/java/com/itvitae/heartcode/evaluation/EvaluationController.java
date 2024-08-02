@@ -23,10 +23,10 @@ public class EvaluationController {
         User evaluator = userService.findById(newEvaluation.evaluatorAddress()).get();
         User evaluatee = userService.findById(newEvaluation.evaluateeAddress()).get();
 
-    if (evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked()) != null) {
+        if (evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked()) != null) {
             matchService.createMatch(evaluator, evaluatee);
             return ResponseEntity.ok().build();
-        };
+        }
         return ResponseEntity.badRequest().build();
     }
 }
