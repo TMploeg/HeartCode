@@ -13,12 +13,18 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("http://localhost:5173")
 public class EvaluationController {
 
-    private final EvaluationService evaluationService;
-    private final MatchService matchService;
-    private final UserService userService;
+  private final EvaluationService evaluationService;
+  private final MatchService matchService;
+  private final UserService userService;
 
-    @PostMapping("create-evaluation-and-check")
-    public ResponseEntity<?> createEvaluationAndCheck (@RequestBody NewEvaluationDTO newEvaluation) {
+  @PostMapping("create-evaluation-and-check")
+  public ResponseEntity<?> createEvaluationAndCheck(@RequestBody NewEvaluationDTO newEvaluation) {
+
+    if (newEvaluation.evaluatorAddress() == null
+        || newEvaluation.evaluateeAddress() == null
+        || newEvaluation.liked() == null) {
+      return ResponseEntity.badRequest().body("Request body does not meet minimum requirements");
+    }
 
     var possibleEvaluator = userService.findById(newEvaluation.evaluatorAddress());
     if (possibleEvaluator.isEmpty()) {
