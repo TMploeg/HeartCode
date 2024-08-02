@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("http://localhost:5173")
 public class EvaluationController {
 
-  private final EvaluationService evaluationService;
-  private final MatchService matchService;
-  private final UserService userService;
+    private final EvaluationService evaluationService;
+    private final MatchService matchService;
+    private final UserService userService;
 
-  @PostMapping("create-evaluation-and-check")
-  public ResponseEntity<?> createEvaluationAndCheck(@RequestBody NewEvaluationDTO newEvaluation) {
+    @PostMapping("create-evaluation-and-check")
+    public ResponseEntity<?> createEvaluationAndCheck (@RequestBody NewEvaluationDTO newEvaluation) {
 
     var possibleEvaluator = userService.findById(newEvaluation.evaluatorAddress());
     if (possibleEvaluator.isEmpty()) {
