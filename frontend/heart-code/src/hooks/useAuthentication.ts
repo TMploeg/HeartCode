@@ -6,10 +6,6 @@ export default function useAuthentication() {
 
   function register(registerData: RegisterData) {
     return post("users/register", registerData);
-    // .catch((error) => {
-    // alert(error.response.data);
-    // return Promise.reject(error.response.data);
-    // });
   }
 
   return {
