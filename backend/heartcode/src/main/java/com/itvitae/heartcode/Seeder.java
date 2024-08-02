@@ -30,20 +30,20 @@ public class Seeder implements CommandLineRunner {
     }
 
     userRepository.saveAll(
-        Stream.of(
-                User.TEST_USER_NAME,
-                "user0",
-                "user1",
-                "user2",
-                "user3",
-                "user4",
-                "user5",
-                "user6",
-                "user7",
-                "user8",
-                "user9")
-            .map(s -> new User(s + "@heartcode.com", s))
-            .toList());
+            Stream.of(
+                            User.TEST_USER_NAME,
+                            "user0",
+                            "user1",
+                            "user2",
+                            "user3",
+                            "user4",
+                            "user5",
+                            "user6",
+                            "user7",
+                            "user8",
+                            "user9")
+                    .map(s -> new User(s + "@heartcode.com", s))
+                    .toList());
   }
 
   private void seedMatches() {

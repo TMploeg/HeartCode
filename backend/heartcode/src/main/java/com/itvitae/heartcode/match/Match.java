@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class Match {
+
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
