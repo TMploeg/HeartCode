@@ -13,20 +13,29 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("http://localhost:5173")
 public class EvaluationController {
 
-    private final EvaluationService evaluationService;
-    private final MatchService matchService;
-    private final UserService userService;
+  private final EvaluationService evaluationService;
+  private final MatchService matchService;
+  private final UserService userService;
 
-    @PostMapping("create-evaluation-and-check")
-    public ResponseEntity<?> createEvaluationAndCheck (@RequestBody NewEvaluationDTO newEvaluation) {
+  @PostMapping("create-evaluation-and-check")
+  public ResponseEntity<?> createEvaluationAndCheck(@RequestBody NewEvaluationDTO newEvaluation) {
 
-        User evaluator = userService.findById(newEvaluation.evaluatorAddress()).get();
-        User evaluatee = userService.findById(newEvaluation.evaluateeAddress()).get();
+    var possibleEvaluator = userService.findById(newEvaluation.evaluatorAddress());
+    if (possibleEvaluator.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    User evaluator = possibleEvaluator.get();
+
+    var possibleEvaluatee = userService.findById(newEvaluation.evaluateeAddress());
+    if (possibleEvaluatee.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    User evaluatee = possibleEvaluatee.get();
 
     if (evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked()) != null) {
-            matchService.createMatch(evaluator, evaluatee);
-            return ResponseEntity.ok().build();
-        };
-        return ResponseEntity.badRequest().build();
+      matchService.createMatch(evaluator, evaluatee);
+      return ResponseEntity.ok().build();
     }
+    return ResponseEntity.badRequest().body("Match already exist");
+  }
 }

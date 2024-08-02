@@ -10,9 +10,9 @@ public record MatchDTO(String email, String alias) {
     }
 
     final User user =
-        match.getUser1().getEmail().equals(currentUser.getEmail())
-            ? match.getUser2()
-            : match.getUser2().getEmail().equals(currentUser.getEmail()) ? match.getUser1() : null;
+            match.getUser1().getEmail().equals(currentUser.getEmail())
+                    ? match.getUser2()
+                    : match.getUser2().getEmail().equals(currentUser.getEmail()) ? match.getUser1() : null;
 
     return Optional.ofNullable(user).map(u -> new MatchDTO(u.getEmail(), u.getAlias()));
   }

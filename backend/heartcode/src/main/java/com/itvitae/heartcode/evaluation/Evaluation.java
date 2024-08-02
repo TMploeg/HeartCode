@@ -11,14 +11,13 @@ public class Evaluation {
 
   @EmbeddedId private EvaluationId evaluationId;
 
-  @Getter
-  private boolean liked;
+  @Getter private boolean liked;
 
-  public User getEvaluator(){
+  public User getEvaluator() {
     return evaluationId.getEvaluator();
   }
 
-  public User getEvaluatee(){
+  public User getEvaluatee() {
     return evaluationId.getEvaluatee();
   }
 

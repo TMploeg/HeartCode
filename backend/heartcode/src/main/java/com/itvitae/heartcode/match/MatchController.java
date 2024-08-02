@@ -19,7 +19,7 @@ public class MatchController {
   @GetMapping
   public List<MatchDTO> getAll() {
     return matchService.getAll().stream()
-        .map(m -> MatchDTO.from(m, userService.getTestUser()).orElse(null))
-        .toList();
+            .map(m -> MatchDTO.from(m, userService.getTestUser()).orElse(null))
+            .toList();
   }
 }
