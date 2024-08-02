@@ -13,4 +13,12 @@ public class UserService {
     public Optional<User> findById(String address){
         return userRepository.findById(address);
     }
+
+  // temporary method, remove after implementing login
+  public User getTestUser() {
+    return userRepository.findAll().stream()
+        .filter(u -> u.getAlias().equals(User.TEST_USER_NAME))
+        .findFirst()
+        .get();
+  }
 }
