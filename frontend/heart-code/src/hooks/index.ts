@@ -1,3 +1,4 @@
 import useApi from "./useApi";
+import useAuthentication from "./useAuthentication";
 
-export { useApi };
+export { useApi, useAuthentication };
