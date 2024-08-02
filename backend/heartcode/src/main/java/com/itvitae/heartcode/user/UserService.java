@@ -14,11 +14,11 @@ public class UserService {
         return userRepository.findById(address);
     }
 
-  // temporary method, remove after implementing login
-  public User getTestUser() {
-    return userRepository.findAll().stream()
-        .filter(u -> u.getAlias().equals(User.TEST_USER_NAME))
-        .findFirst()
-        .get();
-  }
+    // temporary method, remove after implementing login
+    public User getTestUser() {
+        return userRepository.findAll().stream()
+                .filter(u -> u.getAlias().equals(User.TEST_USER_NAME))
+                .findFirst()
+                .get();
+    }
 }
