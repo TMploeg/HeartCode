@@ -3,10 +3,12 @@ import { Match } from "../../models/Match";
 import MatchListItem from "./MatchListItem";
 import "./MatchesPage.css";
 import { useApi } from "../../hooks";
+import { useNavigate } from "react-router-dom";
 
 export default function MatchesPage() {
   const [matches, setMatches] = useState<Match[]>();
   const { get } = useApi();
+  const navigate = useNavigate();
 
   useEffect(() => {
     get<Match[]>("matches").then((response) => {
@@ -27,6 +29,6 @@ export default function MatchesPage() {
   );
 
   function onMatchClicked(match: Match) {
-    console.log(`match '${match.alias}' clicked`);
+    navigate("/chat", { state: { match } });
   }
 }
