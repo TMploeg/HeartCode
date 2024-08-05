@@ -4,7 +4,6 @@ import com.itvitae.heartcode.evaluation.Evaluation;
 import com.itvitae.heartcode.evaluation.EvaluationController;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.evaluation.NewEvaluationDTO;
-import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserRepository;
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Seeder implements CommandLineRunner {
   private final UserRepository userRepository;
-  private final MatchRepository matchRepository;
   private final EvaluationRepository evaluationRepository;
   private final EvaluationController evaluationController;
 
