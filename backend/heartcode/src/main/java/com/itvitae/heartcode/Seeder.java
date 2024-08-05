@@ -4,7 +4,6 @@ import com.itvitae.heartcode.evaluation.Evaluation;
 import com.itvitae.heartcode.evaluation.EvaluationController;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.evaluation.NewEvaluationDTO;
-import com.itvitae.heartcode.match.Match;
 import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserRepository;
@@ -27,8 +26,7 @@ public class Seeder implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     seedUsers();
-    //seedMatches();
-    seedEvaluations();
+    seedEvaluationsAndMatches();
   }
 
   private void seedUsers() {
@@ -53,64 +51,24 @@ public class Seeder implements CommandLineRunner {
             .toList());
   }
 
-  private void seedMatches() {
-    if (matchRepository.count() != 0) {
-      return;
-    }
-
-    List<User> users = userRepository.findAll();
-    Random r = new Random();
-    List<Match> matches = new ArrayList<>();
-
-    for (int i = 0; i < users.size(); i++) {
-      for (int j = i + 1; j < users.size(); j++) {
-        if (r.nextInt(5) == 0) {
-          matches.add(new Match(users.get(i), users.get(j)));
-        }
-      }
-    }
-
-    matchRepository.saveAll(matches);
-  }
-
-  // change the seeder so whenever two accounts happen to like each other a match should be made.
-
-  private void seedEvaluations() {
+  private void seedEvaluationsAndMatches() {
     if (evaluationRepository.count() != 0) {
       return;
     }
 
-    // configurable iteration count
     int iterationCount = 15;
 
     List<User> users = userRepository.findAll();
     Random r = new Random();
     List<Evaluation> evaluations = new ArrayList<>();
 
-    for (int i = 0; i < iterationCount; i++){
+    for (int i = 0; i < iterationCount; i++) {
       NewEvaluationDTO evaluation =
-          new NewEvaluationDTO(users.get(r.nextInt(9)).getEmail(), users.get(r.nextInt(9)).getEmail(), r.nextBoolean());
+          new NewEvaluationDTO(
+              users.get(r.nextInt(9)).getEmail(),
+              users.get(r.nextInt(9)).getEmail(),
+              r.nextBoolean());
       evaluationController.createEvaluationAndCheck(evaluation);
     }
   }
-
-  //  private void seedEvaluations() {
-  //    if (evaluationRepository.count() != 0) {
-  //      return;
-  //    }
-  //
-  //    List<User> users = userRepository.findAll();
-  //    Random r = new Random();
-  //    List<Evaluation> evaluations = new ArrayList<>();
-  //
-  //    for (int i = 0; i < users.size(); i++) {
-  //      for (int j = i + 1; j < users.size(); j++) {
-  //        if (r.nextInt(5) == 0) {
-  //          evaluations.add(new Evaluation(users.get(i), users.get(j), r.nextBoolean()));
-  //        }
-  //      }
-  //    }
-  //
-  //    evaluationRepository.saveAll(evaluations);
-  //  }
 }

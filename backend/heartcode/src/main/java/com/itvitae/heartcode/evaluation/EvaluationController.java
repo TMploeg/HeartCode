@@ -26,7 +26,7 @@ public class EvaluationController {
       return ResponseEntity.badRequest().body("Request body does not meet minimum requirements");
     }
 
-    if (newEvaluation.evaluatorAddress().equals(newEvaluation.evaluateeAddress())){
+    if (newEvaluation.evaluatorAddress().equals(newEvaluation.evaluateeAddress())) {
       return ResponseEntity.badRequest().body("You cannot evaluate yourself");
     }
 
@@ -42,7 +42,7 @@ public class EvaluationController {
     }
     User evaluatee = possibleEvaluatee.get();
 
-    // NOTE: still creates a match even when one of the evaluations is false
+    // NOTE: still creates a match even when one or both of the evaluations is false
     if (evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked()) != null) {
       matchService.createMatch(evaluator, evaluatee);
       return ResponseEntity.ok().build();
