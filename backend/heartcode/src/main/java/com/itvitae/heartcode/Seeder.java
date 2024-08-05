@@ -1,7 +1,9 @@
 package com.itvitae.heartcode;
 
 import com.itvitae.heartcode.evaluation.Evaluation;
+import com.itvitae.heartcode.evaluation.EvaluationController;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
+import com.itvitae.heartcode.evaluation.NewEvaluationDTO;
 import com.itvitae.heartcode.match.Match;
 import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.user.User;
@@ -20,11 +22,12 @@ public class Seeder implements CommandLineRunner {
   private final UserRepository userRepository;
   private final MatchRepository matchRepository;
   private final EvaluationRepository evaluationRepository;
+  private final EvaluationController evaluationController;
 
   @Override
   public void run(String... args) throws Exception {
     seedUsers();
-    seedMatches();
+    //seedMatches();
     seedEvaluations();
   }
 
@@ -77,9 +80,18 @@ public class Seeder implements CommandLineRunner {
       return;
     }
 
+    // configurable iteration count
+    int iterationCount = 15;
+
     List<User> users = userRepository.findAll();
     Random r = new Random();
     List<Evaluation> evaluations = new ArrayList<>();
+
+    for (int i = 0; i < iterationCount; i++){
+      NewEvaluationDTO evaluation =
+          new NewEvaluationDTO(users.get(r.nextInt(9)).getEmail(), users.get(r.nextInt(9)).getEmail(), r.nextBoolean());
+      evaluationController.createEvaluationAndCheck(evaluation);
+    }
   }
 
   //  private void seedEvaluations() {
