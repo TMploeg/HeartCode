@@ -5,5 +5,9 @@ interface Props {
 }
 
 export default function ChatMessageView({ chatMessage }: Props) {
-  return <div>{chatMessage.text}</div>;
+  return (
+    <div className={`chat-message ${chatMessage.owned ? "owned" : ""}`}>
+      {chatMessage.text}
+    </div>
+  );
 }
