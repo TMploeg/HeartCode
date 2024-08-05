@@ -1,5 +1,7 @@
 package com.itvitae.heartcode.evaluation;
 
+import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
@@ -23,18 +25,18 @@ public class EvaluationController {
     if (newEvaluation.evaluatorAddress() == null
         || newEvaluation.evaluateeAddress() == null
         || newEvaluation.liked() == null) {
-      return ResponseEntity.badRequest().body("Request body does not meet minimum requirements");
+      throw new BadRequestException("Request body does not meet minimum requirements");
     }
 
     var possibleEvaluator = userService.findById(newEvaluation.evaluatorAddress());
     if (possibleEvaluator.isEmpty()) {
-      return ResponseEntity.notFound().build();
+      throw new NotFoundException();
     }
     User evaluator = possibleEvaluator.get();
 
     var possibleEvaluatee = userService.findById(newEvaluation.evaluateeAddress());
     if (possibleEvaluatee.isEmpty()) {
-      return ResponseEntity.notFound().build();
+      throw new NotFoundException();
     }
     User evaluatee = possibleEvaluatee.get();
 
@@ -42,6 +44,6 @@ public class EvaluationController {
       matchService.createMatch(evaluator, evaluatee);
       return ResponseEntity.ok().build();
     }
-    return ResponseEntity.badRequest().body("Match already exist");
+    throw new BadRequestException("Match already exist");
   }
 }
