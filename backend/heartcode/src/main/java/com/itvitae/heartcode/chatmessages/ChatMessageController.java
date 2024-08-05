@@ -1,11 +1,13 @@
 package com.itvitae.heartcode.chatmessages;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class ChatMessageController {
   private final ChatMessageService chatMessageService;
   private final UserService userService;
+  private final MatchService matchService;
 
   @GetMapping
   public List<ChatMessageDTO> getForUser(@RequestParam String matchEmail) {
@@ -44,5 +47,31 @@ public class ChatMessageController {
                 new ChatMessageDTO(
                     m.getText(), m.getSender().getEmail().equals(currentUser.getEmail())))
         .toList();
+  }
+
+  @PostMapping
+  public ResponseEntity<?> sendMessage(@RequestBody NewMessageDTO newMessageDTO) {
+    if (newMessageDTO.text().isBlank()) {
+      throw new BadRequestException("message must have at least one character");
+    }
+    if (newMessageDTO.receiverEmail().equals(userService.getCurrentUser().getEmail())) {
+      throw new BadRequestException("cannot send message to self");
+    }
+
+    User receiver =
+        userService
+            .findById(newMessageDTO.receiverEmail())
+            .filter(
+                rec ->
+                    matchService.getMatchedUsers().stream()
+                        .anyMatch(u -> u.getEmail().equals(rec.getEmail())))
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "cannot send messages to users you are not matched with"));
+
+    chatMessageService.save(newMessageDTO.text(), receiver);
+
+    return ResponseEntity.ok().build();
   }
 }

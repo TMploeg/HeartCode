@@ -6,11 +6,11 @@ import ChatMessageView from "./ChatMessageView";
 import { useApi } from "../../hooks";
 import "./Chat.css";
 
-const FETCH_MESSAGES_INTERVAL_DELAY = 1000;
+const FETCH_MESSAGES_INTERVAL_DELAY = 5000;
 
 export default function ChatPage() {
   const { state } = useLocation();
-  const { get } = useApi();
+  const { get, post } = useApi();
 
   const [messages, setMessages] = useState<ChatMessage[] | null>(null);
   const [newMessage, setNewMessage] = useState<string>("");
@@ -57,5 +57,11 @@ export default function ChatPage() {
 
   function submitNewMessage() {
     console.log(newMessage);
+    post("chat", { text: newMessage, receiverEmail: match.email })
+      .then(() => {
+        getMessages();
+        setNewMessage("");
+      })
+      .catch((error) => console.log(error.response.data));
   }
 }
