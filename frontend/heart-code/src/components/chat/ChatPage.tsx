@@ -6,36 +6,56 @@ import ChatMessageView from "./ChatMessageView";
 import { useApi } from "../../hooks";
 import "./Chat.css";
 
-const FETCH_MESSAGES_INTERVAL_DELAY = 5000;
+const FETCH_MESSAGES_INTERVAL_DELAY = 1000;
 
 export default function ChatPage() {
   const { state } = useLocation();
   const { get } = useApi();
 
   const [messages, setMessages] = useState<ChatMessage[] | null>(null);
+  const [newMessage, setNewMessage] = useState<string>("");
 
   useEffect(() => {
     getMessages();
-    setInterval(getMessages, FETCH_MESSAGES_INTERVAL_DELAY);
+    const interval = setInterval(getMessages, FETCH_MESSAGES_INTERVAL_DELAY);
+
+    return () => clearInterval(interval);
   }, []);
 
   const match: Match = state.match;
 
   return (
-    <div>
+    <div className="chat-page">
       <div className="chat-page-header">{match.alias}</div>
       <div className="chat-page-messages">
         {messages === null
           ? "loading..."
-          : messages.map((m) => <ChatMessageView chatMessage={m} />)}
+          : messages.map((message, index) => (
+              <ChatMessageView key={index} chatMessage={message} />
+            ))}
+      </div>
+      <div className="chat-message-input-container">
+        <input
+          className="chat-message-input"
+          value={newMessage}
+          onChange={(event) => setNewMessage(event.target.value)}
+        />
+        <div className="submit-message-button-container">
+          <button className="submit-message-button" onClick={submitNewMessage}>
+            {">"}
+          </button>
+        </div>
       </div>
     </div>
   );
 
   function getMessages() {
-    console.log("test");
     get<ChatMessage[]>("chat", { matchEmail: match.email }).then((response) =>
       setMessages(response.data)
     );
+  }
+
+  function submitNewMessage() {
+    console.log(newMessage);
   }
 }
