@@ -82,6 +82,7 @@ public class Seeder implements CommandLineRunner {
       for (int ii = i + 1; ii < users.size(); ii++) {
         final User user1 = users.get(i);
         final User user2 = users.get(ii);
+
         if (matchRepository.findForUser(user1).stream()
             .anyMatch(
                 m ->
@@ -99,13 +100,25 @@ public class Seeder implements CommandLineRunner {
     boolean senderSwitch = false;
     LocalDateTime startDateTime = LocalDateTime.of(2024, 1, 1, 12, 0);
     long totalMessagesSend = 0;
+    String[] seedMessages = {
+      "Andy loved to sleep on a bed of nails.",
+      "Today I dressed my unicorn in preparation for the race.",
+      "She wanted a pet platypus but ended up getting a duck and a ferret instead.",
+      "The two walked down the slot canyon oblivious to the sound of thunder in the distance.",
+      "Barking dogs and screaming toddlers have the unique ability to turn friendly neighbors into cranky enemies.",
+      "She was too busy always talking about what she wanted to do to actually do any of it.",
+      "He ended up burning his fingers poking someone else's fire.",
+      "Mothers spend months of their lives waiting on their children.",
+      "We should play with legos at camp.",
+      "Grape jelly was leaking out the hole in the roof."
+    };
 
     while (r.nextInt(101) < continueChance) {
       continueChance -= 10;
 
       int nrOfMessages = r.nextInt(1, 4);
       for (int i = 0; i < nrOfMessages; i++) {
-        String messageContent = "Awesome Chat Message Content!!!";
+        String messageContent = seedMessages[r.nextInt(seedMessages.length)];
         User sender = senderSwitch ? user1 : user2;
         User receiver = senderSwitch ? user2 : user1;
         LocalDateTime dateTime = startDateTime.plusMinutes(totalMessagesSend * 5);
