@@ -14,3 +14,10 @@
 .auth-form-container .submit-button {
   font-size: 0.8em;
 }
+
+.auth-form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
