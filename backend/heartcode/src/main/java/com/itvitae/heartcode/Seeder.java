@@ -76,22 +76,24 @@ public class Seeder implements CommandLineRunner {
       return;
     }
 
-    User testUser =
-        userRepository.findAll().stream()
-            .filter(u -> u.getAlias().equals(User.TEST_USER_NAME))
-            .findFirst()
-            .get();
-    List<User> otherUsers =
-        userRepository.findAll().stream()
-            .filter(u -> !u.getEmail().equals(testUser.getEmail()))
-            .toList();
+    List<User> users = userRepository.findAll();
 
-    for (User user : otherUsers) {
-      generateSeedMessagesForUser(testUser, user);
+    for (int i = 0; i < users.size(); i++) {
+      for (int ii = i + 1; ii < users.size(); ii++) {
+        final User user1 = users.get(i);
+        final User user2 = users.get(ii);
+        if (matchRepository.findForUser(user1).stream()
+            .anyMatch(
+                m ->
+                    m.getUser1().getEmail().equals(user2.getEmail())
+                        || m.getUser2().getEmail().equals(user2.getEmail()))) {
+          generateSeedMessagesForUsers(user1, user2);
+        }
+      }
     }
   }
 
-  private void generateSeedMessagesForUser(User testUser, User otherUser) {
+  private void generateSeedMessagesForUsers(User user1, User user2) {
     int continueChance = 70;
     Random r = new Random();
     boolean senderSwitch = false;
@@ -104,8 +106,8 @@ public class Seeder implements CommandLineRunner {
       int nrOfMessages = r.nextInt(1, 4);
       for (int i = 0; i < nrOfMessages; i++) {
         String messageContent = "Awesome Chat Message Content!!!";
-        User sender = senderSwitch ? testUser : otherUser;
-        User receiver = senderSwitch ? otherUser : testUser;
+        User sender = senderSwitch ? user1 : user2;
+        User receiver = senderSwitch ? user2 : user1;
         LocalDateTime dateTime = startDateTime.plusMinutes(totalMessagesSend * 5);
 
         chatMessageRepository.save(new ChatMessage(messageContent, sender, receiver, dateTime));
