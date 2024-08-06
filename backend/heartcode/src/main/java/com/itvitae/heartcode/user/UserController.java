@@ -1,6 +1,8 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.security.AuthTokenDTO;
+import com.itvitae.heartcode.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("${app.cors-allowed-origins}")
 public class UserController {
   private final UserService userService;
+  private final JwtService jwtService;
 
   @PostMapping("register")
   public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
@@ -23,9 +26,30 @@ public class UserController {
     if (registerDTO.alias() == null || registerDTO.alias().isBlank()) {
       throw new BadRequestException("alias is required");
     }
+    if (registerDTO.password() == null || registerDTO.password().isBlank()) {
+      throw new BadRequestException("password is required");
+    }
 
-    User user = userService.save(new User(registerDTO.email(), registerDTO.alias()));
+    User user = userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password());
 
     return ResponseEntity.ok(UserDTO.from(user));
+  }
+
+  @PostMapping("login")
+  public AuthTokenDTO login(@RequestBody LoginDTO authDTO) {
+    if (authDTO.email() == null || authDTO.password() == null) {
+      throw new BadRequestException("email and password are required");
+    }
+
+    userService
+        .findById(authDTO.email())
+        .filter(user -> userService.isCorrectPassword(user, authDTO.password()))
+        .orElseThrow(() -> new BadRequestException("username or password is incorrect"));
+
+    return new AuthTokenDTO(
+        jwtService
+            .generateTokenForUser(authDTO.email())
+            .orElseThrow(
+                () -> new RuntimeException("could not generate token for unknown reasons")));
   }
 }
