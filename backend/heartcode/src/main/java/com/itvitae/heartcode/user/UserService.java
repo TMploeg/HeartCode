@@ -44,8 +44,8 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(email).isPresent();
   }
 
-  // temporary method, remove after implementing login
-  public User getTestUser() {
+  public User getCurrentUser() {
+    // TODO replace with user in SecurityContextHolder after implementing login
     return userRepository.findAll().stream()
         .filter(u -> u.getAlias().equals(User.TEST_USER_NAME))
         .findFirst()
