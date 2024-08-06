@@ -25,7 +25,11 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             requests ->
-                requests.requestMatchers("users/**").permitAll().anyRequest().authenticated())
+                requests
+                    .requestMatchers("api/v1/users/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(
             exceptionHandlingConfigurer ->

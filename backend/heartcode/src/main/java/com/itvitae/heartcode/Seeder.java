@@ -47,7 +47,7 @@ public class Seeder implements CommandLineRunner {
                 "user7",
                 "user8",
                 "user9")
-            .map(s -> new User(s + "@heartcode.com", s, s + "_password"))
+            .map(s -> new User(s + "@heartcode.com", s, "{noop}" + s + "_password"))
             .toList());
   }
 

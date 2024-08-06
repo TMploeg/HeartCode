@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -43,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
               principal -> {
                 UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(
-                        principal, null, List.of(principal.getRole().value()));
+                        principal, null, principal.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
@@ -59,10 +58,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   private Optional<User> getUserFromAuthorizationHeader(String authorization) {
-    if (authorization == null || !authorization.startsWith(AUTHORIZATION_HEADER_JWT_PREFIX)) {
-      return Optional.empty();
-    }
-
     return jwtService
         .readToken(authorization.substring(AUTHORIZATION_HEADER_JWT_PREFIX.length()))
         .filter(token -> !token.isExpired())

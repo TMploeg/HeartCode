@@ -3,6 +3,7 @@ package com.itvitae.heartcode.user;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,10 +47,7 @@ public class UserService implements UserDetailsService {
 
   public User getCurrentUser() {
     // TODO replace with user in SecurityContextHolder after implementing login
-    return userRepository.findAll().stream()
-        .filter(u -> u.getAlias().equals(User.TEST_USER_NAME))
-        .findFirst()
-        .get();
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
   public boolean isCorrectPassword(User user, String password) {

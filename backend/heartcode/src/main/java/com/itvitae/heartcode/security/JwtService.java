@@ -8,6 +8,7 @@ import java.util.*;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,8 +50,13 @@ public class JwtService {
   private String buildToken(User user) {
     long currentTimeMillis = System.currentTimeMillis();
 
+    Map<String, Object> claims = new HashMap<>();
+    claims.put(
+        ROLES_CLAIM_NAME,
+        user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+
     return Jwts.builder()
-        .claims(Map.of(ROLES_CLAIM_NAME, user.getAuthorities()))
+        .claims(claims)
         .subject(user.getUsername())
         .issuedAt(new Date(currentTimeMillis))
         .expiration(new Date(currentTimeMillis + getExpirationMilliseconds()))
@@ -59,17 +65,33 @@ public class JwtService {
   }
 
   private String getRoleFromClaims(Claims claims) {
-    Object roleObject = claims.get(ROLES_CLAIM_NAME);
+    Object rolesObject = claims.get(ROLES_CLAIM_NAME);
 
-    if (roleObject == null) {
-      throw new IllegalArgumentException("'" + ROLES_CLAIM_NAME + "' claim not found");
+    if (rolesObject == null) {
+      throw new IllegalArgumentException("JwtService: '" + ROLES_CLAIM_NAME + "' claim not found");
     }
 
-    if (!(roleObject instanceof String role)) {
-      throw new IllegalArgumentException("claims '" + ROLES_CLAIM_NAME + "' value is invalid");
+    if (!(rolesObject instanceof Iterable<?> roles)) {
+      throw new IllegalArgumentException(
+          "JwtService: claim '" + ROLES_CLAIM_NAME + "' value is invalid");
     }
 
-    return role;
+    List<String> parsedRoles = new LinkedList<>();
+
+    for (Object o : roles) {
+      if (o instanceof String parsedRole) {
+        parsedRoles.add(parsedRole);
+      }
+    }
+
+    if (parsedRoles.isEmpty()) {
+      throw new RuntimeException("JwtService: no roles found");
+    }
+    if (parsedRoles.size() > 1) {
+      throw new RuntimeException("JwtService: multiple roles found");
+    }
+
+    return parsedRoles.get(0);
   }
 
   private long getExpirationMilliseconds() {

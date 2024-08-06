@@ -1,18 +1,15 @@
 package com.itvitae.heartcode.user;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 public enum UserRole {
-  USER("user");
+  USER("ROLE_USER");
 
-  private GrantedAuthority value;
+  private final String value;
 
   private UserRole(String value) {
-    this.value = new SimpleGrantedAuthority(value);
+    this.value = value;
   }
 
-  public GrantedAuthority value() {
+  public String value() {
     return value;
   }
 }
