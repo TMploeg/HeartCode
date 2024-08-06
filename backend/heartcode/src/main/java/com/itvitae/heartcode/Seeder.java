@@ -1,9 +1,8 @@
 package com.itvitae.heartcode;
 
 import com.itvitae.heartcode.evaluation.Evaluation;
-import com.itvitae.heartcode.evaluation.EvaluationController;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
-import com.itvitae.heartcode.evaluation.NewEvaluationDTO;
+import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserRepository;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class Seeder implements CommandLineRunner {
   private final UserRepository userRepository;
   private final EvaluationRepository evaluationRepository;
-  private final EvaluationController evaluationController;
+  private final MatchRepository matchRepository;
 
   @Override
   public void run(String... args) throws Exception {
@@ -54,6 +53,26 @@ public class Seeder implements CommandLineRunner {
       return;
     }
 
+    List<User> users = userRepository.findAll();
+    Random r = new Random();
+    List<Evaluation> evaluations = new ArrayList<>();
+
+    for (int u1 = 0; u1 < users.size(); u1++) {
+      for (int u2 = 0; u2 < users.size(); u2++) {
+        if (u1 != u2) {
+          Evaluation evaluation = new Evaluation(users.get(u1), users.get(u2), r.nextBoolean());
+          evaluations.add(evaluation);
+        }
+      }
+    }
+    evaluationRepository.saveAll(evaluations);
+  }
+
+  /*  private void seedEvaluationsAndMatches() {
+    if (evaluationRepository.count() != 0) {
+      return;
+    }
+
     int iterationCount = 15;
 
     List<User> users = userRepository.findAll();
@@ -63,10 +82,10 @@ public class Seeder implements CommandLineRunner {
     for (int i = 0; i < iterationCount; i++) {
       NewEvaluationDTO evaluation =
           new NewEvaluationDTO(
-              users.get(r.nextInt(9)).getEmail(),
-              users.get(r.nextInt(9)).getEmail(),
+              users.get(r.nextInt((int) userRepository.count())).getEmail(),
+              users.get(r.nextInt((int) userRepository.count())).getEmail(),
               r.nextBoolean());
       evaluationController.createEvaluationAndCheck(evaluation);
     }
-  }
+  }*/
 }
