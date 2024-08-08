@@ -62,8 +62,8 @@ export default function RegisterPage() {
         Register
       </Button>
       <div className="auth-form-errors">
-        {formErrors.map((err) => (
-          <div>{err}</div>
+        {formErrors.map((err, index) => (
+          <div key={index}>{err}</div>
         ))}
       </div>
     </div>
