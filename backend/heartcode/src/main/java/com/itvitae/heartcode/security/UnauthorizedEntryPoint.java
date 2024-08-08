@@ -20,14 +20,10 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
       throws IOException, ServletException {
     Optional<Authentication> authentication =
         Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
-    authentication.ifPresent(
-        auth ->
-            System.out.println("Authentication Object Type: " + auth.getClass().getSimpleName()));
+
     if (authentication.filter(Authentication::isAuthenticated).isPresent()) {
-      System.out.println(this.getClass().getSimpleName() + ": authenticated");
       response.sendError(HttpStatus.FORBIDDEN.value());
     } else {
-      System.out.println(this.getClass().getSimpleName() + ": not authenticated");
       response.sendError(HttpStatus.UNAUTHORIZED.value());
     }
   }
