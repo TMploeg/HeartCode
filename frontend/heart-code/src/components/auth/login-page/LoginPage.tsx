@@ -1,8 +1,8 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import "../Auth.css";
 import { useState } from "react";
-import { useApi, useAuthentication, useToken } from "../../../hooks";
 import LoginResponse from "../../../models/LoginResponse";
+import { useAuthentication } from "../../../hooks";
 import { useNavigate } from "react-router-dom";
 
 interface LoginData {
@@ -18,6 +18,8 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
   const { login } = useAuthentication();
+
+  const formErrors = getFormErrors();
 
   return (
     <div className="auth-form">
@@ -39,14 +41,29 @@ export default function LoginPage() {
           }
         />
       </InputGroup>
-      <Button disabled={!canLogin()} onClick={submit}>
+      <Button disabled={formErrors.length > 0} onClick={submit}>
         Login
       </Button>
+      <div className="auth-form-errors">
+        {formErrors.map((err) => (
+          <div>{err}</div>
+        ))}
+      </div>
     </div>
   );
 
-  function canLogin(): boolean {
-    return loginData.email.length > 0 && loginData.password.length > 0;
+  function getFormErrors(): String[] {
+    const errors: String[] = [];
+
+    if (loginData.email.length === 0) {
+      errors.push("email is required");
+    }
+
+    if (loginData.password.length === 0) {
+      errors.push("password is required");
+    }
+
+    return errors;
   }
 
   function submit() {
