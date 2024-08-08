@@ -7,6 +7,7 @@ export default function NavigationBar() {
       <NavigationBarButton page="" pageName="Home" />
       <NavigationBarButton page="matches" pageName="Chat" />
       <NavigationBarButton page="register" pageName="Register" />
+      <NavigationBarButton page="login" pageName="Login" />
     </div>
   );
 }
