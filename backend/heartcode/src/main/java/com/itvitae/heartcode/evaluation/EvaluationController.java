@@ -40,10 +40,14 @@ public class EvaluationController {
     }
     User evaluatee = possibleEvaluatee.get();
 
-    if (evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked()) != null) {
-      matchService.createMatch(evaluator, evaluatee);
+    var possibleEvaluation =
+        evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked());
+
+    if (possibleEvaluation == null) {
+      throw new BadRequestException("Match already exist");
+    } else {
+      matchService.createMatch(evaluator, evaluatee, possibleEvaluation.isLiked());
       return ResponseEntity.ok().build();
     }
-    throw new BadRequestException("Match already exist");
   }
 }

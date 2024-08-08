@@ -1,5 +1,6 @@
 package com.itvitae.heartcode.match;
 
+import com.itvitae.heartcode.evaluation.Evaluation;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
@@ -14,11 +15,18 @@ public class MatchService {
   private final EvaluationRepository evaluationRepository;
   private final UserService userService;
 
-  public Match createMatch(User evaluator, User evaluatee) {
-    if (evaluationRepository
-        .findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(evaluator, evaluatee)
-        .isPresent()) {
-      return matchRepository.save(new Match(evaluator, evaluatee));
+  public Match createMatch(User evaluator, User evaluatee, Boolean isLiked) {
+    if (isLiked && !getMatchedUsers(evaluator).contains(evaluatee)) {
+
+      var possibleEvaluation =
+          evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(
+              evaluatee, evaluator);
+      if (possibleEvaluation.isPresent()) {
+        Evaluation evaluation = possibleEvaluation.get();
+        if (evaluation.isLiked()) {
+          return matchRepository.save(new Match(evaluator, evaluatee));
+        }
+      }
     }
     return null;
   }
