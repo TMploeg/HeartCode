@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
 import { isValidEmail } from "../AuthValidation";
+import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
 export default function RegisterPage() {
   const [registerData, setRegisterData] = useState<RegisterData>({
@@ -12,6 +13,7 @@ export default function RegisterPage() {
     alias: "",
     password: "",
   });
+  const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
 
   const { register } = useAuthentication();
   const navigate = useNavigate();
@@ -42,6 +44,7 @@ export default function RegisterPage() {
         <Form.Control
           placeholder="Password"
           value={registerData.password}
+          type={passwordVisible ? "text" : "password"}
           onChange={(event) =>
             setRegisterData((data) => ({
               ...data,
@@ -49,6 +52,11 @@ export default function RegisterPage() {
             }))
           }
         />
+        <Button onClick={() => setPasswordVisible((visible) => !visible)}>
+          <div className="icon-button-content">
+            {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
+          </div>
+        </Button>
       </InputGroup>
       <Button disabled={formErrors.length > 0} onClick={submit}>
         Register

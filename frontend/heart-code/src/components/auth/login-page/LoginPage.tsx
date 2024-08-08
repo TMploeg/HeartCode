@@ -1,8 +1,8 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import "../Auth.css";
 import { useState } from "react";
-import LoginResponse from "../../../models/LoginResponse";
 import { useAuthentication } from "../../../hooks";
+import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 interface LoginData {
@@ -15,6 +15,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
+  const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
 
   const navigate = useNavigate();
   const { login } = useAuthentication();
@@ -35,11 +36,17 @@ export default function LoginPage() {
       <InputGroup>
         <Form.Control
           placeholder="Password"
+          type={passwordVisible ? "text" : "password"}
           value={loginData.password}
           onChange={(event) =>
             setLoginData((data) => ({ ...data, password: event.target.value }))
           }
         />
+        <Button onClick={() => setPasswordVisible((visible) => !visible)}>
+          <div className="icon-button-content">
+            {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
+          </div>
+        </Button>
       </InputGroup>
       <Button disabled={formErrors.length > 0} onClick={submit}>
         Login
