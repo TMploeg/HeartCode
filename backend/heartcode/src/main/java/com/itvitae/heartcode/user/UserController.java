@@ -3,20 +3,21 @@ package com.itvitae.heartcode.user;
 import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/users")
 @CrossOrigin("${app.cors-allowed-origins}")
+@Transactional
 public class UserController {
   private final UserService userService;
   private final JwtService jwtService;
 
   @PostMapping("register")
-  public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
+  public AuthTokenDTO register(@RequestBody RegisterDTO registerDTO) {
     if (registerDTO.email() == null) {
       throw new BadRequestException("email is required");
     } else if (userService.isInvalidEmail(registerDTO.email())
@@ -32,7 +33,11 @@ public class UserController {
 
     User user = userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password());
 
-    return ResponseEntity.ok(UserDTO.from(user));
+    return new AuthTokenDTO(
+        jwtService
+            .generateTokenForUser(user.getEmail())
+            .orElseThrow(
+                () -> new RuntimeException("could not generate token for unknown reasons")));
   }
 
   @PostMapping("login")
