@@ -1,7 +1,7 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import "../Auth.css";
 import { useState } from "react";
-import { useApi, useToken } from "../../../hooks";
+import { useApi, useAuthentication, useToken } from "../../../hooks";
 import LoginResponse from "../../../models/LoginResponse";
 import { useNavigate } from "react-router-dom";
 
@@ -15,9 +15,9 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  const { post } = useApi();
-  const { setToken } = useToken();
+
   const navigate = useNavigate();
+  const { login } = useAuthentication();
 
   return (
     <div className="auth-form">
@@ -39,7 +39,7 @@ export default function LoginPage() {
           }
         />
       </InputGroup>
-      <Button disabled={!canLogin()} onClick={login}>
+      <Button disabled={!canLogin()} onClick={submit}>
         Login
       </Button>
     </div>
@@ -49,15 +49,10 @@ export default function LoginPage() {
     return loginData.email.length > 0 && loginData.password.length > 0;
   }
 
-  function login() {
-    post<LoginResponse, LoginData>("users/login", loginData)
-      .then((response) => handleLoginSucces(response.data))
+  function submit() {
+    login(loginData)
+      .then(() => navigate("/"))
       .catch((error) => showError(error.response.data.detail));
-  }
-
-  function handleLoginSucces(response: LoginResponse) {
-    setToken(response.token);
-    navigate("/");
   }
 
   function showError(errorMessage: string): void {

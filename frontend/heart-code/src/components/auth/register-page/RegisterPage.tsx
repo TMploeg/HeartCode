@@ -4,6 +4,7 @@ import { useAuthentication } from "../../../hooks";
 import { useNavigate } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
+import { isValidEmail } from "../AuthValidation";
 
 export default function RegisterPage() {
   const [registerData, setRegisterData] = useState<RegisterData>({
@@ -14,6 +15,8 @@ export default function RegisterPage() {
 
   const { register } = useAuthentication();
   const navigate = useNavigate();
+
+  const formErrors: String[] = getFormErrors();
 
   return (
     <div className="auth-form">
@@ -47,18 +50,35 @@ export default function RegisterPage() {
           }
         />
       </InputGroup>
-      <Button disabled={!canRegister()} onClick={submit}>
+      <Button disabled={formErrors.length > 0} onClick={submit}>
         Register
       </Button>
+      <div className="auth-form-errors">
+        {formErrors.map((err) => (
+          <div>{err}</div>
+        ))}
+      </div>
     </div>
   );
 
-  function canRegister(): boolean {
-    return (
-      registerData.email.length > 0 &&
-      registerData.alias.length > 0 &&
-      registerData.password.length > 0
-    );
+  function getFormErrors(): String[] {
+    const errors: String[] = [];
+
+    if (registerData.email.length === 0) {
+      errors.push("email is required");
+    } else if (!isValidEmail(registerData.email)) {
+      errors.push("email is invalid");
+    }
+
+    if (registerData.alias.length === 0) {
+      errors.push("alias is required");
+    }
+
+    if (registerData.password.length === 0) {
+      errors.push("password is required");
+    }
+
+    return errors;
   }
 
   function submit() {
