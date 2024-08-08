@@ -2,58 +2,66 @@ import { useState } from "react";
 import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
 import { useNavigate } from "react-router-dom";
-
-interface RegisterData {
-  email: string;
-  alias: string;
-}
+import { InputGroup, Button, Form } from "react-bootstrap";
+import RegisterData from "../../../models/RegisterData";
 
 export default function RegisterPage() {
   const [registerData, setRegisterData] = useState<RegisterData>({
     email: "",
     alias: "",
+    password: "",
   });
 
   const { register } = useAuthentication();
   const navigate = useNavigate();
 
   return (
-    <div className="auth-form-container">
-      <div>
-        <div>Email</div>
-        <input
+    <div className="auth-form">
+      <InputGroup>
+        <Form.Control
+          placeholder="Email Address"
           value={registerData.email}
           onChange={(event) =>
             setRegisterData((data) => ({ ...data, email: event.target.value }))
           }
         />
-      </div>
-      <div>
-        <div>Alias</div>
-        <input
+      </InputGroup>
+      <InputGroup>
+        <Form.Control
+          placeholder="Alias"
           value={registerData.alias}
           onChange={(event) =>
             setRegisterData((data) => ({ ...data, alias: event.target.value }))
           }
         />
-      </div>
-      <button
-        disabled={
-          registerData.email.length === 0 || registerData.alias.length === 0
-        }
-        className="submit-button"
-        onClick={onSubmit}
-      >
+      </InputGroup>
+      <InputGroup>
+        <Form.Control
+          placeholder="Password"
+          value={registerData.password}
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              password: event.target.value,
+            }))
+          }
+        />
+      </InputGroup>
+      <Button disabled={!canRegister()} onClick={submit}>
         Register
-      </button>
+      </Button>
     </div>
   );
 
-  function onSubmit() {
-    register(registerData)
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => alert(error.response.data));
+  function canRegister(): boolean {
+    return (
+      registerData.email.length > 0 &&
+      registerData.alias.length > 0 &&
+      registerData.password.length > 0
+    );
+  }
+
+  function submit() {
+    register(registerData).then(() => navigate("/"));
   }
 }
