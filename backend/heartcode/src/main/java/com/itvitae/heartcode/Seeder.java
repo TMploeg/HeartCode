@@ -1,10 +1,9 @@
 package com.itvitae.heartcode;
 
-import com.itvitae.heartcode.evaluation.Evaluation;
-import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.chatmessages.ChatMessage;
 import com.itvitae.heartcode.chatmessages.ChatMessageRepository;
-import com.itvitae.heartcode.match.Match;
+import com.itvitae.heartcode.evaluation.Evaluation;
+import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserRepository;
@@ -29,7 +28,6 @@ public class Seeder implements CommandLineRunner {
   public void run(String... args) throws Exception {
     seedUsers();
     seedEvaluationsAndMatches();
-    seedMatches();
     seedMessages();
   }
 
