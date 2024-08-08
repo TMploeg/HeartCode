@@ -1,9 +1,11 @@
 package com.itvitae.heartcode.match;
 
+import com.itvitae.heartcode.evaluation.Evaluation;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +16,19 @@ public class MatchService {
   private final EvaluationRepository evaluationRepository;
   private final UserService userService;
 
-  public Match createMatch(User evaluator, User evaluatee) {
-    if (evaluationRepository
-        .findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(evaluator, evaluatee)
-        .isPresent()) {
-      return matchRepository.save(new Match(evaluator, evaluatee));
+  public Optional<Match> createMatch(User evaluator, User evaluatee, Boolean isLiked) {
+    if (getMatchedUsers(evaluator).contains(evaluatee)) {
+      return Optional.empty();
     }
-    return null;
+
+    Optional<Evaluation> possibleEvaluation =
+        evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(
+            evaluatee, evaluator);
+
+    if (!isLiked || possibleEvaluation.filter(evaluation1 -> evaluation1.isLiked()).isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(matchRepository.save(new Match(evaluator, evaluatee)));
   }
 
   public List<Match> getAll() {
