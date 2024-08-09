@@ -16,7 +16,9 @@ export default function App() {
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
       </Routes>
-      <NavigationBar />
+      <div className="nav-bar">
+        <NavigationBar />
+      </div>
     </div>
   );
 }
