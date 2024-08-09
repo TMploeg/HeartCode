@@ -3,6 +3,7 @@ import "./App.css";
 import MatchesPage from "./components/matches-page/MatchesPage";
 import NavigationBar from "./components/navigationbar/NavigationBar";
 import RegisterPage from "./components/auth/register-page/RegisterPage";
+import ProfilePage from "./components/profile-page/PersonalPage";
 import ChatPage from "./components/chat/ChatPage";
 
 export default function App() {
@@ -13,6 +14,8 @@ export default function App() {
         <Route path="matches" element={<MatchesPage />} />
         <Route path="chat" element={<ChatPage />} />
         <Route path="register" element={<RegisterPage />} />
+        // needs to navigate by id later
+        <Route path="account" element={<ProfilePage />} />
       </Routes>
       <NavigationBar />
     </div>
