@@ -45,7 +45,9 @@ public class ChatMessageController {
         .map(
             m ->
                 new ChatMessageDTO(
-                    m.getText(), m.getSender().getEmail().equals(currentUser.getEmail())))
+                    m.getText(),
+                    m.getSender().getEmail().equals(currentUser.getEmail()),
+                    m.getDateTime()))
         .toList();
   }
 
