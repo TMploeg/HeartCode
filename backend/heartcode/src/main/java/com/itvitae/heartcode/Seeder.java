@@ -5,10 +5,10 @@ import com.itvitae.heartcode.chatmessages.ChatMessageRepository;
 import com.itvitae.heartcode.evaluation.Evaluation;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.match.MatchRepository;
+import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -22,6 +22,7 @@ public class Seeder implements CommandLineRunner {
   private final UserRepository userRepository;
   private final EvaluationRepository evaluationRepository;
   private final MatchRepository matchRepository;
+  private final MatchService matchService;
   private final ChatMessageRepository chatMessageRepository;
 
   @Override
@@ -60,39 +61,19 @@ public class Seeder implements CommandLineRunner {
 
     List<User> users = userRepository.findAll();
     Random r = new Random();
-    List<Evaluation> evaluations = new ArrayList<>();
 
     for (int u1 = 0; u1 < users.size(); u1++) {
       for (int u2 = 0; u2 < users.size(); u2++) {
         if (u1 != u2) {
           Evaluation evaluation = new Evaluation(users.get(u1), users.get(u2), r.nextBoolean());
-          evaluations.add(evaluation);
+          evaluationRepository.save(evaluation);
+          matchService.createMatch(
+              evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked());
         }
       }
     }
-    evaluationRepository.saveAll(evaluations);
   }
 
-  /*  private void seedEvaluationsAndMatches() {
-    if (evaluationRepository.count() != 0) {
-      return;
-    }
-
-    int iterationCount = 15;
-
-    List<User> users = userRepository.findAll();
-    Random r = new Random();
-    List<Evaluation> evaluations = new ArrayList<>();
-
-    for (int i = 0; i < iterationCount; i++) {
-      NewEvaluationDTO evaluation =
-          new NewEvaluationDTO(
-              users.get(r.nextInt((int) userRepository.count())).getEmail(),
-              users.get(r.nextInt((int) userRepository.count())).getEmail(),
-              r.nextBoolean());
-      evaluationController.createEvaluationAndCheck(evaluation);
-    }
-  }*/
   private void seedMessages() {
     if (!chatMessageRepository.findAll().isEmpty()) {
       return;
