@@ -14,16 +14,6 @@ export default function PersonalPage() {
     });
   }, []);
 
-  //_______________________________________________________
-  //   const { userID } = useParams();
-  //   const [user, setUser] = useState<User>();
-  //   useEffect(() => {
-  //     get<User>(`users/${userID}`).then((response) => {
-  //       setUser(response.data);
-  //     });
-  //   }, []);
-  //_______________________________________________________
-
   return (
     <div className="personal-page">
       {user !== undefined && user !== null ? (

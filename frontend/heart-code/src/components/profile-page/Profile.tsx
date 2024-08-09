@@ -24,11 +24,7 @@ export default function Profile({ user, isPersonalPage }: Props) {
           </Card>
         </Card.Body>
         {/* Needs to navigate to edit profile page later*/}
-        {isPersonalPage ? (
-          <Button className="edit-button">Edit</Button>
-        ) : (
-          <>{/*needs to return like and dislike buttons*/}</>
-        )}
+        {isPersonalPage ? <Button className="edit-button">Edit</Button> : <></>}
       </Card>
     </div>
   );
