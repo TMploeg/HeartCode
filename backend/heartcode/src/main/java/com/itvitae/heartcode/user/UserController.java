@@ -5,7 +5,10 @@ import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,5 +59,17 @@ public class UserController {
             .generateTokenForUser(authDTO.email())
             .orElseThrow(
                 () -> new RuntimeException("could not generate token for unknown reasons")));
+  }
+
+  @GetMapping("account")
+  public ResponseEntity<UserDTO> getCurrentUser() {
+    return ResponseEntity.ok(UserDTO.from(userService.getCurrentUser()));
+  }
+
+  @GetMapping("{id}")
+  public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
+      Optional<User> user = userService.findById(id);
+      if(!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
+      return ResponseEntity.ok(UserDTO.from(user.get()));
   }
 }
