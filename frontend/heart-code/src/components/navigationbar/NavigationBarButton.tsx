@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./NavigationBar.css";
+import { Button } from "react-bootstrap";
 
 interface ButtonProps {
   page: string;
@@ -12,8 +13,10 @@ export default function NavigationBarButton({ page, pageName }: ButtonProps) {
   const navigate = useNavigate();
 
   return (
-    <button className="button" onClick={() => navigate("/" + page)}>
-      {pageName}
-    </button>
+    <div>
+      <Button className="navbar-button" onClick={() => navigate("/" + page)}>
+        {pageName}
+      </Button>
+    </div>
   );
 }
