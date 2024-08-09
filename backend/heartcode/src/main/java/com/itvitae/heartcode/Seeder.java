@@ -2,12 +2,13 @@ package com.itvitae.heartcode;
 
 import com.itvitae.heartcode.chatmessages.ChatMessage;
 import com.itvitae.heartcode.chatmessages.ChatMessageRepository;
-import com.itvitae.heartcode.match.Match;
+import com.itvitae.heartcode.evaluation.Evaluation;
+import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.match.MatchRepository;
+import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -19,13 +20,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Seeder implements CommandLineRunner {
   private final UserRepository userRepository;
+  private final EvaluationRepository evaluationRepository;
   private final MatchRepository matchRepository;
+  private final MatchService matchService;
   private final ChatMessageRepository chatMessageRepository;
 
   @Override
   public void run(String... args) throws Exception {
     seedUsers();
-    seedMatches();
+    seedEvaluationsAndMatches();
     seedMessages();
   }
 
@@ -47,28 +50,29 @@ public class Seeder implements CommandLineRunner {
                 "user7",
                 "user8",
                 "user9")
-            .map(s -> new User(s + "@heartcode.com", s))
+            .map(s -> new User(s + "@heartcode.com", s, "{noop}" + s + "_password"))
             .toList());
   }
 
-  private void seedMatches() {
-    if (matchRepository.count() != 0) {
+  private void seedEvaluationsAndMatches() {
+    if (evaluationRepository.count() != 0) {
       return;
     }
 
     List<User> users = userRepository.findAll();
     Random r = new Random();
-    List<Match> matches = new ArrayList<>();
 
-    for (int i = 0; i < users.size(); i++) {
-      for (int j = i + 1; j < users.size(); j++) {
-        if (r.nextInt(5) == 0) {
-          matches.add(new Match(users.get(i), users.get(j)));
+    for (int evaluator = 0; evaluator < users.size(); evaluator++) {
+      for (int evaluatee = 0; evaluatee < users.size(); evaluatee++) {
+        if (evaluator != evaluatee) {
+          Evaluation evaluation =
+              new Evaluation(users.get(evaluator), users.get(evaluatee), r.nextBoolean());
+          evaluationRepository.save(evaluation);
+          matchService.createMatch(
+              evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked());
         }
       }
     }
-
-    matchRepository.saveAll(matches);
   }
 
   private void seedMessages() {

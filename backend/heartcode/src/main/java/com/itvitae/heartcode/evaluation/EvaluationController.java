@@ -28,6 +28,10 @@ public class EvaluationController {
       throw new BadRequestException("Request body does not meet minimum requirements");
     }
 
+    if (newEvaluation.evaluatorAddress().equals(newEvaluation.evaluateeAddress())) {
+      return ResponseEntity.badRequest().body("You cannot evaluate yourself");
+    }
+
     var possibleEvaluator = userService.findById(newEvaluation.evaluatorAddress());
     if (possibleEvaluator.isEmpty()) {
       throw new NotFoundException();
@@ -40,10 +44,14 @@ public class EvaluationController {
     }
     User evaluatee = possibleEvaluatee.get();
 
-    if (evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked()) != null) {
-      matchService.createMatch(evaluator, evaluatee);
+    var possibleEvaluation =
+        evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked());
+
+    if (possibleEvaluation == null) {
+      throw new BadRequestException("Match already exist");
+    } else {
+      matchService.createMatch(evaluator, evaluatee, possibleEvaluation.isLiked());
       return ResponseEntity.ok().build();
     }
-    throw new BadRequestException("Match already exist");
   }
 }

@@ -1,55 +1,45 @@
-import { useState } from "react";
+import { Button, Form, InputGroup } from "react-bootstrap";
 import "../Auth.css";
+import { useState } from "react";
 import { useAuthentication } from "../../../hooks";
-import { useNavigate } from "react-router-dom";
-import { InputGroup, Button, Form } from "react-bootstrap";
-import RegisterData from "../../../models/RegisterData";
-import { isValidEmail } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
-export default function RegisterPage() {
-  const [registerData, setRegisterData] = useState<RegisterData>({
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+export default function LoginPage() {
+  const [loginData, setLoginData] = useState<LoginData>({
     email: "",
-    alias: "",
     password: "",
   });
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
 
-  const { register } = useAuthentication();
   const navigate = useNavigate();
+  const { login } = useAuthentication();
 
-  const formErrors: String[] = getFormErrors();
+  const formErrors = getFormErrors();
 
   return (
     <div className="auth-form">
       <InputGroup>
         <Form.Control
           placeholder="Email Address"
-          value={registerData.email}
+          value={loginData.email}
           onChange={(event) =>
-            setRegisterData((data) => ({ ...data, email: event.target.value }))
-          }
-        />
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          placeholder="Alias"
-          value={registerData.alias}
-          onChange={(event) =>
-            setRegisterData((data) => ({ ...data, alias: event.target.value }))
+            setLoginData((data) => ({ ...data, email: event.target.value }))
           }
         />
       </InputGroup>
       <InputGroup>
         <Form.Control
           placeholder="Password"
-          value={registerData.password}
           type={passwordVisible ? "text" : "password"}
+          value={loginData.password}
           onChange={(event) =>
-            setRegisterData((data) => ({
-              ...data,
-              password: event.target.value,
-            }))
+            setLoginData((data) => ({ ...data, password: event.target.value }))
           }
         />
         <Button onClick={() => setPasswordVisible((visible) => !visible)}>
@@ -59,7 +49,7 @@ export default function RegisterPage() {
         </Button>
       </InputGroup>
       <Button disabled={formErrors.length > 0} onClick={submit}>
-        Register
+        Login
       </Button>
       <div className="auth-form-errors">
         {formErrors.map((err, index) => (
@@ -72,17 +62,11 @@ export default function RegisterPage() {
   function getFormErrors(): String[] {
     const errors: String[] = [];
 
-    if (registerData.email.length === 0) {
+    if (loginData.email.length === 0) {
       errors.push("email is required");
-    } else if (!isValidEmail(registerData.email)) {
-      errors.push("email is invalid");
     }
 
-    if (registerData.alias.length === 0) {
-      errors.push("alias is required");
-    }
-
-    if (registerData.password.length === 0) {
+    if (loginData.password.length === 0) {
       errors.push("password is required");
     }
 
@@ -90,6 +74,13 @@ export default function RegisterPage() {
   }
 
   function submit() {
-    register(registerData).then(() => navigate("/"));
+    login(loginData)
+      .then(() => navigate("/"))
+      .catch((error) => showError(error.response.data.detail));
+  }
+
+  function showError(errorMessage: string): void {
+    alert(errorMessage);
+    console.log(errorMessage);
   }
 }
