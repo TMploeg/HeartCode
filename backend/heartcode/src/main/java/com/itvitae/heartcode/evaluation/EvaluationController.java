@@ -28,6 +28,10 @@ public class EvaluationController {
       throw new BadRequestException("Request body does not meet minimum requirements");
     }
 
+    if (newEvaluation.evaluatorAddress().equals(newEvaluation.evaluateeAddress())) {
+      return ResponseEntity.badRequest().body("You cannot evaluate yourself");
+    }
+
     var possibleEvaluator = userService.findById(newEvaluation.evaluatorAddress());
     if (possibleEvaluator.isEmpty()) {
       throw new NotFoundException();
