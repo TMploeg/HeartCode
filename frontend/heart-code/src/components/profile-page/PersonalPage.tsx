@@ -4,7 +4,7 @@ import { useApi } from "../../hooks";
 import Profile from "./Profile";
 // import { useParams } from "react-router-dom";
 
-export default function AccountPage() {
+export default function PersonalPage() {
   const [user, setUser] = useState<User>();
   const { get } = useApi();
 

@@ -16,7 +16,6 @@ export default function App() {
         <Route path="chat" element={<ChatPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
-        // needs to navigate by id later
         <Route path="account" element={<ProfilePage />} />
       </Routes>
       <NavigationBar />
