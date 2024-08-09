@@ -62,10 +62,11 @@ public class Seeder implements CommandLineRunner {
     List<User> users = userRepository.findAll();
     Random r = new Random();
 
-    for (int u1 = 0; u1 < users.size(); u1++) {
-      for (int u2 = 0; u2 < users.size(); u2++) {
-        if (u1 != u2) {
-          Evaluation evaluation = new Evaluation(users.get(u1), users.get(u2), r.nextBoolean());
+    for (int evaluator = 0; evaluator < users.size(); evaluator++) {
+      for (int evaluatee = 0; evaluatee < users.size(); evaluatee++) {
+        if (evaluator != evaluatee) {
+          Evaluation evaluation =
+              new Evaluation(users.get(evaluator), users.get(evaluatee), r.nextBoolean());
           evaluationRepository.save(evaluation);
           matchService.createMatch(
               evaluation.getEvaluator(), evaluation.getEvaluatee(), evaluation.isLiked());
