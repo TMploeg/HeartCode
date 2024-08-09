@@ -3,33 +3,34 @@ package com.itvitae.heartcode.user;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
   public Optional<User> findById(String address) {
     return userRepository.findById(address);
   }
 
-  public User save(User user) {
-    if (user.getEmail() == null) {
-      throw new IllegalArgumentException("email is null");
-    }
-    if (user.getAlias() == null) {
-      throw new IllegalArgumentException("alias is null");
-    }
-
-    if (isInvalidEmail(user.getEmail()) || userWithEmailExists(user.getEmail())) {
+  public User save(String email, String alias, String password) {
+    if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
-    if (user.getAlias().isBlank()) {
+    if (alias.isBlank()) {
       throw new IllegalArgumentException("alias is invalid");
     }
+    if (password.isBlank()) {
+      throw new IllegalArgumentException("password is invalid");
+    }
 
-    return userRepository.save(user);
+    return userRepository.save(new User(email, alias, passwordEncoder.encode(password)));
   }
 
   public boolean isInvalidEmail(String email) {
@@ -46,9 +47,17 @@ public class UserService {
 
   public User getCurrentUser() {
     // TODO replace with user in SecurityContextHolder after implementing login
-    return userRepository.findAll().stream()
-        .filter(u -> u.getAlias().equals(User.TEST_USER_NAME))
-        .findFirst()
-        .get();
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
+
+  public boolean isCorrectPassword(User user, String password) {
+    return passwordEncoder.matches(password, user.getPassword());
+  }
+
+  // ONLY USED BY SPRING SECURITY, USE 'findById' TO GET USERS!!!
+  public User loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepository
+        .findById(username)
+        .orElseThrow(() -> new UsernameNotFoundException("user '" + username + "' not found"));
   }
 }
