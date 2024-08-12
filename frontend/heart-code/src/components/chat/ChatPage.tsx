@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Match } from "../../models/Match";
 import ChatMessage from "../../models/ChatMessage";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[] | null>(null);
   const [newMessage, setNewMessage] = useState<string>("");
 
+
   useEffect(() => {
     getMessages();
     const interval = setInterval(getMessages, FETCH_MESSAGES_INTERVAL_DELAY);
@@ -33,8 +34,8 @@ export default function ChatPage() {
         {messages === null
           ? "loading..."
           : messages.map((message, index) => (
-              <ChatMessageView key={index} chatMessage={message} />
-            ))}
+            <ChatMessageView key={index} chatMessage={message} />
+          ))}
       </div>
 
       <div className="chat-message-input-container">
@@ -61,7 +62,6 @@ export default function ChatPage() {
   }
 
   function submitNewMessage() {
-    console.log(newMessage);
     post("chat", { text: newMessage, receiverEmail: match.email })
       .then(() => {
         getMessages();
