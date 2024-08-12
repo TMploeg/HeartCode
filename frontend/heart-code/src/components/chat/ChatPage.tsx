@@ -9,7 +9,6 @@ import { Button, Form, InputGroup } from "react-bootstrap";
 import { BsSendFill } from "react-icons/bs";
 
 const FETCH_MESSAGES_INTERVAL_DELAY = 5000;
-let lastDate: String;
 
 export default function ChatPage() {
   const { state } = useLocation();
