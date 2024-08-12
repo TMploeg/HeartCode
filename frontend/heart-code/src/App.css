@@ -1,6 +1,14 @@
 body {
   margin: 0;
   user-select: none;
+  background-image: url("./background-img.jpg");
+  background-size: cover;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .icon-button-content {

@@ -9,7 +9,7 @@ import LoginPage from "./components/auth/login-page/LoginPage";
 
 export default function App() {
   return (
-    <div>
+    <div className="app">
       <Routes>
         <Route path="" element={<div>Hello, HeartCode!</div>} />
         <Route path="matches" element={<MatchesPage />} />

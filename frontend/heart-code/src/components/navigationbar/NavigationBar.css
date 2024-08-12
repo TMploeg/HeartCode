@@ -1,22 +1,23 @@
 .nav-bar {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  background-color: #c4256a;
+  position: absolute;
+  bottom: 2px;
+  padding: 8px;
+  padding-top: 12px;
+  background-color: white;
 }
 
 .navbar-button {
-  width: 60px;
-  color: #c4256a;
-}
-
-.testt {
-  align-self: flex-end;
-  border-radius: 20px;
-  margin: 8px;
-  background-color: #c4256a;
-  border-color: #c4256a;
+  width: 50px;
+  height: 50px;
+  background-color: #c4256a !important;
+  border-radius: 50% !important;
+  border: none !important;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
