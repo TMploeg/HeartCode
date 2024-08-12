@@ -33,6 +33,14 @@ public class UserService implements UserDetailsService {
     return userRepository.save(new User(email, alias, passwordEncoder.encode(password)));
   }
 
+  public User update(User user) {
+    if (user == null) {
+      throw new IllegalArgumentException("user is null");
+    }
+
+    return userRepository.save(user);
+  }
+
   public boolean isInvalidEmail(String email) {
     if (email == null) {
       throw new IllegalArgumentException("email is null");

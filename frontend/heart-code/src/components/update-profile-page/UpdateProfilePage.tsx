@@ -16,7 +16,7 @@ interface UpdateValue<TValue> {
 }
 
 export default function UpdateProfilePage() {
-  const { get } = useApi();
+  const { get, patch } = useApi();
   const [userInfo, setUserInfo] = useState<User>();
   const navigate = useNavigate();
   useEffect(getUserInfo, []);
@@ -64,6 +64,7 @@ export default function UpdateProfilePage() {
             className="profile-update-save-button"
             variant="primary"
             disabled={!canSave()}
+            onClick={save}
           >
             Save
           </Button>
@@ -75,7 +76,7 @@ export default function UpdateProfilePage() {
   function getUserInfo() {
     get<User>("users/account")
       .then((response) => setUserInfo(response.data))
-      .catch(() => navigate(-1));
+      .catch(() => navigateBack());
   }
 
   function loadUserInfo() {
@@ -93,5 +94,23 @@ export default function UpdateProfilePage() {
       updateValues &&
       Object.values(updateValues).findIndex((value) => value.changed) !== -1
     );
+  }
+
+  function save() {
+    if (!updateValues) {
+      return;
+    }
+
+    const updatedFields = {
+      alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
+    };
+
+    patch("users/account", updatedFields)
+      .then(() => navigateBack())
+      .catch(() => alert("failed to save changes"));
+  }
+
+  function navigateBack(): void {
+    navigate("/account");
   }
 }
