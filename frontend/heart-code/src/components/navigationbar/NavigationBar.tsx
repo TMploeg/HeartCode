@@ -3,17 +3,8 @@ import "./NavigationBar.css";
 import {
   BsFillPersonFill,
   BsChat,
-  BsArrowThroughHeart,
-  BsFillHeartFill,
-  BsFillHouseDoorFill,
   BsHouseDoorFill,
-  BsFillSuitHeartFill,
-  BsGear,
-  BsHeartFill,
   BsPersonPlusFill,
-  BsFire,
-  BsFillRCircleFill,
-  BsFillPencilFill,
   BsFilePersonFill,
 } from "react-icons/bs";
 
