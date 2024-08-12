@@ -6,6 +6,8 @@ import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
 import { isValidEmail } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function RegisterPage() {
   const [registerData, setRegisterData] = useState<RegisterData>({
@@ -13,6 +15,7 @@ export default function RegisterPage() {
     alias: "",
     password: "",
   });
+  const [date, setDate] = useState(new Date());
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
 
   const { register } = useAuthentication();
@@ -57,6 +60,9 @@ export default function RegisterPage() {
             {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
           </div>
         </Button>
+      </InputGroup>
+      <InputGroup>
+        <DatePicker selected={date} onChange={(event) => setDate(event)} />
       </InputGroup>
       <Button disabled={formErrors.length > 0} onClick={submit}>
         Register
