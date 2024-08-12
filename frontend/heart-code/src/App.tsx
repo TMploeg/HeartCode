@@ -19,21 +19,10 @@ export default function App() {
           <Route path="register" element={<RegisterPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="account" element={<ProfilePage />} />
-          <Route path="account/update" element={<UpdateProfilePage />} />
         </Routes>
-      </div>
-      <NavigationBar />
-    <div className="app">
-      <Routes>
-        <Route path="" element={<div>Hello, HeartCode!</div>} />
-        <Route path="matches" element={<MatchesPage />} />
-        <Route path="chat" element={<ChatPage />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="account" element={<ProfilePage />} />
-      </Routes>
-      <div className="nav-bar">
-        <NavigationBar />
+        <div className="nav-bar">
+          <NavigationBar />
+        </div>
       </div>
     </div>
   );
