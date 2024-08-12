@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import ChatMessageView from "./ChatMessageView";
 import { useApi } from "../../hooks";
 import "./Chat.css";
+import { Button, Form, InputGroup } from "react-bootstrap";
+import { BsSendFill } from "react-icons/bs";
 
 const FETCH_MESSAGES_INTERVAL_DELAY = 5000;
 let lastDate: String;
@@ -36,17 +38,20 @@ export default function ChatPage() {
             <ChatMessageView key={index} chatMessage={message} />
           ))}
       </div>
+
       <div className="chat-message-input-container">
-        <input
-          className="chat-message-input"
-          value={newMessage}
-          onChange={(event) => setNewMessage(event.target.value)}
-        />
-        <div className="submit-message-button-container">
-          <button className="submit-message-button" onClick={submitNewMessage}>
-            {">"}
-          </button>
-        </div>
+        <InputGroup>
+          <Form.Control
+            value={newMessage}
+            onChange={(event) => setNewMessage(event.target.value)}
+          />
+          <Button
+            disabled={newMessage.length === 0}
+            onClick={() => submitNewMessage()}
+          >
+            <BsSendFill />
+          </Button>
+        </InputGroup>
       </div>
     </div>
   );

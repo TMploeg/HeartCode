@@ -1,0 +1,33 @@
+.profile-page {
+  display: flex;
+  margin: 24px;
+  justify-content: center;
+}
+
+.profile-card {
+  gap: 8px;
+  margin-bottom: 16px;
+  width: 80dvw;
+  height: 85dvb;
+  background: rgba(255, 255, 255);
+}
+
+.card-content {
+  margin-bottom: 8px;
+}
+
+.bio {
+  margin-top: 8px;
+  font-size: medium;
+  height: 75%;
+}
+
+.edit-button {
+  width: 60px;
+  align-self: flex-end;
+  border-radius: 20px;
+  margin: 8px;
+  background-color: #c4256a;
+  border-color: #c4256a;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
