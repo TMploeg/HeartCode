@@ -4,11 +4,12 @@ import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -68,8 +69,31 @@ public class UserController {
 
   @GetMapping("{id}")
   public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
-      Optional<User> user = userService.findById(id);
-      if(!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
-      return ResponseEntity.ok(UserDTO.from(user.get()));
+    Optional<User> user = userService.findById(id);
+    if (!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
+    return ResponseEntity.ok(UserDTO.from(user.get()));
+  }
+
+  //  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PatchMapping("account")
+  public UserDTO updateProfile(@RequestBody UpdateProfileDTO updateProfileDTO) {
+    User user = userService.getCurrentUser();
+    List<String> errors = new ArrayList<>();
+
+    if (updateProfileDTO.alias() != null) {
+      if (!updateProfileDTO.alias().isBlank()) {
+        user.setAlias(updateProfileDTO.alias());
+      } else {
+        errors.add("alias is invalid");
+      }
+    }
+
+    if (!errors.isEmpty()) {
+      throw new BadRequestException(String.join(";", errors));
+    }
+
+    userService.update(user);
+
+    return UserDTO.from(user);
   }
 }
