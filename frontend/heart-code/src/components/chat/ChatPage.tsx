@@ -7,6 +7,7 @@ import { useApi } from "../../hooks";
 import "./Chat.css";
 
 const FETCH_MESSAGES_INTERVAL_DELAY = 5000;
+let lastDate: String;
 
 export default function ChatPage() {
   const { state } = useLocation();
@@ -14,7 +15,7 @@ export default function ChatPage() {
 
   const [messages, setMessages] = useState<ChatMessage[] | null>(null);
   const [newMessage, setNewMessage] = useState<string>("");
-  const [lastDate, setLastDate] = useState<Date>(new Date())
+
 
   useEffect(() => {
     getMessages();
@@ -32,8 +33,8 @@ export default function ChatPage() {
         {messages === null
           ? "loading..."
           : messages.map((message, index) => (
-              <ChatMessageView key={index} chatMessage={message} lastDate={lastDate} setLastDate={setLastDate}/>
-            ))}
+            <ChatMessageView key={index} chatMessage={message} />
+          ))}
       </div>
       <div className="chat-message-input-container">
         <input
