@@ -1,5 +1,6 @@
 package com.itvitae.heartcode.user;
 
+import com.itvitae.heartcode.user.gender.UserGender;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

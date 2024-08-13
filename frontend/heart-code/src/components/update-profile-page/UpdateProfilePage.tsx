@@ -2,16 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks";
 import { useEffect, useState } from "react";
 import { User } from "../../models/User";
-import { Button, Card, Form, InputGroup, ListGroup } from "react-bootstrap";
+import { Button, Card, Form, ListGroup } from "react-bootstrap";
 import "./UpdateProfilePage.css";
 import Spinner from "react-bootstrap/Spinner";
+import { genders } from "../../enums/Gender";
 
-interface UpdateValues {
-  alias: UpdateValue<string>;
-}
-
-interface UpdateValue<TValue> {
-  value: TValue;
+interface UpdateValue {
+  value: any;
   changed: boolean;
 }
 
@@ -22,9 +19,11 @@ export default function UpdateProfilePage() {
   useEffect(getUserInfo, []);
   useEffect(loadUserInfo, [userInfo]);
 
-  const [updateValues, setUpdateValues] = useState<UpdateValues>();
+  const [updateValues, setUpdateValues] = useState<{
+    [key: string]: UpdateValue;
+  }>();
 
-  if (!updateValues) {
+  if (!updateValues || !userInfo) {
     return (
       <div className="spinner-container">
         <Spinner animation="border" variant="primary" />
@@ -53,11 +52,36 @@ export default function UpdateProfilePage() {
                     ...values,
                     alias: {
                       value: event.target.value,
-                      changed: (userInfo?.alias ?? "") !== event.target.value,
+                      changed: (userInfo.alias ?? "") !== event.target.value,
                     },
                   }))
                 }
               />
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Label
+                className={`profile-field-label ${
+                  updateValues.gender.changed ? "changed" : ""
+                }`}
+              >
+                Gender{updateValues.gender.changed ? "*" : ""}
+              </Form.Label>
+              <Form.Select
+                defaultValue={userInfo.gender.name}
+                onChange={(event) =>
+                  setUpdateValues((values) => ({
+                    ...values,
+                    gender: {
+                      value: event.target.value,
+                      changed: userInfo.gender.name !== event.target.value,
+                    },
+                  }))
+                }
+              >
+                {genders.map((gender) => (
+                  <option key={gender}>{gender}</option>
+                ))}
+              </Form.Select>
             </ListGroup.Item>
           </ListGroup>
           <Button
@@ -86,6 +110,7 @@ export default function UpdateProfilePage() {
 
     setUpdateValues({
       alias: { value: userInfo.alias, changed: false },
+      gender: { value: userInfo.gender, changed: false },
     });
   }
 
@@ -103,6 +128,9 @@ export default function UpdateProfilePage() {
 
     const updatedFields = {
       alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
+      gender: updateValues.gender.changed
+        ? updateValues.gender.value
+        : undefined,
     };
 
     patch("users/account", updatedFields)

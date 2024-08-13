@@ -1,4 +1,4 @@
-package com.itvitae.heartcode.user;
+package com.itvitae.heartcode.user.gender;
 
 import java.util.Arrays;
 import java.util.Optional;

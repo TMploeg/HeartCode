@@ -1,5 +1,6 @@
 package com.itvitae.heartcode.user;
 
+import com.itvitae.heartcode.user.gender.UserGender;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;

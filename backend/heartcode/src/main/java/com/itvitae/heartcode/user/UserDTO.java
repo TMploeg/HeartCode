@@ -1,7 +1,9 @@
 package com.itvitae.heartcode.user;
 
-public record UserDTO(String email, String alias, String gender) {
+import com.itvitae.heartcode.user.gender.GenderDTO;
+
+public record UserDTO(String email, String alias, GenderDTO gender) {
   public static UserDTO from(User user) {
-    return new UserDTO(user.getEmail(), user.getAlias(), user.getGender().getAbbreviation());
+    return new UserDTO(user.getEmail(), user.getAlias(), GenderDTO.from(user.getGender()));
   }
 }

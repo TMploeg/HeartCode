@@ -3,6 +3,7 @@ package com.itvitae.heartcode.user;
 import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
+import com.itvitae.heartcode.user.gender.UserGender;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
