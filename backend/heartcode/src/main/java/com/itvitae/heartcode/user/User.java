@@ -1,6 +1,8 @@
 package com.itvitae.heartcode.user;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import java.util.Collection;
 import java.util.List;
@@ -26,11 +28,15 @@ public class User implements UserDetails {
 
   private UserRole role;
 
-  public User(String email, String alias, String password) {
+  @Enumerated(EnumType.ORDINAL)
+  private UserGender gender;
+
+  public User(String email, String alias, String password, UserGender gender) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
+    this.gender = gender;
   }
 
   @Override

@@ -5,6 +5,7 @@ import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,27 @@ public class UserController {
       throw new BadRequestException("password is required");
     }
 
-    User user = userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password());
+    if (registerDTO.gender() == null) {
+      throw new BadRequestException("gender is required");
+    } else if (registerDTO.gender().isBlank()) {
+      throw new BadRequestException("gender must have at least one character");
+    }
+
+    UserGender gender =
+        UserGender.getFromAbbreviation(registerDTO.gender())
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "gender is invalid, valid options include: ["
+                            + String.join(
+                                ", ",
+                                Arrays.stream(UserGender.values())
+                                    .map(UserGender::abbreviation)
+                                    .toList())
+                            + "]"));
+
+    User user =
+        userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password(), gender);
 
     return new AuthTokenDTO(
         jwtService
