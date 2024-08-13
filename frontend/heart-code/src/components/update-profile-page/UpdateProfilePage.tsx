@@ -79,7 +79,9 @@ export default function UpdateProfilePage() {
                 }
               >
                 {genders.map((gender) => (
-                  <option key={gender}>{gender}</option>
+                  <option key={gender} value={gender}>
+                    {gender.split("_").join(" ")}
+                  </option>
                 ))}
               </Form.Select>
             </ListGroup.Item>
@@ -129,7 +131,7 @@ export default function UpdateProfilePage() {
     const updatedFields = {
       alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
       gender: updateValues.gender.changed
-        ? updateValues.gender.value.split(" ").join("-")
+        ? updateValues.gender.value
         : undefined,
     };
 
