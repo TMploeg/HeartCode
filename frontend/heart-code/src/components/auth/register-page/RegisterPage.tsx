@@ -6,12 +6,14 @@ import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
 import { isValidEmail } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
+import Gender, { genders } from "../../../enums/Gender";
 
 export default function RegisterPage() {
   const [registerData, setRegisterData] = useState<RegisterData>({
     email: "",
     alias: "",
     password: "",
+    gender: Gender.MALE,
   });
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
 
@@ -58,6 +60,17 @@ export default function RegisterPage() {
           </div>
         </Button>
       </InputGroup>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) =>
+            setRegisterData((data) => ({ ...data, gender: event.target.value }))
+          }
+        >
+          {genders.map((gender) => (
+            <option key={gender}>{gender}</option>
+          ))}
+        </Form.Select>
+      </InputGroup>
       <Button disabled={formErrors.length > 0} onClick={submit}>
         Register
       </Button>
@@ -90,6 +103,8 @@ export default function RegisterPage() {
   }
 
   function submit() {
-    register(registerData).then(() => navigate("/"));
+    register(registerData)
+      .then(() => navigate("/"))
+      .catch(() => alert("registration failed"));
   }
 }
