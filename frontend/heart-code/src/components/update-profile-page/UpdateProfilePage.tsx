@@ -129,7 +129,7 @@ export default function UpdateProfilePage() {
     const updatedFields = {
       alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
       gender: updateValues.gender.changed
-        ? updateValues.gender.value
+        ? updateValues.gender.value.split(" ").join("-")
         : undefined,
     };
 

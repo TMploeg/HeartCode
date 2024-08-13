@@ -4,6 +4,7 @@ enum Gender {
   NON_BINARY = "non-binary",
   BINARY = "binary",
   OTHER = "other",
+  PREFER_NOT_TO_SAY = "prefer not to say",
 }
 
 export default Gender;
@@ -14,4 +15,5 @@ export const genders: string[] = [
   Gender.NON_BINARY,
   Gender.BINARY,
   Gender.OTHER,
+  Gender.PREFER_NOT_TO_SAY,
 ];

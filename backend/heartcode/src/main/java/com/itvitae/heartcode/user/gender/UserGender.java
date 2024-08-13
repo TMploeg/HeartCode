@@ -10,7 +10,8 @@ public enum UserGender {
   FEMALE("F"),
   NON_BINARY("NB"),
   BINARY("B"),
-  OTHER("O");
+  OTHER("O"),
+  PREFER_NOT_TO_SAY("-");
 
   private final String name;
   private final String abbreviation;
