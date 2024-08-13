@@ -19,6 +19,7 @@ export default function App() {
           <Route path="register" element={<RegisterPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="account" element={<ProfilePage />} />
+          <Route path="account/update" element={<UpdateProfilePage />} />
         </Routes>
         <div className="nav-bar">
           <NavigationBar />
