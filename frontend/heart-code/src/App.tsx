@@ -21,8 +21,10 @@ export default function App() {
           <Route path="account" element={<ProfilePage />} />
           <Route path="account/update" element={<UpdateProfilePage />} />
         </Routes>
+        <div className="nav-bar">
+          <NavigationBar />
+        </div>
       </div>
-      <NavigationBar />
     </div>
   );
 }
