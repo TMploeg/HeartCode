@@ -28,6 +28,7 @@ public class User implements UserDetails {
 
   private UserRole role;
 
+  @Setter
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
