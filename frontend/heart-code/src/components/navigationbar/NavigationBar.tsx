@@ -8,6 +8,7 @@ import {
   BsFilePersonFill,
 } from "react-icons/bs";
 import { IconType } from "react-icons";
+import { AppRoute } from "../../enums/AppRoute";
 
 interface Props {
   currentPage: string;
@@ -30,34 +31,29 @@ export default function NavigationBar({ currentPage }: Props) {
           />
         );
       })}
-      {/* <NavigationBarButton page="account" icon={<BsFillPersonFill />} />
-      <NavigationBarButton page="" icon={<BsHouseDoorFill />} />
-      <NavigationBarButton page="matches" icon={<BsChat />} />
-      <NavigationBarButton page="register" icon={<BsPersonPlusFill />} />
-      <NavigationBarButton page="login" icon={<BsFilePersonFill />} /> */}
     </div>
   );
 
   function getButtons(): ButtonData[] {
     return [
       {
-        path: "/account",
+        path: AppRoute.ACCOUNT,
         icon: BsFillPersonFill,
       },
       {
-        path: "/",
+        path: AppRoute.HOME,
         icon: BsHouseDoorFill,
       },
       {
-        path: "/matches",
+        path: AppRoute.MATCHES,
         icon: BsChat,
       },
       {
-        path: "/register",
+        path: AppRoute.REGISTER,
         icon: BsPersonPlusFill,
       },
       {
-        path: "/login",
+        path: AppRoute.LOGIN,
         icon: BsFilePersonFill,
       },
     ];
@@ -65,6 +61,6 @@ export default function NavigationBar({ currentPage }: Props) {
 }
 
 interface ButtonData {
-  path: string;
+  path: AppRoute;
   icon: IconType;
 }

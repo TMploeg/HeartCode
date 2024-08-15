@@ -7,7 +7,7 @@ import ProfilePage from "./components/profile-page/PersonalPage";
 import ChatPage from "./components/chat/ChatPage";
 import LoginPage from "./components/auth/login-page/LoginPage";
 import UpdateProfilePage from "./components/update-profile-page/UpdateProfilePage";
-import { useEffect } from "react";
+import { AppRoute } from "./enums/AppRoute";
 
 export default function App() {
   const location = useLocation();
@@ -16,13 +16,16 @@ export default function App() {
     <div className="app-container">
       <div className="page">
         <Routes>
-          <Route path="" element={<div>Hello, HeartCode!</div>} />
-          <Route path="matches" element={<MatchesPage />} />
-          <Route path="chat" element={<ChatPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="account" element={<ProfilePage />} />
-          <Route path="account/update" element={<UpdateProfilePage />} />
+          <Route path={AppRoute.HOME} element={<div>Hello, HeartCode!</div>} />
+          <Route path={AppRoute.MATCHES} element={<MatchesPage />} />
+          <Route path={AppRoute.CHAT} element={<ChatPage />} />
+          <Route path={AppRoute.REGISTER} element={<RegisterPage />} />
+          <Route path={AppRoute.LOGIN} element={<LoginPage />} />
+          <Route path={AppRoute.ACCOUNT} element={<ProfilePage />} />
+          <Route
+            path={AppRoute.ACCOUNT_UPDATE}
+            element={<UpdateProfilePage />}
+          />
         </Routes>
         <div className="nav-bar">
           <NavigationBar currentPage={location.pathname} />

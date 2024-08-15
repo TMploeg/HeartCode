@@ -2,9 +2,10 @@ import { useNavigate } from "react-router-dom";
 import "./NavigationBar.css";
 import { Button } from "react-bootstrap";
 import { ReactNode } from "react";
+import { AppRoute } from "../../enums/AppRoute";
 
 interface ButtonProps {
-  page: string;
+  page: AppRoute;
   icon: ReactNode;
   className?: string;
 }
@@ -14,8 +15,6 @@ export default function NavigationBarButton({
   icon,
   className,
 }: ButtonProps) {
-  //Moet later nog een icon krijgen ipv pageName
-
   const navigate = useNavigate();
 
   return (

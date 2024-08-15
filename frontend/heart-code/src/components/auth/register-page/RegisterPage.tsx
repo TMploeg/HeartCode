@@ -7,6 +7,7 @@ import RegisterData from "../../../models/RegisterData";
 import { isValidEmail, isValidPassword } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import Gender, { genders } from "../../../enums/Gender";
+import { AppRoute } from "../../../enums/AppRoute";
 
 export default function RegisterPage() {
   const [registerData, setRegisterData] = useState<RegisterData>({
@@ -146,7 +147,7 @@ export default function RegisterPage() {
   }
   function submit() {
     register(registerData)
-      .then(() => navigate("/"))
+      .then(() => navigate(AppRoute.HOME))
       .catch(() => alert("registration failed"));
   }
 }

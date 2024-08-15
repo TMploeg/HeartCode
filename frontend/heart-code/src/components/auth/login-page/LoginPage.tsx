@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuthentication } from "../../../hooks";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { AppRoute } from "../../../enums/AppRoute";
 
 interface LoginData {
   email: string;
@@ -82,7 +83,7 @@ export default function LoginPage() {
 
   function submit() {
     login(loginData)
-      .then(() => navigate("/"))
+      .then(() => navigate(AppRoute.HOME))
       .catch((error) => showError(error.response.data.detail));
   }
 
