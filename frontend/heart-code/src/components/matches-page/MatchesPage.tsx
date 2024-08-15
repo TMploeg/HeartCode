@@ -4,6 +4,7 @@ import MatchListItem from "./MatchListItem";
 import "./MatchesPage.css";
 import { useApi } from "../../hooks";
 import { useNavigate } from "react-router-dom";
+import { AppRoute } from "../../enums/AppRoute";
 
 export default function MatchesPage() {
   const [matches, setMatches] = useState<Match[]>();
@@ -29,6 +30,6 @@ export default function MatchesPage() {
   );
 
   function onMatchClicked(match: Match) {
-    navigate("/chat", { state: { match } });
+    navigate(AppRoute.CHAT, { state: { match } });
   }
 }

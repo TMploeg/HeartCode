@@ -3,6 +3,7 @@ import { Card, Button } from "react-bootstrap";
 import "./Profile.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import Gender from "../../enums/Gender";
+import { AppRoute } from "../../enums/AppRoute";
 
 interface Props {
   user: User;
@@ -29,9 +30,11 @@ export default function Profile({ user, isPersonalPage }: Props) {
             <Card.Text>Bio text goes here</Card.Text>
           </Card>
         </Card.Body>
-        {/* Needs to navigate to edit profile page later*/}
         {isPersonalPage ? (
-          <Button className="edit-button" onClick={() => navigate("update")}>
+          <Button
+            className="edit-button"
+            onClick={() => navigate(AppRoute.ACCOUNT_UPDATE)}
+          >
             Edit
           </Button>
         ) : (

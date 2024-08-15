@@ -1,4 +1,10 @@
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import "./App.css";
 import MatchesPage from "./components/matches-page/MatchesPage";
 import NavigationBar from "./components/navigationbar/NavigationBar";
@@ -10,11 +16,13 @@ import UpdateProfilePage from "./components/update-profile-page/UpdateProfilePag
 import { useAuthentication } from "./hooks";
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
+import { AppRoute } from "./enums/AppRoute";
 
 export default function App() {
   const { isLoggedIn } = useAuthentication();
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   useEffect(() => {
     setInterval(() => {
       checkLoggedIn();
@@ -26,17 +34,18 @@ export default function App() {
       {loggedIn === null ? (
         <Spinner animation="border" variant="primary" />
       ) : (
-        <div className="page">
-          <Routes>
-            {getRoutes()}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-          {loggedIn && (
-            <div className="nav-bar">
-              <NavigationBar />
-            </div>
-          )}
-        </div>
+        <>
+          <div className="page">
+            <Routes>
+              {getRoutes()}
+              <Route
+                path={AppRoute.ANY}
+                element={<Navigate to={AppRoute.HOME} />}
+              />
+            </Routes>
+          </div>
+          {loggedIn && <NavigationBar currentPage={location.pathname} />}
+        </>
       )}
     </div>
   );
@@ -44,21 +53,21 @@ export default function App() {
   function getRoutes() {
     return loggedIn ? (
       <>
-        <Route path="/" element={<div>Hello, HeartCode!</div>} />
-        <Route path="/matches" element={<MatchesPage />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/account" element={<ProfilePage />} />
-        <Route path="/account/update" element={<UpdateProfilePage />} />
+        <Route path={AppRoute.HOME} element={<div>Hello, HeartCode!</div>} />
+        <Route path={AppRoute.MATCHES} element={<MatchesPage />} />
+        <Route path={AppRoute.CHAT} element={<ChatPage />} />
+        <Route path={AppRoute.ACCOUNT} element={<ProfilePage />} />
+        <Route path={AppRoute.ACCOUNT_UPDATE} element={<UpdateProfilePage />} />
       </>
     ) : (
       <>
-        <Route path="/" element={<Navigate to="login" />} />
+        <Route path={AppRoute.HOME} element={<Navigate to="login" />} />
         <Route
-          path="/login"
+          path={AppRoute.LOGIN}
           element={<LoginPage onLogin={handleAuthenticated} />}
         />
         <Route
-          path="/register"
+          path={AppRoute.REGISTER}
           element={<RegisterPage onRegister={handleAuthenticated} />}
         />
       </>
@@ -76,7 +85,7 @@ export default function App() {
   function handleAuthenticated() {
     checkLoggedIn().then((loggedIn) => {
       if (loggedIn) {
-        navigate("/");
+        navigate(AppRoute.HOME);
       }
     });
   }
