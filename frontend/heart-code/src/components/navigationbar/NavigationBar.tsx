@@ -19,10 +19,11 @@ const Icon: IconType = BsFilePersonFill;
 export default function NavigationBar({ currentPage }: Props) {
   return (
     <div className="nav-bar">
-      {getButtons().map((buttonData) => {
+      {getButtons().map((buttonData, index) => {
         const Icon: IconType = buttonData.icon;
         return (
           <NavigationBarButton
+            key={index}
             page={buttonData.path}
             icon={<Icon />}
             className={
