@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import MatchesPage from "./components/matches-page/MatchesPage";
 import NavigationBar from "./components/navigationbar/NavigationBar";
@@ -7,8 +7,11 @@ import ProfilePage from "./components/profile-page/PersonalPage";
 import ChatPage from "./components/chat/ChatPage";
 import LoginPage from "./components/auth/login-page/LoginPage";
 import UpdateProfilePage from "./components/update-profile-page/UpdateProfilePage";
+import { useEffect } from "react";
 
 export default function App() {
+  const location = useLocation();
+
   return (
     <div className="app-container">
       <div className="page">
@@ -22,7 +25,7 @@ export default function App() {
           <Route path="account/update" element={<UpdateProfilePage />} />
         </Routes>
         <div className="nav-bar">
-          <NavigationBar />
+          <NavigationBar currentPage={location.pathname} />
         </div>
       </div>
     </div>

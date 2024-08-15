@@ -6,16 +6,24 @@ import { ReactNode } from "react";
 interface ButtonProps {
   page: string;
   icon: ReactNode;
+  className?: string;
 }
 
-export default function NavigationBarButton({ page, icon }: ButtonProps) {
+export default function NavigationBarButton({
+  page,
+  icon,
+  className,
+}: ButtonProps) {
   //Moet later nog een icon krijgen ipv pageName
 
   const navigate = useNavigate();
 
   return (
     <div>
-      <Button className="navbar-button" onClick={() => navigate("/" + page)}>
+      <Button
+        className={`navbar-button ${className}`}
+        onClick={() => navigate(page)}
+      >
         {icon}
       </Button>
     </div>

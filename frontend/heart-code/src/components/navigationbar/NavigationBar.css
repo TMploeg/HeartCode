@@ -20,4 +20,8 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+  opacity: 0.7;
+}
+.navbar-button.current-page {
+  opacity: 1;
 }
