@@ -3,8 +3,40 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  width: 80%;
+  height: 80%;
+  align-self: center;
+  justify-self: center;
+  margin-top: 40px;
+}
+
+.input-field {
+  background: rgba(255, 255, 255, 0);
 }
 
 .auth-form-errors {
-  color: red;
+  color: #c4256a;
+}
+
+.error-message {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.4);
+  border-style: solid;
+  padding-left: 8px;
+  margin-bottom: 12px;
+}
+
+.register-button {
+  width: 100%;
+  align-self: center;
+  margin: 8px;
+  background-color: #c4256a !important;
+  border-color: #c4256a !important;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.visibility-button {
+  background-color: #c4256a !important;
+  border-color: #c4256a !important;
 }

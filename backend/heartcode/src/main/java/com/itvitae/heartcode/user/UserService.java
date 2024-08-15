@@ -2,6 +2,8 @@ package com.itvitae.heartcode.user;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
+
+import com.itvitae.heartcode.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -60,6 +62,26 @@ public class UserService implements UserDetailsService {
 
   public boolean isCorrectPassword(User user, String password) {
     return passwordEncoder.matches(password, user.getPassword());
+  }
+
+  public boolean isValidPassword(String password) {
+    int numOfUppercase = 0;
+    int numOfLowercase = 0;
+    int numOfDigits = 0;
+    int numOfSpecialChars = 0;
+    for (int i = 0; i < password.length(); i++) {
+      char ch = password.charAt(i);
+      if (Character.isUpperCase(ch)) {
+        numOfUppercase++;
+      } else if (Character.isLowerCase(ch)){
+        numOfLowercase++;
+      } else if (Character.isDigit(ch)) {
+        numOfDigits++;
+      } else if (!Character.isAlphabetic(ch) && !Character.isDigit(ch)) {
+        numOfSpecialChars++;
+      }
+    }
+    return numOfUppercase >= 1 && numOfLowercase >= 1 && numOfDigits >= 1 && numOfSpecialChars >= 1;
   }
 
   // ONLY USED BY SPRING SECURITY, USE 'findById' TO GET USERS!!!
