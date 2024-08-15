@@ -1,20 +1,12 @@
 import NavigationBarButton from "./NavigationBarButton";
 import "./NavigationBar.css";
-import {
-  BsFillPersonFill,
-  BsChat,
-  BsHouseDoorFill,
-  BsPersonPlusFill,
-  BsFilePersonFill,
-} from "react-icons/bs";
 import { IconType } from "react-icons";
 import { AppRoute } from "../../enums/AppRoute";
+import { BsFillPersonFill, BsChat, BsSearch } from "react-icons/bs";
 
 interface Props {
-  currentPage: string;
+  currentPage: String;
 }
-
-const Icon: IconType = BsFilePersonFill;
 
 export default function NavigationBar({ currentPage }: Props) {
   return (
@@ -43,19 +35,11 @@ export default function NavigationBar({ currentPage }: Props) {
       },
       {
         path: AppRoute.HOME,
-        icon: BsHouseDoorFill,
+        icon: BsSearch,
       },
       {
         path: AppRoute.MATCHES,
         icon: BsChat,
-      },
-      {
-        path: AppRoute.REGISTER,
-        icon: BsPersonPlusFill,
-      },
-      {
-        path: AppRoute.LOGIN,
-        icon: BsFilePersonFill,
       },
     ];
   }

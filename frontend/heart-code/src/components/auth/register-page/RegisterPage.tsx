@@ -1,15 +1,17 @@
 import { useState } from "react";
 import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
 import { isValidEmail, isValidPassword } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import Gender, { genders } from "../../../enums/Gender";
-import { AppRoute } from "../../../enums/AppRoute";
 
-export default function RegisterPage() {
+interface Props {
+  onRegister: () => void;
+}
+export default function RegisterPage({ onRegister }: Props) {
   const [registerData, setRegisterData] = useState<RegisterData>({
     email: "",
     alias: "",
@@ -113,6 +115,7 @@ export default function RegisterPage() {
           </div>
         ))}
       </div>
+      <Link to="/login">or login if you already have an account</Link>
     </div>
   );
 
@@ -147,7 +150,7 @@ export default function RegisterPage() {
   }
   function submit() {
     register(registerData)
-      .then(() => navigate(AppRoute.HOME))
+      .then(onRegister)
       .catch(() => alert("registration failed"));
   }
 }
