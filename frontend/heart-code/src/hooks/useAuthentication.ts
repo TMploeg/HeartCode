@@ -26,11 +26,12 @@ export default function useAuthentication() {
   }
 
   function isLoggedIn(): Promise<boolean> {
-    if (getToken() === null) {
+    const token: string | null = getToken();
+    if (token === null) {
       return Promise.resolve(false);
     }
 
-    return get<boolean>("users/validate-token")
+    return get<boolean>("users/validate-token", { token })
       .then((response) => response.data)
       .catch(() => {
         return false;

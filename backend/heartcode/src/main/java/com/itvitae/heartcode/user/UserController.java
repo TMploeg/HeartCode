@@ -97,7 +97,7 @@ public class UserController {
   }
 
   @GetMapping("validate-token")
-  public boolean isValidToken(@RequestBody String token) {
+  public boolean isValidToken(@RequestParam String token) {
     if (token == null) {
       throw new BadRequestException("token is required");
     }

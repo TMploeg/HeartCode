@@ -7,7 +7,10 @@ import RegisterData from "../../../models/RegisterData";
 import { isValidEmail } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
-export default function RegisterPage() {
+interface Props {
+  onRegister: () => void;
+}
+export default function RegisterPage({ onRegister }: Props) {
   const [registerData, setRegisterData] = useState<RegisterData>({
     email: "",
     alias: "",
@@ -90,6 +93,6 @@ export default function RegisterPage() {
   }
 
   function submit() {
-    register(registerData).then(() => navigate("/"));
+    register(registerData).then(onRegister);
   }
 }

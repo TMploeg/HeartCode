@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import MatchesPage from "./components/matches-page/MatchesPage";
 import NavigationBar from "./components/navigationbar/NavigationBar";
@@ -9,31 +9,40 @@ import LoginPage from "./components/auth/login-page/LoginPage";
 import UpdateProfilePage from "./components/update-profile-page/UpdateProfilePage";
 import { useAuthentication } from "./hooks";
 import { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 
 export default function App() {
   const { isLoggedIn } = useAuthentication();
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const navigate = useNavigate();
   useEffect(() => {
-    setInterval(checkLoggedIn, 60000);
+    setInterval(() => {
+      checkLoggedIn();
+    }, 1000);
   }, []);
 
   return (
     <div className="app-container">
-      <div className="page">
-        <Routes>
-          {getRoutes()}
-          {/* <Route path="*" element={<Navigate to="/" />} /> */}
-        </Routes>
-        {loggedIn && (
-          <div className="nav-bar">
-            <NavigationBar />
-          </div>
-        )}
-      </div>
+      {loggedIn === null ? (
+        <Spinner animation="border" variant="primary" />
+      ) : (
+        <div className="page">
+          <Routes>
+            {getRoutes()}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+          {loggedIn && (
+            <div className="nav-bar">
+              <NavigationBar />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 
   function getRoutes() {
+    console.log("routes: ", loggedIn);
     return loggedIn ? (
       <>
         <Route path="/" element={<div>Hello, HeartCode!</div>} />
@@ -45,13 +54,33 @@ export default function App() {
     ) : (
       <>
         <Route path="/" element={<Navigate to="login" />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/login"
+          element={<LoginPage onLogin={handleAuthenticated} />}
+        />
+        <Route
+          path="/register"
+          element={<RegisterPage onRegister={handleAuthenticated} />}
+        />
       </>
     );
   }
 
-  function checkLoggedIn() {
-    isLoggedIn().then((isLoggedIn) => setLoggedIn(isLoggedIn));
+  async function checkLoggedIn(): Promise<boolean> {
+    const loggedIn: boolean = (await isLoggedIn()) ?? false;
+
+    console.log("logged in: ", loggedIn);
+
+    setLoggedIn(loggedIn);
+
+    return loggedIn;
+  }
+
+  function handleAuthenticated() {
+    checkLoggedIn().then((loggedIn) => {
+      if (loggedIn) {
+        navigate("/");
+      }
+    });
   }
 }

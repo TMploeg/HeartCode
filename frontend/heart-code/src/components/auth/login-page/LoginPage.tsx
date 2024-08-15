@@ -10,7 +10,11 @@ interface LoginData {
   password: string;
 }
 
-export default function LoginPage() {
+interface Props {
+  onLogin: () => void;
+}
+
+export default function LoginPage({ onLogin }: Props) {
   const [loginData, setLoginData] = useState<LoginData>({
     email: "",
     password: "",
@@ -75,7 +79,7 @@ export default function LoginPage() {
 
   function submit() {
     login(loginData)
-      .then(() => navigate("/"))
+      .then(onLogin)
       .catch((error) => showError(error.response.data.detail));
   }
 
