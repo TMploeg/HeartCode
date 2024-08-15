@@ -42,7 +42,6 @@ export default function App() {
   );
 
   function getRoutes() {
-    console.log("routes: ", loggedIn);
     return loggedIn ? (
       <>
         <Route path="/" element={<div>Hello, HeartCode!</div>} />
@@ -68,8 +67,6 @@ export default function App() {
 
   async function checkLoggedIn(): Promise<boolean> {
     const loggedIn: boolean = (await isLoggedIn()) ?? false;
-
-    console.log("logged in: ", loggedIn);
 
     setLoggedIn(loggedIn);
 
