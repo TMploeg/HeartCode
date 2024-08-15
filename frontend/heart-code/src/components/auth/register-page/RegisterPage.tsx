@@ -138,16 +138,12 @@ export default function RegisterPage() {
     }
 
     if (!isValidPassword(registerData.password)) {
-      errors.push(`password must contain:
-          1 uppercase letter,
-          1 lowercase letter,
-          1 number,
-          1 special character
+      errors.push(`password must contain
+          an uppercase letter,
+          a lowercase letter,
+          a number 
+          and a special character
         `);
-      // errors.push("  - at least 1 uppercase letter");
-      // errors.push("  - at least 1 lowercase letter");
-      // errors.push("  - at least 1 number");
-      // errors.push("  - at least 1 special character");
     }
 
     return errors;
