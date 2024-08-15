@@ -2,6 +2,7 @@ import { User } from "../../models/User";
 import { Card, Button } from "react-bootstrap";
 import "./Profile.css";
 import { Navigate, useNavigate } from "react-router-dom";
+import Gender from "../../enums/Gender";
 
 interface Props {
   user: User;
@@ -20,7 +21,9 @@ export default function Profile({ user, isPersonalPage }: Props) {
         />
         <Card.Body className="card-content">
           <Card.Title>{user.alias}</Card.Title>
-          <Card.Subtitle className="card-content">Gender, age</Card.Subtitle>
+          <Card.Subtitle className="card-content">
+            [age] {convertGender(user.gender)}
+          </Card.Subtitle>
           <Card.Subtitle>Relationship type</Card.Subtitle>
           <Card className="bio">
             <Card.Text>Bio text goes here</Card.Text>
@@ -37,4 +40,10 @@ export default function Profile({ user, isPersonalPage }: Props) {
       </Card>
     </div>
   );
+
+  function convertGender(gender: string): string {
+    return gender === Gender.PREFER_NOT_TO_SAY
+      ? "gender not specified"
+      : gender;
+  }
 }
