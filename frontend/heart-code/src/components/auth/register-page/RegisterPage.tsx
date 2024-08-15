@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
 import { isValidEmail } from "../AuthValidation";
@@ -82,6 +82,7 @@ export default function RegisterPage({ onRegister }: Props) {
           <div key={index}>{err}</div>
         ))}
       </div>
+      <Link to="/login">or login if you already have an account</Link>
     </div>
   );
 

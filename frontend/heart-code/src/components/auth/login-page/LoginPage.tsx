@@ -3,7 +3,7 @@ import "../Auth.css";
 import { useState } from "react";
 import { useAuthentication } from "../../../hooks";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface LoginData {
   email: string;
@@ -60,6 +60,7 @@ export default function LoginPage({ onLogin }: Props) {
           <div key={index}>{err}</div>
         ))}
       </div>
+      <Link to="/register">or register if you do not yet have an account</Link>
     </div>
   );
 
