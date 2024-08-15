@@ -44,11 +44,7 @@ export default function App() {
               />
             </Routes>
           </div>
-          {loggedIn && (
-            // <div className="nav-bar">
-            <NavigationBar currentPage={location.pathname} />
-            // </div>
-          )}
+          {loggedIn && <NavigationBar currentPage={location.pathname} />}
         </>
       )}
     </div>

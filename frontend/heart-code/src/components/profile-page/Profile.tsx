@@ -30,7 +30,6 @@ export default function Profile({ user, isPersonalPage }: Props) {
             <Card.Text>Bio text goes here</Card.Text>
           </Card>
         </Card.Body>
-        {/* Needs to navigate to edit profile page later*/}
         {isPersonalPage ? (
           <Button
             className="edit-button"
