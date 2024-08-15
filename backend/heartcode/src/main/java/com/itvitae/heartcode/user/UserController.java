@@ -33,7 +33,7 @@ public class UserController {
     if (registerDTO.alias() == null || registerDTO.alias().isBlank()) {
       throw new BadRequestException("alias is required");
     }
-    if (!userService.isValidPassword(registerDTO.password())) {
+    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password()) ) {
       throw new BadRequestException("password is not valid");
     }
 
