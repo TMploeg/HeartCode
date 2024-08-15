@@ -67,13 +67,13 @@ export default function UpdateProfilePage() {
                 Gender{updateValues.gender.changed ? "*" : ""}
               </Form.Label>
               <Form.Select
-                defaultValue={userInfo.gender.name}
+                defaultValue={userInfo.gender}
                 onChange={(event) =>
                   setUpdateValues((values) => ({
                     ...values,
                     gender: {
                       value: event.target.value,
-                      changed: userInfo.gender.name !== event.target.value,
+                      changed: userInfo.gender !== event.target.value,
                     },
                   }))
                 }
