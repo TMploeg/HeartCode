@@ -19,7 +19,7 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
-  public User save(String email, String alias, String password) {
+  public User save(String email, String alias, String password, UserGender gender) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -30,7 +30,7 @@ public class UserService implements UserDetailsService {
       throw new IllegalArgumentException("password is invalid");
     }
 
-    return userRepository.save(new User(email, alias, passwordEncoder.encode(password)));
+    return userRepository.save(new User(email, alias, passwordEncoder.encode(password), gender));
   }
 
   public User update(User user) {

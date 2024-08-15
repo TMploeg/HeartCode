@@ -5,9 +5,11 @@ import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +37,23 @@ public class UserController {
       throw new BadRequestException("password is required");
     }
 
-    User user = userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password());
+    if (registerDTO.gender() == null) {
+      throw new BadRequestException("gender is required");
+    } else if (registerDTO.gender().isBlank()) {
+      throw new BadRequestException("gender must have at least one character");
+    }
+
+    UserGender gender =
+        UserGender.parse(registerDTO.gender())
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "gender is invalid, valid options include: ["
+                            + getGenderOptionsString()
+                            + "]"));
+
+    User user =
+        userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password(), gender);
 
     return new AuthTokenDTO(
         jwtService
@@ -74,26 +92,54 @@ public class UserController {
     return ResponseEntity.ok(UserDTO.from(user.get()));
   }
 
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @PatchMapping("account")
-  public UserDTO updateProfile(@RequestBody UpdateProfileDTO updateProfileDTO) {
+  public void updateProfile(@RequestBody UpdateProfileDTO updateProfileDTO) {
     User user = userService.getCurrentUser();
     List<String> errors = new ArrayList<>();
 
-    if (updateProfileDTO.alias() != null) {
-      if (!updateProfileDTO.alias().isBlank()) {
-        user.setAlias(updateProfileDTO.alias());
-      } else {
-        errors.add("alias is invalid");
-      }
-    }
+    updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
+    updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
     }
 
     userService.update(user);
+  }
 
-    return UserDTO.from(user);
+  private Optional<String> updateAlias(String newAlias, User user) {
+    if (newAlias == null) {
+      return Optional.empty();
+    }
+
+    if (newAlias.isBlank()) {
+      return Optional.of("alias is invalid");
+    }
+
+    user.setAlias(newAlias);
+    return Optional.empty();
+  }
+
+  private Optional<String> updateGender(String newGender, User user) {
+    if (newGender == null) {
+      return Optional.empty();
+    }
+
+    if (newGender.isBlank()) {
+      return Optional.of("gender must have at least one character");
+    }
+
+    Optional<UserGender> gender = UserGender.parse(newGender);
+    gender.ifPresent(user::setGender);
+
+    return gender.isPresent()
+        ? Optional.empty()
+        : Optional.of("gender is invalid, valid options: [" + getGenderOptionsString() + "]");
+  }
+
+  private static String getGenderOptionsString() {
+    return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
   }
 
   @GetMapping("validate-token")
