@@ -6,6 +6,7 @@ import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
 import { isValidEmail, isValidPassword } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
+import Gender, { genders } from "../../../enums/Gender";
 
 export default function RegisterPage() {
   const [registerData, setRegisterData] = useState<RegisterData>({
@@ -13,6 +14,7 @@ export default function RegisterPage() {
     alias: "",
     password: "",
     passwordConfirmation: "",
+    gender: Gender.MALE,
   });
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
   const [passwordConfirmationVisible, setpasswordConfirmationVisible] =
@@ -86,6 +88,17 @@ export default function RegisterPage() {
           </div>
         </Button>
       </InputGroup>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) =>
+            setRegisterData((data) => ({ ...data, gender: event.target.value }))
+          }
+        >
+          {genders.map((gender) => (
+            <option key={gender}>{gender}</option>
+          ))}
+        </Form.Select>
+      </InputGroup>
       <Button
         className="register-button"
         disabled={formErrors.length > 0}
@@ -139,12 +152,9 @@ export default function RegisterPage() {
 
     return errors;
   }
-
   function submit() {
     register(registerData)
       .then(() => navigate("/"))
-      .catch((error) => {
-        alert(error.response.data.detail);
-      });
+      .catch(() => alert("registration failed"));
   }
 }

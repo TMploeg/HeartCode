@@ -7,6 +7,7 @@ import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
+import com.itvitae.heartcode.user.UserGender;
 import com.itvitae.heartcode.user.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -50,8 +51,16 @@ public class Seeder implements CommandLineRunner {
                 "user7",
                 "user8",
                 "user9")
-            .map(s -> new User(s + "@heartcode.com", s, "{noop}" + s + "_password"))
+            .map(
+                s ->
+                    new User(
+                        s + "@heartcode.com", s, "{noop}" + s + "_password", getRandomGender()))
             .toList());
+  }
+
+  private UserGender getRandomGender() {
+    UserGender[] genders = UserGender.values();
+    return genders[new Random().nextInt(genders.length)];
   }
 
   private void seedEvaluationsAndMatches() {
