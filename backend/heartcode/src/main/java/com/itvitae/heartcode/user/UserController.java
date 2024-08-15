@@ -74,7 +74,6 @@ public class UserController {
     return ResponseEntity.ok(UserDTO.from(user.get()));
   }
 
-  //  @ResponseStatus(HttpStatus.NO_CONTENT)
   @PatchMapping("account")
   public UserDTO updateProfile(@RequestBody UpdateProfileDTO updateProfileDTO) {
     User user = userService.getCurrentUser();
@@ -95,5 +94,14 @@ public class UserController {
     userService.update(user);
 
     return UserDTO.from(user);
+  }
+
+  @GetMapping("validate-token")
+  public boolean isValidToken(@RequestBody String token) {
+    if (token == null) {
+      throw new BadRequestException("token is required");
+    }
+
+    return jwtService.readToken(token).isPresent();
   }
 }
