@@ -25,11 +25,14 @@ public class User implements UserDetails {
 
   private UserRole role;
 
-  public User(String email, String alias, String password) {
+  private String dateOfBirth;
+
+  public User(String email, String alias, String password, String dateOfBirth) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
+    this.dateOfBirth = dateOfBirth;
   }
 
   @Override

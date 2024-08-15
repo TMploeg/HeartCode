@@ -4,11 +4,10 @@ import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,8 +32,16 @@ public class UserController {
     if (registerDTO.password() == null || registerDTO.password().isBlank()) {
       throw new BadRequestException("password is required");
     }
+    if (registerDTO.dateOfBirth() == null || registerDTO.dateOfBirth().isBlank()) {
+      throw new BadRequestException("Date of birth is required");
+    }
 
-    User user = userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password());
+    User user =
+        userService.save(
+            registerDTO.email(),
+            registerDTO.alias(),
+            registerDTO.password(),
+            registerDTO.dateOfBirth());
 
     return new AuthTokenDTO(
         jwtService
@@ -68,8 +75,8 @@ public class UserController {
 
   @GetMapping("{id}")
   public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
-      Optional<User> user = userService.findById(id);
-      if(!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
-      return ResponseEntity.ok(UserDTO.from(user.get()));
+    Optional<User> user = userService.findById(id);
+    if (!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
+    return ResponseEntity.ok(UserDTO.from(user.get()));
   }
 }

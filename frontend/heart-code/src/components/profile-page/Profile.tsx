@@ -17,7 +17,8 @@ export default function Profile({ user, isPersonalPage }: Props) {
         />
         <Card.Body className="card-content">
           <Card.Title>{user.alias}</Card.Title>
-          <Card.Subtitle className="card-content">Gender, age</Card.Subtitle>
+          <Card.Subtitle className="card-content">Gender</Card.Subtitle>
+          <Card.Subtitle className="card-content">age</Card.Subtitle>
           <Card.Subtitle>Relationship type</Card.Subtitle>
           <Card className="bio">
             <Card.Text>Bio text goes here</Card.Text>
