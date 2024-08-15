@@ -6,6 +6,7 @@ import { Button, Card, Form, ListGroup } from "react-bootstrap";
 import "./UpdateProfilePage.css";
 import Spinner from "react-bootstrap/Spinner";
 import { genders } from "../../enums/Gender";
+import { AppRoute } from "../../enums/AppRoute";
 
 interface UpdateValue {
   value: any;
@@ -162,6 +163,6 @@ export default function UpdateProfilePage() {
   }
 
   function navigateBack(): void {
-    navigate("/account");
+    navigate(AppRoute.ACCOUNT);
   }
 }
