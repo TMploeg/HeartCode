@@ -141,4 +141,13 @@ public class UserController {
   private static String getGenderOptionsString() {
     return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
   }
+
+  @GetMapping("validate-token")
+  public boolean isValidToken(@RequestParam String token) {
+    if (token == null) {
+      throw new BadRequestException("token is required");
+    }
+
+    return jwtService.readToken(token).isPresent();
+  }
 }
