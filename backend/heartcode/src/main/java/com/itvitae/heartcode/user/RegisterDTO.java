@@ -1,3 +1,5 @@
 package com.itvitae.heartcode.user;
 
-public record RegisterDTO(String email, String alias, String password, String gender) {}
+import java.sql.Clob;
+
+public record RegisterDTO(String email, String alias, String password, String gender, Clob bio) {}

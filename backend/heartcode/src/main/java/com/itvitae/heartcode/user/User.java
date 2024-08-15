@@ -1,9 +1,9 @@
 package com.itvitae.heartcode.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.sql.Blob;
+import java.sql.Clob;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -24,6 +24,10 @@ public class User implements UserDetails {
 
   @Setter private String alias;
 
+  @Setter
+  @Lob
+  private Clob bio;
+
   private String password;
 
   private UserRole role;
@@ -32,12 +36,13 @@ public class User implements UserDetails {
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
-  public User(String email, String alias, String password, UserGender gender) {
+  public User(String email, String alias, String password, UserGender gender, Clob bio) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
     this.gender = gender;
+    this.bio = bio;
   }
 
   @Override

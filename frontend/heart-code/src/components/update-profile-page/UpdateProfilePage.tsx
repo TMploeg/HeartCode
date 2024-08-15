@@ -85,6 +85,27 @@ export default function UpdateProfilePage() {
                 ))}
               </Form.Select>
             </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Label
+                className={`profile-field-label ${
+                  updateValues.bio.changed ? "changed" : ""
+                }`}
+              >
+                Bio{updateValues.bio.changed ? "*" : ""}
+              </Form.Label>
+              <Form.Control
+                value={updateValues.bio.value}
+                onChange={(event) =>
+                  setUpdateValues((values) => ({
+                    ...values,
+                    bio: {
+                      value: event.target.value,
+                      changed: (userInfo.bio ?? "") !== event.target.value,
+                    },
+                  }))
+                }
+              />
+            </ListGroup.Item>
           </ListGroup>
           <Button
             className="profile-update-save-button"

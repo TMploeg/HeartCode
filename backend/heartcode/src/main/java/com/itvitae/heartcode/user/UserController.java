@@ -53,7 +53,12 @@ public class UserController {
                             + "]"));
 
     User user =
-        userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password(), gender);
+        userService.save(
+            registerDTO.email(),
+            registerDTO.alias(),
+            registerDTO.password(),
+            gender,
+            registerDTO.bio());
 
     return new AuthTokenDTO(
         jwtService

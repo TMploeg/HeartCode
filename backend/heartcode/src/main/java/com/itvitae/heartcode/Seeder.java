@@ -9,11 +9,13 @@ import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserGender;
 import com.itvitae.heartcode.user.UserRepository;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.engine.jdbc.ClobProxy;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +39,6 @@ public class Seeder implements CommandLineRunner {
     if (userRepository.count() != 0) {
       return;
     }
-
     userRepository.saveAll(
         Stream.of(
                 User.TEST_USER_NAME,
@@ -54,7 +55,7 @@ public class Seeder implements CommandLineRunner {
             .map(
                 s ->
                     new User(
-                        s + "@heartcode.com", s, "{noop}" + s + "_password", getRandomGender()))
+                        s + "@heartcode.com", s, "{noop}" + s + "_password", getRandomGender(), ClobProxy.generateProxy("bio")))
             .toList());
   }
 
