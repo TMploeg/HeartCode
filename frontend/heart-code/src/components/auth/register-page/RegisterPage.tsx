@@ -129,8 +129,11 @@ export default function RegisterPage() {
       errors.push("alias is required");
     }
 
-    if (registerData.password.length === 0) {
-      errors.push("password is required");
+    if (
+      registerData.password.length === 0 ||
+      registerData.password.length < 7
+    ) {
+      errors.push("password is too short");
     }
 
     if (registerData.password !== registerData.passwordConfirmation) {
