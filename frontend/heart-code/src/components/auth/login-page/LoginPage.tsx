@@ -42,13 +42,20 @@ export default function LoginPage() {
             setLoginData((data) => ({ ...data, password: event.target.value }))
           }
         />
-        <Button onClick={() => setPasswordVisible((visible) => !visible)}>
+        <Button
+          className="visibility-button"
+          onClick={() => setPasswordVisible((visible) => !visible)}
+        >
           <div className="icon-button-content">
             {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
           </div>
         </Button>
       </InputGroup>
-      <Button disabled={formErrors.length > 0} onClick={submit}>
+      <Button
+        className="submit-button"
+        disabled={formErrors.length > 0}
+        onClick={submit}
+      >
         Login
       </Button>
       <div className="auth-form-errors">

@@ -4,7 +4,7 @@ import { useAuthentication } from "../../../hooks";
 import { useNavigate } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
-import { isValidEmail } from "../AuthValidation";
+import { isValidEmail, isValidPassword } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import Gender, { genders } from "../../../enums/Gender";
 
@@ -13,9 +13,12 @@ export default function RegisterPage() {
     email: "",
     alias: "",
     password: "",
+    passwordConfirmation: "",
     gender: Gender.MALE,
   });
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
+  const [passwordConfirmationVisible, setpasswordConfirmationVisible] =
+    useState<Boolean>(false);
 
   const { register } = useAuthentication();
   const navigate = useNavigate();
@@ -54,9 +57,33 @@ export default function RegisterPage() {
             }))
           }
         />
-        <Button onClick={() => setPasswordVisible((visible) => !visible)}>
+        <Button
+          className="visibility-button"
+          onClick={() => setPasswordVisible((visible) => !visible)}
+        >
           <div className="icon-button-content">
             {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
+          </div>
+        </Button>
+      </InputGroup>
+      <InputGroup>
+        <Form.Control
+          placeholder="Confirm Password"
+          value={registerData.passwordConfirmation}
+          type={passwordConfirmationVisible ? "text" : "password"}
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              passwordConfirmation: event.target.value,
+            }))
+          }
+        />
+        <Button
+          className="visibility-button"
+          onClick={() => setpasswordConfirmationVisible((visible) => !visible)}
+        >
+          <div className="icon-button-content">
+            {passwordConfirmationVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
           </div>
         </Button>
       </InputGroup>
@@ -71,12 +98,18 @@ export default function RegisterPage() {
           ))}
         </Form.Select>
       </InputGroup>
-      <Button disabled={formErrors.length > 0} onClick={submit}>
+      <Button
+        className="submit-button"
+        disabled={formErrors.length > 0}
+        onClick={submit}
+      >
         Register
       </Button>
       <div className="auth-form-errors">
         {formErrors.map((err, index) => (
-          <div key={index}>{err}</div>
+          <div className="error-message" key={index}>
+            {err}
+          </div>
         ))}
       </div>
     </div>
@@ -95,13 +128,22 @@ export default function RegisterPage() {
       errors.push("alias is required");
     }
 
-    if (registerData.password.length === 0) {
-      errors.push("password is required");
+    if (registerData.password !== registerData.passwordConfirmation) {
+      errors.push("password does not match");
+    }
+
+    if (!isValidPassword(registerData.password)) {
+      errors.push(`password must contain
+          an uppercase letter,
+          a lowercase letter,
+          a number,
+          a special character
+          and must have at least 7 characters
+        `);
     }
 
     return errors;
   }
-
   function submit() {
     register(registerData)
       .then(() => navigate("/"))
