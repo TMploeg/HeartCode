@@ -29,7 +29,6 @@ export default function RegisterPage() {
     <div className="auth-form">
       <InputGroup>
         <Form.Control
-          className="input-field"
           placeholder="Email Address"
           value={registerData.email}
           onChange={(event) =>
@@ -100,7 +99,7 @@ export default function RegisterPage() {
         </Form.Select>
       </InputGroup>
       <Button
-        className="register-button"
+        className="submit-button"
         disabled={formErrors.length > 0}
         onClick={submit}
       >
@@ -129,13 +128,6 @@ export default function RegisterPage() {
       errors.push("alias is required");
     }
 
-    if (
-      registerData.password.length === 0 ||
-      registerData.password.length < 7
-    ) {
-      errors.push("password is too short");
-    }
-
     if (registerData.password !== registerData.passwordConfirmation) {
       errors.push("password does not match");
     }
@@ -144,8 +136,9 @@ export default function RegisterPage() {
       errors.push(`password must contain
           an uppercase letter,
           a lowercase letter,
-          a number 
-          and a special character
+          a number,
+          a special character
+          and must have at least 7 characters
         `);
     }
 

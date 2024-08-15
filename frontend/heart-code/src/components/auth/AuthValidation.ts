@@ -28,7 +28,8 @@ function isValidPassword(password: string): boolean {
       numOfUppercase >= 1 &&
       numOfLowercase >= 1 &&
       numOfDigits >= 1 &&
-      numOfSpecialChars >= 1
+      numOfSpecialChars >= 1 &&
+      password.length > 7
     );
   }
 }

@@ -81,7 +81,7 @@ public class UserService implements UserDetailsService {
         numOfSpecialChars++;
       }
     }
-    return numOfUppercase >= 1 && numOfLowercase >= 1 && numOfDigits >= 1 && numOfSpecialChars >= 1;
+    return numOfUppercase >= 1 && numOfLowercase >= 1 && numOfDigits >= 1 && numOfSpecialChars >= 1 && password.length() > 7;
   }
 
   // ONLY USED BY SPRING SECURITY, USE 'findById' TO GET USERS!!!
