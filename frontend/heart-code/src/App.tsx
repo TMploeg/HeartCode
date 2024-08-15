@@ -34,20 +34,22 @@ export default function App() {
       {loggedIn === null ? (
         <Spinner animation="border" variant="primary" />
       ) : (
-        <div className="page">
-          <Routes>
-            {getRoutes()}
-            <Route
-              path={AppRoute.ANY}
-              element={<Navigate to={AppRoute.HOME} />}
-            />
-          </Routes>
+        <>
+          <div className="page">
+            <Routes>
+              {getRoutes()}
+              <Route
+                path={AppRoute.ANY}
+                element={<Navigate to={AppRoute.HOME} />}
+              />
+            </Routes>
+          </div>
           {loggedIn && (
-            <div className="nav-bar">
-              <NavigationBar currentPage={location.pathname} />
-            </div>
+            // <div className="nav-bar">
+            <NavigationBar currentPage={location.pathname} />
+            // </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );
