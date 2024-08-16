@@ -1,14 +1,51 @@
 import NavigationBarButton from "./NavigationBarButton";
 import "./NavigationBar.css";
+import { IconType } from "react-icons";
+import { AppRoute } from "../../enums/AppRoute";
+import { BsFillPersonFill, BsChat, BsSearch } from "react-icons/bs";
 
-export default function NavigationBar() {
+interface Props {
+  currentPage: String;
+}
+
+export default function NavigationBar({ currentPage }: Props) {
   return (
     <div className="nav-bar">
-      <NavigationBarButton page="account" pageName="User" />
-      <NavigationBarButton page="" pageName="Home" />
-      <NavigationBarButton page="matches" pageName="Chat" />
-      <NavigationBarButton page="register" pageName="Register" />
-      <NavigationBarButton page="login" pageName="Login" />
+      {getButtons().map((buttonData, index) => {
+        const Icon: IconType = buttonData.icon;
+        return (
+          <NavigationBarButton
+            key={index}
+            page={buttonData.path}
+            icon={<Icon />}
+            className={
+              buttonData.path === currentPage ? "current-page" : undefined
+            }
+          />
+        );
+      })}
     </div>
   );
+
+  function getButtons(): ButtonData[] {
+    return [
+      {
+        path: AppRoute.ACCOUNT,
+        icon: BsFillPersonFill,
+      },
+      {
+        path: AppRoute.HOME,
+        icon: BsSearch,
+      },
+      {
+        path: AppRoute.MATCHES,
+        icon: BsChat,
+      },
+    ];
+  }
+}
+
+interface ButtonData {
+  path: AppRoute;
+  icon: IconType;
 }

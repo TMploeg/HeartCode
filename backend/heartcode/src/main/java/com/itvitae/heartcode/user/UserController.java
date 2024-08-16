@@ -4,8 +4,12 @@ import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,19 +33,30 @@ public class UserController {
     if (registerDTO.alias() == null || registerDTO.alias().isBlank()) {
       throw new BadRequestException("alias is required");
     }
-    if (registerDTO.password() == null || registerDTO.password().isBlank()) {
-      throw new BadRequestException("password is required");
+    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password()) ) {
+      throw new BadRequestException("password is not valid");
+    }
+
+    if (registerDTO.gender() == null) {
+      throw new BadRequestException("gender is required");
+    } else if (registerDTO.gender().isBlank()) {
+      throw new BadRequestException("gender must have at least one character");
     }
     if (registerDTO.dateOfBirth() == null || registerDTO.dateOfBirth().isBlank()) {
       throw new BadRequestException("Date of birth is required");
     }
 
+    UserGender gender =
+        UserGender.parse(registerDTO.gender())
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "gender is invalid, valid options include: ["
+                            + getGenderOptionsString()
+                            + "]"));
+
     User user =
-        userService.save(
-            registerDTO.email(),
-            registerDTO.alias(),
-            registerDTO.password(),
-            registerDTO.dateOfBirth());
+        userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password(), gender, registerDTO.dateOfBirth());
 
     return new AuthTokenDTO(
         jwtService
@@ -75,8 +90,67 @@ public class UserController {
 
   @GetMapping("{id}")
   public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
-    Optional<User> user = userService.findById(id);
-    if (!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
-    return ResponseEntity.ok(UserDTO.from(user.get()));
+      Optional<User> user = userService.findById(id);
+      if(!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
+      return ResponseEntity.ok(UserDTO.from(user.get()));
+  }
+
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PatchMapping("account")
+  public void updateProfile(@RequestBody UpdateProfileDTO updateProfileDTO) {
+    User user = userService.getCurrentUser();
+    List<String> errors = new ArrayList<>();
+
+    updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
+    updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
+
+    if (!errors.isEmpty()) {
+      throw new BadRequestException(String.join(";", errors));
+    }
+
+    userService.update(user);
+  }
+
+  private Optional<String> updateAlias(String newAlias, User user) {
+    if (newAlias == null) {
+      return Optional.empty();
+    }
+
+    if (newAlias.isBlank()) {
+      return Optional.of("alias is invalid");
+    }
+
+    user.setAlias(newAlias);
+    return Optional.empty();
+  }
+
+  private Optional<String> updateGender(String newGender, User user) {
+    if (newGender == null) {
+      return Optional.empty();
+    }
+
+    if (newGender.isBlank()) {
+      return Optional.of("gender must have at least one character");
+    }
+
+    Optional<UserGender> gender = UserGender.parse(newGender);
+    gender.ifPresent(user::setGender);
+
+    return gender.isPresent()
+        ? Optional.empty()
+        : Optional.of("gender is invalid, valid options: [" + getGenderOptionsString() + "]");
+  }
+
+  private static String getGenderOptionsString() {
+    return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
+  }
+
+  @GetMapping("validate-token")
+  public boolean isValidToken(@RequestParam String token) {
+    if (token == null) {
+      throw new BadRequestException("token is required");
+    }
+
+    return jwtService.readToken(token).isPresent();
   }
 }

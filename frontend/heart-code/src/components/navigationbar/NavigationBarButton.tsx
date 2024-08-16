@@ -1,19 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import "./NavigationBar.css";
+import { Button } from "react-bootstrap";
+import { ReactNode } from "react";
+import { AppRoute } from "../../enums/AppRoute";
 
 interface ButtonProps {
-  page: string;
-  pageName: string;
+  page: AppRoute;
+  icon: ReactNode;
+  className?: string;
 }
 
-export default function NavigationBarButton({ page, pageName }: ButtonProps) {
-  //Moet later nog een icon krijgen ipv pageName
-
+export default function NavigationBarButton({
+  page,
+  icon,
+  className,
+}: ButtonProps) {
   const navigate = useNavigate();
 
   return (
-    <button className="button" onClick={() => navigate("/" + page)}>
-      {pageName}
-    </button>
+    <div>
+      <Button
+        className={`navbar-button ${className}`}
+        onClick={() => navigate(page)}
+      >
+        {icon}
+      </Button>
+    </div>
   );
 }

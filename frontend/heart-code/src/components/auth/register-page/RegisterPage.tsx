@@ -1,25 +1,34 @@
 import { useState } from "react";
 import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
 import {
   isValidEmail,
   isValidDateOfBirth,
   isValidAge,
+  isValidPassword,
 } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
+import Gender, { genders } from "../../../enums/Gender";
 
-export default function RegisterPage() {
+interface Props {
+  onRegister: () => void;
+}
+export default function RegisterPage({ onRegister }: Props) {
   const [registerData, setRegisterData] = useState<RegisterData>({
     email: "",
     alias: "",
     password: "",
+    passwordConfirmation: "",
+    gender: Gender.MALE,
     dateOfBirth: "",
   });
 
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
+  const [passwordConfirmationVisible, setpasswordConfirmationVisible] =
+    useState<Boolean>(false);
 
   const { register } = useAuthentication();
   const navigate = useNavigate();
@@ -58,7 +67,10 @@ export default function RegisterPage() {
             }))
           }
         />
-        <Button onClick={() => setPasswordVisible((visible) => !visible)}>
+        <Button
+          className="visibility-button"
+          onClick={() => setPasswordVisible((visible) => !visible)}
+        >
           <div className="icon-button-content">
             {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
           </div>
@@ -76,14 +88,53 @@ export default function RegisterPage() {
           }
         />
       </InputGroup>
-      <Button disabled={formErrors.length > 0} onClick={submit}>
+      <InputGroup>
+        <Form.Control
+          placeholder="Confirm Password"
+          value={registerData.passwordConfirmation}
+          type={passwordConfirmationVisible ? "text" : "password"}
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              passwordConfirmation: event.target.value,
+            }))
+          }
+        />
+        <Button
+          className="visibility-button"
+          onClick={() => setpasswordConfirmationVisible((visible) => !visible)}
+        >
+          <div className="icon-button-content">
+            {passwordConfirmationVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
+          </div>
+        </Button>
+      </InputGroup>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) =>
+            setRegisterData((data) => ({ ...data, gender: event.target.value }))
+          }
+        >
+          {genders.map((gender) => (
+            <option key={gender}>{gender}</option>
+          ))}
+        </Form.Select>
+      </InputGroup>
+      <Button
+        className="submit-button"
+        disabled={formErrors.length > 0}
+        onClick={submit}
+      >
         Register
       </Button>
       <div className="auth-form-errors">
         {formErrors.map((err, index) => (
-          <div key={index}>{err}</div>
+          <div className="error-message" key={index}>
+            {err}
+          </div>
         ))}
       </div>
+      <Link to="/login">or login if you already have an account</Link>
     </div>
   );
 
@@ -100,28 +151,39 @@ export default function RegisterPage() {
       errors.push("An alias is required");
     }
 
-    if (registerData.password.length === 0) {
-      errors.push("A password is required");
+    if (registerData.password !== registerData.passwordConfirmation) {
+      errors.push("Password does not match");
+    }
+
+    if (!isValidPassword(registerData.password)) {
+      errors.push(`password must contain
+          an uppercase letter,
+          a lowercase letter,
+          a number,
+          a special character
+          and must have at least 7 characters
+        `);
     }
 
     if (registerData.dateOfBirth.length === 0) {
-      errors.push("A date of birth is required");
-    } else if (!isValidDateOfBirth(registerData.dateOfBirth)) {
-      errors.push("You must enter a valid date of birth");
-    } else {
-      const dataInfo = registerData.dateOfBirth.split("/");
-      const dateString = dataInfo.join("-");
-      const [day, month, year] = dateString.split("-");
-      if (!isValidAge(new Date(+year, +month - 1, +day))) {
-        console.log(new Date(+year, +month - 1, +day));
-        errors.push("You must be at least 18 years old");
-      }
-    }
+          errors.push("A date of birth is required");
+        } else if (!isValidDateOfBirth(registerData.dateOfBirth)) {
+          errors.push("You must enter a valid date of birth");
+        } else {
+          const dataInfo = registerData.dateOfBirth.split("/");
+          const dateString = dataInfo.join("-");
+          const [day, month, year] = dateString.split("-");
+          if (!isValidAge(new Date(+year, +month - 1, +day))) {
+            console.log(new Date(+year, +month - 1, +day));
+            errors.push("You must be at least 18 years old");
+          }
+        }
 
     return errors;
   }
-
   function submit() {
-    register(registerData).then(() => navigate("/"));
+    register(registerData)
+      .then(onRegister)
+      .catch(() => alert("registration failed"));
   }
 }

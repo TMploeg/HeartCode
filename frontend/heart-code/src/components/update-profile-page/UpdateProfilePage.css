@@ -1,0 +1,21 @@
+.spinner-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.update-profile-form-container {
+  padding: 20px;
+}
+
+.profile-update-save-button {
+  margin-top: 10px;
+}
+
+.profile-field-label {
+  color: gray;
+}
+.profile-field-label.changed {
+  color: black;
+}

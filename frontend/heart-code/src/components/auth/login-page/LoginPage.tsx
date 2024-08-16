@@ -3,14 +3,18 @@ import "../Auth.css";
 import { useState } from "react";
 import { useAuthentication } from "../../../hooks";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface LoginData {
   email: string;
   password: string;
 }
 
-export default function LoginPage() {
+interface Props {
+  onLogin: () => void;
+}
+
+export default function LoginPage({ onLogin }: Props) {
   const [loginData, setLoginData] = useState<LoginData>({
     email: "",
     password: "",
@@ -42,13 +46,20 @@ export default function LoginPage() {
             setLoginData((data) => ({ ...data, password: event.target.value }))
           }
         />
-        <Button onClick={() => setPasswordVisible((visible) => !visible)}>
+        <Button
+          className="visibility-button"
+          onClick={() => setPasswordVisible((visible) => !visible)}
+        >
           <div className="icon-button-content">
             {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
           </div>
         </Button>
       </InputGroup>
-      <Button disabled={formErrors.length > 0} onClick={submit}>
+      <Button
+        className="submit-button"
+        disabled={formErrors.length > 0}
+        onClick={submit}
+      >
         Login
       </Button>
       <div className="auth-form-errors">
@@ -56,6 +67,7 @@ export default function LoginPage() {
           <div key={index}>{err}</div>
         ))}
       </div>
+      <Link to="/register">or register if you do not yet have an account</Link>
     </div>
   );
 
@@ -75,7 +87,7 @@ export default function LoginPage() {
 
   function submit() {
     login(loginData)
-      .then(() => navigate("/"))
+      .then(onLogin)
       .catch((error) => showError(error.response.data.detail));
   }
 

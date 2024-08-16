@@ -16,9 +16,16 @@ export default function useApi() {
     });
   }
 
+  function patch<TResponse, TBody>(url: string, body: TBody) {
+    return axios.patch<TResponse>(convertUrl(url), body, {
+      headers: getHeaders(),
+    });
+  }
+
   return {
     get,
     post,
+    patch,
   };
 
   function convertUrl(url: string) {

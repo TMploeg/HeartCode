@@ -1,6 +1,8 @@
 package com.itvitae.heartcode.user;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
 import java.time.Period;
@@ -8,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +24,7 @@ public class User implements UserDetails {
 
   @Id private String email;
 
-  private String alias;
+  @Setter private String alias;
 
   private String password;
 
@@ -29,12 +32,17 @@ public class User implements UserDetails {
 
   private LocalDate dateOfBirth;
 
-  public User(String email, String alias, String password, LocalDate dateOfBirth) {
+  @Setter
+  @Enumerated(EnumType.ORDINAL)
+  private UserGender gender;
+
+  public User(String email, String alias, String password, LocalDate dateOfBirth, UserGender gender) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
     this.dateOfBirth = dateOfBirth;
+    this.gender = gender;
   }
 
   public int getAge() {

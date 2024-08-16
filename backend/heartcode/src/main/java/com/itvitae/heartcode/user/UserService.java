@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.regex.Pattern;
+
+import com.itvitae.heartcode.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +25,7 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
-  public User save(String email, String alias, String password, String dateOfBirthString) {
+  public User save(String email, String alias, String password, UserGender gender, String dateOfBirthString) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -37,12 +39,19 @@ public class UserService implements UserDetailsService {
     }
 
     LocalDate dateOfBirth =
-        parseDateOfBirth(dateOfBirthString)
-            .filter(date -> isOver18(date))
-            .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
+            parseDateOfBirth(dateOfBirthString)
+                    .filter(date -> isOver18(date))
+                    .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
 
-    return userRepository.save(
-        new User(email, alias, passwordEncoder.encode(password), dateOfBirth));
+    return userRepository.save(new User(email, alias, passwordEncoder.encode(password), gender, dateOfBirth));
+  }
+
+  public User update(User user) {
+    if (user == null) {
+      throw new IllegalArgumentException("user is null");
+    }
+
+    return userRepository.save(user);
   }
 
   public boolean isInvalidEmail(String email) {
@@ -92,6 +101,26 @@ public class UserService implements UserDetailsService {
 
   public boolean isCorrectPassword(User user, String password) {
     return passwordEncoder.matches(password, user.getPassword());
+  }
+
+  public boolean isValidPassword(String password) {
+    int numOfUppercase = 0;
+    int numOfLowercase = 0;
+    int numOfDigits = 0;
+    int numOfSpecialChars = 0;
+    for (int i = 0; i < password.length(); i++) {
+      char ch = password.charAt(i);
+      if (Character.isUpperCase(ch)) {
+        numOfUppercase++;
+      } else if (Character.isLowerCase(ch)){
+        numOfLowercase++;
+      } else if (Character.isDigit(ch)) {
+        numOfDigits++;
+      } else if (!Character.isAlphabetic(ch) && !Character.isDigit(ch)) {
+        numOfSpecialChars++;
+      }
+    }
+    return numOfUppercase >= 1 && numOfLowercase >= 1 && numOfDigits >= 1 && numOfSpecialChars >= 1 && password.length() > 7;
   }
 
   // ONLY USED BY SPRING SECURITY, USE 'findById' TO GET USERS!!!
