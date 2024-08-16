@@ -1,7 +1,7 @@
 import { User } from "../../models/User";
 import { Card, Button } from "react-bootstrap";
 import "./Profile.css";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Gender from "../../enums/Gender";
 import { AppRoute } from "../../enums/AppRoute";
 

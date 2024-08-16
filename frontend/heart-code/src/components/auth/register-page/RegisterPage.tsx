@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
 import { isValidEmail, isValidPassword } from "../AuthValidation";
@@ -24,7 +24,6 @@ export default function RegisterPage({ onRegister }: Props) {
     useState<Boolean>(false);
 
   const { register } = useAuthentication();
-  const navigate = useNavigate();
 
   const formErrors: String[] = getFormErrors();
 
