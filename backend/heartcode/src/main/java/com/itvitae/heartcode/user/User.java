@@ -36,13 +36,14 @@ public class User implements UserDetails {
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
-  public User(String email, String alias, String password, LocalDate dateOfBirth, UserGender gender) {
+  public User(
+      String email, String alias, String password, UserGender gender, LocalDate dateOfBirth) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
-    this.dateOfBirth = dateOfBirth;
     this.gender = gender;
+    this.dateOfBirth = dateOfBirth;
   }
 
   public int getAge() {
