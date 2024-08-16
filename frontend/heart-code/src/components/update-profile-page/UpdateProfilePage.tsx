@@ -59,6 +59,7 @@ export default function UpdateProfilePage() {
                 }
               />
             </ListGroup.Item>
+
             <ListGroup.Item>
               <Form.Label
                 className={`profile-field-label ${
@@ -85,6 +86,29 @@ export default function UpdateProfilePage() {
                   </option>
                 ))}
               </Form.Select>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Label
+                className={`profile-field-label ${
+                  updateValues.bio.changed ? "changed" : ""
+                }`}
+              >
+                Bio{updateValues.bio.changed ? "*" : ""}
+              </Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={5}
+                value={updateValues.bio.value}
+                onChange={(event) =>
+                  setUpdateValues((values) => ({
+                    ...values,
+                    bio: {
+                      value: event.target.value,
+                      changed: (userInfo.bio ?? "") !== event.target.value,
+                    },
+                  }))
+                }
+              />
             </ListGroup.Item>
           </ListGroup>
           <Button
@@ -114,6 +138,7 @@ export default function UpdateProfilePage() {
     setUpdateValues({
       alias: { value: userInfo.alias, changed: false },
       gender: { value: userInfo.gender, changed: false },
+      bio: { value: userInfo.bio, changed: false },
     });
   }
 
@@ -134,6 +159,7 @@ export default function UpdateProfilePage() {
       gender: updateValues.gender.changed
         ? updateValues.gender.value
         : undefined,
+      bio: updateValues.bio.changed ? updateValues.bio.value : undefined,
     };
 
     patch("users/account", updatedFields)
