@@ -23,7 +23,7 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
-  public User save(String email, String alias, String password, String dateOfBirth) {
+  public User save(String email, String alias, String password, String dateOfBirthString) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -36,9 +36,10 @@ public class UserService implements UserDetailsService {
       throw new IllegalArgumentException("password is invalid");
     }
 
-    parseDateOfBirth(dateOfBirth)
-        .filter(date -> isOver18(date))
-        .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
+    LocalDate dateOfBirth =
+        parseDateOfBirth(dateOfBirthString)
+            .filter(date -> isOver18(date))
+            .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
 
     return userRepository.save(
         new User(email, alias, passwordEncoder.encode(password), dateOfBirth));

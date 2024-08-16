@@ -8,6 +8,7 @@ import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserRepository;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
@@ -50,7 +51,7 @@ public class Seeder implements CommandLineRunner {
                 "user7",
                 "user8",
                 "user9")
-            .map(s -> new User(s + "@heartcode.com", s, "{noop}" + s + "_password", "13/10/2000"))
+            .map(s -> new User(s + "@heartcode.com", s, "{noop}" + s + "_password", LocalDate.now()))
             .toList());
   }
 

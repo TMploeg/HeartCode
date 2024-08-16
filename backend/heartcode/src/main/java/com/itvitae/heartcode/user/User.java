@@ -2,6 +2,8 @@ package com.itvitae.heartcode.user;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -25,14 +27,20 @@ public class User implements UserDetails {
 
   private UserRole role;
 
-  private String dateOfBirth;
+  private LocalDate dateOfBirth;
 
-  public User(String email, String alias, String password, String dateOfBirth) {
+  public User(String email, String alias, String password, LocalDate dateOfBirth) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
     this.dateOfBirth = dateOfBirth;
+  }
+
+  public int getAge() {
+    LocalDate now = LocalDate.now();
+    Period period = Period.between(dateOfBirth, now);
+    return period.getYears();
   }
 
   @Override
