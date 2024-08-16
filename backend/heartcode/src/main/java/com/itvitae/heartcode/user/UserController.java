@@ -35,7 +35,7 @@ public class UserController {
     if (registerDTO.alias() == null || registerDTO.alias().isBlank()) {
       throw new BadRequestException("alias is required");
     }
-    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password()) ) {
+    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password())) {
       throw new BadRequestException("password is not valid");
     }
 
@@ -44,6 +44,20 @@ public class UserController {
     } else if (registerDTO.gender().isBlank()) {
       throw new BadRequestException("gender must have at least one character");
     }
+    if (registerDTO.dateOfBirth() == null || registerDTO.dateOfBirth().isBlank()) {
+      throw new BadRequestException("Date of birth is required");
+    }
+    if (registerDTO.dateOfBirth() == null) {
+      throw new BadRequestException("Date of birth is not a real date");
+    }
+
+    userService
+        .parseDateOfBirth(registerDTO.dateOfBirth())
+        .filter(date -> userService.isOver18(date))
+        .orElseThrow(
+            () ->
+                new BadRequestException(
+                    "date of birth field doesn't include a valid date or is younger then 18"));
 
     UserGender gender =
         UserGender.parse(registerDTO.gender())
@@ -60,6 +74,7 @@ public class UserController {
             registerDTO.alias(),
             registerDTO.password(),
             gender,
+            registerDTO.dateOfBirth(),
             registerDTO.bio());
 
     return new AuthTokenDTO(
