@@ -1,17 +1,16 @@
 package com.itvitae.heartcode.user;
 
 import jakarta.persistence.*;
-
-import java.sql.Blob;
-import java.sql.Clob;
 import java.util.Collection;
 import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity(name = "users")
 @NoArgsConstructor
@@ -26,7 +25,7 @@ public class User implements UserDetails {
 
   @Setter
   @Lob
-  private Clob bio;
+  private String bio;
 
   private String password;
 
@@ -36,7 +35,7 @@ public class User implements UserDetails {
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
-  public User(String email, String alias, String password, UserGender gender, Clob bio) {
+  public User(String email, String alias, String password, UserGender gender, String bio) {
     this.email = email;
     this.alias = alias;
     this.password = password;

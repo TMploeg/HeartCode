@@ -100,6 +100,20 @@ export default function RegisterPage({ onRegister }: Props) {
             <option key={gender}>{gender}</option>
           ))}
         </Form.Select>
+
+        <InputGroup>
+          <Form.Control
+            className="bio-field"
+            placeholder="Bio"
+            value={registerData.bio}
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                alias: event.target.value,
+              }))
+            }
+          />
+        </InputGroup>
       </InputGroup>
       <Button
         className="submit-button"

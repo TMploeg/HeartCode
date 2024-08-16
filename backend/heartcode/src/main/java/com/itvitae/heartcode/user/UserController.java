@@ -4,6 +4,8 @@ import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -86,7 +88,7 @@ public class UserController {
   }
 
   @GetMapping("account")
-  public ResponseEntity<UserDTO> getCurrentUser() {
+  public ResponseEntity<UserDTO> getCurrentUser() throws SQLException {
     return ResponseEntity.ok(UserDTO.from(userService.getCurrentUser()));
   }
 
@@ -105,6 +107,7 @@ public class UserController {
 
     updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
+    updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
@@ -123,6 +126,17 @@ public class UserController {
     }
 
     user.setAlias(newAlias);
+    return Optional.empty();
+  }
+
+  private Optional<String> updateBio(String newBio, User user) {
+
+    System.out.println("in update bio");
+    if (newBio == null) {
+      return Optional.empty();
+    }
+
+    user.setBio(newBio);
     return Optional.empty();
   }
 

@@ -1,7 +1,5 @@
 package com.itvitae.heartcode.user;
 
-import java.sql.Blob;
-import java.sql.Clob;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -23,7 +21,7 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
-  public User save(String email, String alias, String password, UserGender gender, Clob bio) {
+  public User save(String email, String alias, String password, UserGender gender, String bio) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }

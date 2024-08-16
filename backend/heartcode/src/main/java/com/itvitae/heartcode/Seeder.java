@@ -14,12 +14,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.engine.jdbc.ClobProxy;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class Seeder implements CommandLineRunner {
   private final UserRepository userRepository;
@@ -55,7 +58,7 @@ public class Seeder implements CommandLineRunner {
             .map(
                 s ->
                     new User(
-                        s + "@heartcode.com", s, "{noop}" + s + "_password", getRandomGender(), ClobProxy.generateProxy("bio")))
+                        s + "@heartcode.com", s, "{noop}" + s + "_password", getRandomGender(), "bio"))
             .toList());
   }
 
