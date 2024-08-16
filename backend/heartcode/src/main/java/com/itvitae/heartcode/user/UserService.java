@@ -11,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
@@ -106,14 +104,5 @@ public class UserService implements UserDetailsService {
     return userRepository
         .findById(username)
         .orElseThrow(() -> new UsernameNotFoundException("user '" + username + "' not found"));
-  }
-
-  @PostMapping("picture-test")
-  public void pictureTest(@RequestBody byte[] bytes) {
-    System.out.println("BYTES START");
-    for (byte b : bytes) {
-      System.out.println(b);
-    }
-    System.out.println("BYTES END");
   }
 }
