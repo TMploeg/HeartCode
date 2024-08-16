@@ -94,6 +94,7 @@ public class UserController {
 
   @GetMapping("{id}")
   public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
+    System.out.println("in getuserbyid");
     Optional<User> user = userService.findById(id);
     if (!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
     return ResponseEntity.ok(UserDTO.from(user.get()));

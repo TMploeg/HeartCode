@@ -28,6 +28,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     getMessages();
+    getMatchProfile();
     const interval = setInterval(getMessages, FETCH_MESSAGES_INTERVAL_DELAY);
 
     return () => clearInterval(interval);
@@ -52,7 +53,9 @@ export default function ChatPage() {
       </button>
       <Modal show={show} fullscreen={true} onHide={() => setShow(false)}>
         <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>{}</Modal.Body>
+        <Modal.Body>
+          <Profile user={matchProfile} isPersonalPage={false} />
+        </Modal.Body>
       </Modal>
       <div className="chat-page-messages">
         {messages === null
@@ -80,9 +83,10 @@ export default function ChatPage() {
   );
 
   function getMatchProfile() {
-    get("/", { matchEmail: match.email }).then((response) =>
-      setMatchProfile(response.data)s
-    );
+    get<User>("users", { matchEmail: match.email }).then((response) => {
+      setMatchProfile(response.data);
+      console.log(matchProfile);
+    });
   }
 
   function getMessages() {
