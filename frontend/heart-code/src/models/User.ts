@@ -3,4 +3,5 @@ export interface User {
   alias: string;
   gender: string;
   age: number;
+  bio: string;
 }

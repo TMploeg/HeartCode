@@ -7,4 +7,5 @@ export default interface RegisterData {
   passwordConfirmation: string;
   gender: string;
   dateOfBirth: string;
+  bio: string;
 }

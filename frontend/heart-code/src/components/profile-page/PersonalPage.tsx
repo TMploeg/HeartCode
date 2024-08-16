@@ -10,6 +10,7 @@ export default function PersonalPage() {
   useEffect(() => {
     get<User>("users/account").then((response) => {
       setUser(response.data);
+      console.log(user);
     });
   }, []);
 

@@ -27,7 +27,7 @@ export default function Profile({ user, isPersonalPage }: Props) {
           </Card.Subtitle>
           <Card.Subtitle>Relationship type</Card.Subtitle>
           <Card className="bio">
-            <Card.Text>Bio text goes here</Card.Text>
+            <Card.Text>{user.bio}</Card.Text>
           </Card>
         </Card.Body>
         {isPersonalPage ? (
