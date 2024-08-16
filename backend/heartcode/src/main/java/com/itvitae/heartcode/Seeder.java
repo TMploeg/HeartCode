@@ -6,9 +6,14 @@ import com.itvitae.heartcode.evaluation.Evaluation;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.match.MatchService;
+import com.itvitae.heartcode.profilepictures.ProfilePicture;
+import com.itvitae.heartcode.profilepictures.ProfilePictureRepository;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserGender;
 import com.itvitae.heartcode.user.UserRepository;
+import jakarta.transaction.Transactional;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
@@ -19,12 +24,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class Seeder implements CommandLineRunner {
   private final UserRepository userRepository;
   private final EvaluationRepository evaluationRepository;
   private final MatchRepository matchRepository;
   private final MatchService matchService;
   private final ChatMessageRepository chatMessageRepository;
+  private final ProfilePictureRepository profilePictureRepository;
 
   @Override
   public void run(String... args) throws Exception {
@@ -37,6 +44,8 @@ public class Seeder implements CommandLineRunner {
     if (userRepository.count() != 0) {
       return;
     }
+
+    byte[] placeholderImageBytes = getPlaceholderImageBytes();
 
     userRepository.saveAll(
         Stream.of(
@@ -58,13 +67,28 @@ public class Seeder implements CommandLineRunner {
                         s,
                         "{noop}" + s + "_password",
                         getRandomGender(),
-                        null))
+                        profilePictureRepository.save(new ProfilePicture(placeholderImageBytes))))
             .toList());
   }
 
   private UserGender getRandomGender() {
     UserGender[] genders = UserGender.values();
     return genders[new Random().nextInt(genders.length)];
+  }
+
+  private byte[] getPlaceholderImageBytes() {
+    try (InputStream fileStream =
+        HeartCodeApplication.class
+            .getClassLoader()
+            .getResourceAsStream("placeholder_profile_picture")) {
+      if (fileStream == null) {
+        throw new RuntimeException("file stream not found");
+      }
+
+      return fileStream.readAllBytes();
+    } catch (IOException ex) {
+      throw new RuntimeException(ex.getMessage(), ex);
+    }
   }
 
   private void seedEvaluationsAndMatches() {
