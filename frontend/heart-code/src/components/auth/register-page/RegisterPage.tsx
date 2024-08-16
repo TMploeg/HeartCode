@@ -30,6 +30,9 @@ export default function RegisterPage({ onRegister }: Props) {
 
   return (
     <div className="auth-form">
+      <div className="profile-picture-input-field" onClick={chooseImage}>
+        test
+      </div>
       <InputGroup>
         <Form.Control
           placeholder="Email Address"
@@ -148,9 +151,25 @@ export default function RegisterPage({ onRegister }: Props) {
 
     return errors;
   }
+
   function submit() {
     register(registerData)
       .then(onRegister)
       .catch(() => alert("registration failed"));
+  }
+
+  function chooseImage(): void {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.click();
+    input.addEventListener("change", async (event) => {
+      const files: FileList | null = (event.target as HTMLInputElement).files;
+      if (files === null) {
+        return;
+      }
+
+      const buffer: ArrayBuffer = await files[0].arrayBuffer();
+      const blob: Blob = new Blob(buffer);
+    });
   }
 }
