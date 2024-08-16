@@ -100,7 +100,6 @@ export default function RegisterPage({ onRegister }: Props) {
             <option key={gender}>{gender}</option>
           ))}
         </Form.Select>
-
         <InputGroup>
           <Form.Control
             as="textarea"
