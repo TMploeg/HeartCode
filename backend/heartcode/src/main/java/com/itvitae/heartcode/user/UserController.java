@@ -33,7 +33,7 @@ public class UserController {
     if (registerDTO.alias() == null || registerDTO.alias().isBlank()) {
       throw new BadRequestException("alias is required");
     }
-    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password()) ) {
+    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password())) {
       throw new BadRequestException("password is not valid");
     }
 
@@ -44,6 +44,9 @@ public class UserController {
     }
     if (registerDTO.dateOfBirth() == null || registerDTO.dateOfBirth().isBlank()) {
       throw new BadRequestException("Date of birth is required");
+    }
+    if (registerDTO.dateOfBirth() == null) {
+      throw new BadRequestException("Date of birth is not a real date");
     }
 
     UserGender gender =
@@ -56,7 +59,12 @@ public class UserController {
                             + "]"));
 
     User user =
-        userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password(), gender, registerDTO.dateOfBirth());
+        userService.save(
+            registerDTO.email(),
+            registerDTO.alias(),
+            registerDTO.password(),
+            gender,
+            registerDTO.dateOfBirth());
 
     return new AuthTokenDTO(
         jwtService
@@ -90,9 +98,9 @@ public class UserController {
 
   @GetMapping("{id}")
   public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
-      Optional<User> user = userService.findById(id);
-      if(!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
-      return ResponseEntity.ok(UserDTO.from(user.get()));
+    Optional<User> user = userService.findById(id);
+    if (!userService.userWithEmailExists(id)) return ResponseEntity.notFound().build();
+    return ResponseEntity.ok(UserDTO.from(user.get()));
   }
 
   @ResponseStatus(HttpStatus.NO_CONTENT)
