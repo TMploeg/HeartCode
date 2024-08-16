@@ -166,18 +166,18 @@ export default function RegisterPage({ onRegister }: Props) {
     }
 
     if (registerData.dateOfBirth.length === 0) {
-          errors.push("A date of birth is required");
-        } else if (!isValidDateOfBirth(registerData.dateOfBirth)) {
-          errors.push("You must enter a valid date of birth");
-        } else {
-          const dataInfo = registerData.dateOfBirth.split("/");
-          const dateString = dataInfo.join("-");
-          const [day, month, year] = dateString.split("-");
-          if (!isValidAge(new Date(+year, +month - 1, +day))) {
-            console.log(new Date(+year, +month - 1, +day));
-            errors.push("You must be at least 18 years old");
-          }
-        }
+      errors.push("A date of birth is required");
+    } else if (!isValidDateOfBirth(registerData.dateOfBirth)) {
+      errors.push("You must enter a valid date of birth");
+    } else {
+      const dataInfo = registerData.dateOfBirth.split("/");
+      const dateString = dataInfo.join("-");
+      const [day, month, year] = dateString.split("-");
+      if (!isValidAge(new Date(+year, +month - 1, +day))) {
+        console.log(new Date(+year, +month - 1, +day));
+        errors.push("You must be at least 18 years old");
+      }
+    }
 
     return errors;
   }
