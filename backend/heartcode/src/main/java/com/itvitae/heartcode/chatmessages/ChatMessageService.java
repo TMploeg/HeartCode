@@ -4,10 +4,13 @@ import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ChatMessageService {
   private final ChatMessageRepository chatMessageRepository;

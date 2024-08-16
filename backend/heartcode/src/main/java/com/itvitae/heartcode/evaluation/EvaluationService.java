@@ -1,10 +1,12 @@
 package com.itvitae.heartcode.evaluation;
 
 import com.itvitae.heartcode.user.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class EvaluationService {
   private final EvaluationRepository evaluationRepository;
