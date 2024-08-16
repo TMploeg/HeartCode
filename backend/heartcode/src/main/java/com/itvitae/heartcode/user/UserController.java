@@ -49,6 +49,14 @@ public class UserController {
       throw new BadRequestException("Date of birth is not a real date");
     }
 
+    userService
+        .parseDateOfBirth(registerDTO.dateOfBirth())
+        .filter(date -> userService.isOver18(date))
+        .orElseThrow(
+            () ->
+                new BadRequestException(
+                    "date of birth field doesn't include a valid date or is younger then 18"));
+
     UserGender gender =
         UserGender.parse(registerDTO.gender())
             .orElseThrow(
