@@ -6,8 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.regex.Pattern;
-
-import com.itvitae.heartcode.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,7 +23,8 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
-  public User save(String email, String alias, String password, UserGender gender, String dateOfBirthString) {
+  public User save(
+      String email, String alias, String password, UserGender gender, String dateOfBirthString) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -39,11 +38,12 @@ public class UserService implements UserDetailsService {
     }
 
     LocalDate dateOfBirth =
-            parseDateOfBirth(dateOfBirthString)
-                    .filter(date -> isOver18(date))
-                    .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
+        parseDateOfBirth(dateOfBirthString)
+            .filter(date -> isOver18(date))
+            .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
 
-    return userRepository.save(new User(email, alias, passwordEncoder.encode(password), gender, dateOfBirth));
+    return userRepository.save(
+        new User(email, alias, passwordEncoder.encode(password), gender, dateOfBirth));
   }
 
   public User update(User user) {
@@ -112,7 +112,7 @@ public class UserService implements UserDetailsService {
       char ch = password.charAt(i);
       if (Character.isUpperCase(ch)) {
         numOfUppercase++;
-      } else if (Character.isLowerCase(ch)){
+      } else if (Character.isLowerCase(ch)) {
         numOfLowercase++;
       } else if (Character.isDigit(ch)) {
         numOfDigits++;
@@ -120,7 +120,11 @@ public class UserService implements UserDetailsService {
         numOfSpecialChars++;
       }
     }
-    return numOfUppercase >= 1 && numOfLowercase >= 1 && numOfDigits >= 1 && numOfSpecialChars >= 1 && password.length() > 7;
+    return numOfUppercase >= 1
+        && numOfLowercase >= 1
+        && numOfDigits >= 1
+        && numOfSpecialChars >= 1
+        && password.length() > 7;
   }
 
   // ONLY USED BY SPRING SECURITY, USE 'findById' TO GET USERS!!!
