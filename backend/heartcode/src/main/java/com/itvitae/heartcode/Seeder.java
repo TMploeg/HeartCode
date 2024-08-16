@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.engine.jdbc.ClobProxy;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

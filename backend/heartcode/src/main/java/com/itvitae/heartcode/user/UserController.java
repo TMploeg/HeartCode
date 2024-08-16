@@ -130,8 +130,6 @@ public class UserController {
   }
 
   private Optional<String> updateBio(String newBio, User user) {
-
-    System.out.println("in update bio");
     if (newBio == null) {
       return Optional.empty();
     }
