@@ -103,13 +103,15 @@ export default function RegisterPage({ onRegister }: Props) {
 
         <InputGroup>
           <Form.Control
+            as="textarea"
+            rows={5}
             className="bio-field"
             placeholder="Bio"
             value={registerData.bio}
             onChange={(event) =>
               setRegisterData((data) => ({
                 ...data,
-                alias: event.target.value,
+                bio: event.target.value,
               }))
             }
           />
