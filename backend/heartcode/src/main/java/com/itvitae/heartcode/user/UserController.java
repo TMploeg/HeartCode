@@ -88,7 +88,7 @@ public class UserController {
   }
 
   @GetMapping("account")
-  public ResponseEntity<UserDTO> getCurrentUser() throws SQLException {
+  public ResponseEntity<UserDTO> getCurrentUser() {
     return ResponseEntity.ok(UserDTO.from(userService.getCurrentUser()));
   }
 
