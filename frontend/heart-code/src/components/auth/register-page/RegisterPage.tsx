@@ -24,6 +24,7 @@ export default function RegisterPage({ onRegister }: Props) {
     passwordConfirmation: "",
     gender: Gender.MALE,
     dateOfBirth: "",
+    bio: "",
   });
 
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
@@ -188,7 +189,6 @@ export default function RegisterPage({ onRegister }: Props) {
       const dateString = dataInfo.join("-");
       const [day, month, year] = dateString.split("-");
       if (!isValidAge(new Date(+year, +month - 1, +day))) {
-        console.log(new Date(+year, +month - 1, +day));
         errors.push("You must be at least 18 years old");
       }
     }
