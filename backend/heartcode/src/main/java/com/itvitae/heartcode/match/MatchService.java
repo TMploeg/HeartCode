@@ -6,10 +6,13 @@ import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MatchService {
   private final MatchRepository matchRepository;
