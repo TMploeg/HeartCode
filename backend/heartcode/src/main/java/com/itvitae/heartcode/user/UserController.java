@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -95,5 +96,14 @@ public class UserController {
     userService.update(user);
 
     return UserDTO.from(user);
+  }
+
+  @GetMapping("get-random-user")
+  public UserDTO getRandomUser() {
+    List<User> userList = userService.findAll();
+    Random r = new Random();
+    int randomIndex = r.nextInt(0, userList.size());
+    User randomUser = userList.get(randomIndex);
+    return new UserDTO(randomUser.getAlias(), randomUser.getAlias());
   }
 }

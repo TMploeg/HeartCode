@@ -7,6 +7,7 @@ import ProfilePage from "./components/profile-page/PersonalPage";
 import ChatPage from "./components/chat/ChatPage";
 import LoginPage from "./components/auth/login-page/LoginPage";
 import UpdateProfilePage from "./components/update-profile-page/UpdateProfilePage";
+import BrowsingPage from "./components/browsing/BrowsingPage";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="account" element={<ProfilePage />} />
           <Route path="account/update" element={<UpdateProfilePage />} />
+          <Route path="browse" element={<BrowsingPage />} />
         </Routes>
         <div className="nav-bar">
           <NavigationBar />

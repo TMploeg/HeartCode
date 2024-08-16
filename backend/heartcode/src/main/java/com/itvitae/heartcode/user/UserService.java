@@ -1,5 +1,6 @@
 package com.itvitae.heartcode.user;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,10 @@ public class UserService implements UserDetailsService {
 
   public Optional<User> findById(String address) {
     return userRepository.findById(address);
+  }
+
+  public List<User> findAll() {
+    return userRepository.findAll();
   }
 
   public User save(String email, String alias, String password) {

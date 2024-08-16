@@ -1,23 +1,22 @@
+import Profile from "../profile-page/Profile";
 import { useEffect, useState } from "react";
 import { User } from "../../models/User";
 import { useApi } from "../../hooks";
-import Profile from "./Profile";
-// import { useParams } from "react-router-dom";
 
-export default function PersonalPage() {
+export default function Browsing() {
   const [user, setUser] = useState<User>();
   const { get } = useApi();
 
   useEffect(() => {
-    get<User>("users/account").then((response) => {
+    get<User>("users/get-random-user").then((response) => {
       setUser(response.data);
     });
   }, []);
 
   return (
-    <div className="personal-page">
+    <div className="browse">
       {user !== undefined && user !== null ? (
-        <Profile user={user} isPersonalPage={false} />
+        <Profile user={user} isPersonalPage={true} />
       ) : (
         "Loading..."
       )}
