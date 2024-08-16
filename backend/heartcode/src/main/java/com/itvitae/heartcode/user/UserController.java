@@ -4,6 +4,8 @@ import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +35,7 @@ public class UserController {
     if (registerDTO.alias() == null || registerDTO.alias().isBlank()) {
       throw new BadRequestException("alias is required");
     }
-    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password()) ) {
+    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password())) {
       throw new BadRequestException("password is not valid");
     }
 
@@ -42,6 +44,20 @@ public class UserController {
     } else if (registerDTO.gender().isBlank()) {
       throw new BadRequestException("gender must have at least one character");
     }
+    if (registerDTO.dateOfBirth() == null || registerDTO.dateOfBirth().isBlank()) {
+      throw new BadRequestException("Date of birth is required");
+    }
+    if (registerDTO.dateOfBirth() == null) {
+      throw new BadRequestException("Date of birth is not a real date");
+    }
+
+    userService
+        .parseDateOfBirth(registerDTO.dateOfBirth())
+        .filter(date -> userService.isOver18(date))
+        .orElseThrow(
+            () ->
+                new BadRequestException(
+                    "date of birth field doesn't include a valid date or is younger then 18"));
 
     UserGender gender =
         UserGender.parse(registerDTO.gender())
@@ -53,7 +69,13 @@ public class UserController {
                             + "]"));
 
     User user =
-        userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password(), gender);
+        userService.save(
+            registerDTO.email(),
+            registerDTO.alias(),
+            registerDTO.password(),
+            gender,
+            registerDTO.dateOfBirth(),
+            registerDTO.bio());
 
     return new AuthTokenDTO(
         jwtService
@@ -100,6 +122,7 @@ public class UserController {
 
     updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
+    updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
@@ -118,6 +141,15 @@ public class UserController {
     }
 
     user.setAlias(newAlias);
+    return Optional.empty();
+  }
+
+  private Optional<String> updateBio(String newBio, User user) {
+    if (newBio == null) {
+      return Optional.empty();
+    }
+
+    user.setBio(newBio);
     return Optional.empty();
   }
 

@@ -17,7 +17,6 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[] | null>(null);
   const [newMessage, setNewMessage] = useState<string>("");
 
-
   useEffect(() => {
     getMessages();
     const interval = setInterval(getMessages, FETCH_MESSAGES_INTERVAL_DELAY);
@@ -34,8 +33,8 @@ export default function ChatPage() {
         {messages === null
           ? "loading..."
           : messages.map((message, index) => (
-            <ChatMessageView key={index} chatMessage={message} />
-          ))}
+              <ChatMessageView key={index} chatMessage={message} />
+            ))}
       </div>
 
       <div className="chat-message-input-container">

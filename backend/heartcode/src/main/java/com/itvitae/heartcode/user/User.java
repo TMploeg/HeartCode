@@ -1,9 +1,8 @@
 package com.itvitae.heartcode.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import java.time.LocalDate;
+import java.time.Period;
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -24,20 +23,35 @@ public class User implements UserDetails {
 
   @Setter private String alias;
 
+  @Setter
+  @Lob
+  private String bio;
+
   private String password;
 
   private UserRole role;
+
+  private LocalDate dateOfBirth;
 
   @Setter
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
-  public User(String email, String alias, String password, UserGender gender) {
+  public User(
+      String email, String alias, String password, UserGender gender, LocalDate dateOfBirth, String bio) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
     this.gender = gender;
+    this.dateOfBirth = dateOfBirth;
+    this.bio = bio;
+  }
+
+  public int getAge() {
+    LocalDate now = LocalDate.now();
+    Period period = Period.between(dateOfBirth, now);
+    return period.getYears();
   }
 
   @Override
