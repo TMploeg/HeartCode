@@ -1,9 +1,7 @@
 package com.itvitae.heartcode.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import com.itvitae.heartcode.profilepictures.ProfilePicture;
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -28,16 +26,24 @@ public class User implements UserDetails {
 
   private UserRole role;
 
+  @Setter @OneToOne private ProfilePicture profilePicture;
+
   @Setter
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
-  public User(String email, String alias, String password, UserGender gender) {
+  public User(
+      String email,
+      String alias,
+      String password,
+      UserGender gender,
+      ProfilePicture profilePicture) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
     this.gender = gender;
+    this.profilePicture = profilePicture;
   }
 
   @Override

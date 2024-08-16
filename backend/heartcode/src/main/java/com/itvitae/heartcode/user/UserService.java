@@ -1,9 +1,9 @@
 package com.itvitae.heartcode.user;
 
+import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import java.util.Optional;
 import java.util.regex.Pattern;
-
-import com.itvitae.heartcode.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +21,12 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
-  public User save(String email, String alias, String password, UserGender gender) {
+  public User save(
+      String email,
+      String alias,
+      String password,
+      UserGender gender,
+      ProfilePicture profilePicture) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -31,8 +36,12 @@ public class UserService implements UserDetailsService {
     if (password.isBlank()) {
       throw new IllegalArgumentException("password is invalid");
     }
+    if (profilePicture == null) {
+      throw new BadRequestException("profilePicture is null");
+    }
 
-    return userRepository.save(new User(email, alias, passwordEncoder.encode(password), gender));
+    return userRepository.save(
+        new User(email, alias, passwordEncoder.encode(password), gender, profilePicture));
   }
 
   public User update(User user) {
@@ -73,7 +82,7 @@ public class UserService implements UserDetailsService {
       char ch = password.charAt(i);
       if (Character.isUpperCase(ch)) {
         numOfUppercase++;
-      } else if (Character.isLowerCase(ch)){
+      } else if (Character.isLowerCase(ch)) {
         numOfLowercase++;
       } else if (Character.isDigit(ch)) {
         numOfDigits++;
@@ -81,7 +90,11 @@ public class UserService implements UserDetailsService {
         numOfSpecialChars++;
       }
     }
-    return numOfUppercase >= 1 && numOfLowercase >= 1 && numOfDigits >= 1 && numOfSpecialChars >= 1 && password.length() > 7;
+    return numOfUppercase >= 1
+        && numOfLowercase >= 1
+        && numOfDigits >= 1
+        && numOfSpecialChars >= 1
+        && password.length() > 7;
   }
 
   // ONLY USED BY SPRING SECURITY, USE 'findById' TO GET USERS!!!

@@ -1,6 +1,6 @@
 package com.itvitae.heartcode.profilepictures;
 
-import com.itvitae.heartcode.user.User;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProfilePictureRepository extends JpaRepository<ProfilePicture, User> {}
+public interface ProfilePictureRepository extends JpaRepository<ProfilePicture, UUID> {}

@@ -1,11 +1,7 @@
 package com.itvitae.heartcode.profilepictures;
 
-import com.itvitae.heartcode.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +9,14 @@ import lombok.Setter;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProfilePicture {
-  @Id @OneToOne private User owner;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
   @Setter @Lob private byte[] imageData;
+
+  public ProfilePicture(byte[] imageData) {
+    this.imageData = imageData;
+  }
 }

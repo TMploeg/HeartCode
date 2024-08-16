@@ -1,13 +1,12 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.profilepictures.ProfilePicture;
+import com.itvitae.heartcode.profilepictures.ProfilePictureService;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
   private final UserService userService;
   private final JwtService jwtService;
+  private final ProfilePictureService profilePictureService;
 
   @PostMapping("register")
   public AuthTokenDTO register(@RequestBody RegisterDTO registerDTO) {
@@ -33,7 +33,7 @@ public class UserController {
     if (registerDTO.alias() == null || registerDTO.alias().isBlank()) {
       throw new BadRequestException("alias is required");
     }
-    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password()) ) {
+    if (registerDTO.password() == null || !userService.isValidPassword(registerDTO.password())) {
       throw new BadRequestException("password is not valid");
     }
 
@@ -41,6 +41,12 @@ public class UserController {
       throw new BadRequestException("gender is required");
     } else if (registerDTO.gender().isBlank()) {
       throw new BadRequestException("gender must have at least one character");
+    }
+
+    if (registerDTO.profilePicture() == null) {
+      throw new BadRequestException("profilePicture is required");
+    } else if (registerDTO.profilePicture().isEmpty()) {
+      throw new BadRequestException("profilePicture is empty");
     }
 
     UserGender gender =
@@ -52,8 +58,15 @@ public class UserController {
                             + getGenderOptionsString()
                             + "]"));
 
+    ProfilePicture profilePicture = profilePictureService.save(registerDTO.profilePicture());
+
     User user =
-        userService.save(registerDTO.email(), registerDTO.alias(), registerDTO.password(), gender);
+        userService.save(
+            registerDTO.email(),
+            registerDTO.alias(),
+            registerDTO.password(),
+            gender,
+            profilePicture);
 
     return new AuthTokenDTO(
         jwtService
@@ -100,6 +113,7 @@ public class UserController {
 
     updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
+    updateProfilePicture(updateProfileDTO.profilePicture(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
@@ -136,6 +150,20 @@ public class UserController {
     return gender.isPresent()
         ? Optional.empty()
         : Optional.of("gender is invalid, valid options: [" + getGenderOptionsString() + "]");
+  }
+
+  private Optional<String> updateProfilePicture(Map<Long, Byte> profilePicture, User user) {
+    if (profilePicture == null) {
+      return Optional.empty();
+    }
+
+    if (profilePicture.isEmpty()) {
+      return Optional.of("profilePicture is empty");
+    }
+
+    profilePictureService.update(user.getProfilePicture(), profilePicture);
+
+    return Optional.empty();
   }
 
   private static String getGenderOptionsString() {
