@@ -136,6 +136,8 @@ public class UserController {
     User user = userService.getCurrentUser();
     List<String> errors = new ArrayList<>();
 
+    System.out.println(user.getGenderPreference());
+
     updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
     updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
@@ -145,6 +147,7 @@ public class UserController {
       throw new BadRequestException(String.join(";", errors));
     }
 
+    System.out.println(user.getGenderPreference());
     userService.update(user);
   }
 

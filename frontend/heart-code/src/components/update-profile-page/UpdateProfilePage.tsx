@@ -156,12 +156,16 @@ export default function UpdateProfilePage() {
     get<User>("users/account")
       .then((response) => setUserInfo(response.data))
       .catch(() => navigateBack());
+
+    console.log(userInfo?.genderPreference);
   }
 
   function loadUserInfo() {
     if (!userInfo) {
       return;
     }
+
+    console.log(userInfo.genderPreference);
 
     setUpdateValues({
       alias: { value: userInfo.alias, changed: false },
@@ -189,10 +193,12 @@ export default function UpdateProfilePage() {
         ? updateValues.gender.value
         : undefined,
       bio: updateValues.bio.changed ? updateValues.bio.value : undefined,
-      genderPreference: updateValues.gegenderPreferencender.changed
+      genderPreference: updateValues.genderPreference.changed
         ? updateValues.genderPreference.value
         : undefined,
     };
+
+    console.log(updateValues.genderPreference);
 
     patch("users/account", updatedFields)
       .then(() => navigateBack())
