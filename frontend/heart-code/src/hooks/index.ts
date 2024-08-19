@@ -1,6 +1,6 @@
 import useApi from "./useApi";
 import useAuthentication from "./useAuthentication";
 import useToken from "./useToken";
-import useImageInput from "./useImageInput";
+import useProfilePicture from "./useProfilePicture";
 
-export { useApi, useAuthentication, useToken, useImageInput };
+export { useApi, useAuthentication, useToken, useProfilePicture };

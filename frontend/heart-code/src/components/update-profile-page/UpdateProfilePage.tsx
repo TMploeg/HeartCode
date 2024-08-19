@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useApi } from "../../hooks";
 import { useEffect, useState } from "react";
 import { User } from "../../models/User";
 import { Button, Card, Form, ListGroup } from "react-bootstrap";
@@ -7,6 +6,10 @@ import "./UpdateProfilePage.css";
 import Spinner from "react-bootstrap/Spinner";
 import { genders } from "../../enums/Gender";
 import { AppRoute } from "../../enums/AppRoute";
+import ProfilePictureInput, {
+  ImageData,
+} from "../general/profile-picture-input/ProfilePictureInput";
+import { useApi, useProfilePicture } from "../../hooks";
 
 interface UpdateValue {
   value: any;
@@ -17,12 +20,29 @@ export default function UpdateProfilePage() {
   const { get, patch } = useApi();
   const [userInfo, setUserInfo] = useState<User>();
   const navigate = useNavigate();
+  const getProfilePictureURL = useProfilePicture();
+
   useEffect(getUserInfo, []);
   useEffect(loadUserInfo, [userInfo]);
 
   const [updateValues, setUpdateValues] = useState<{
     [key: string]: UpdateValue;
   }>();
+  const [profilePictureData, setProfilePictureData] = useState<
+    ImageData | undefined
+  >(undefined);
+
+  useEffect(() => {
+    if (profilePictureData != undefined) {
+      setUpdateValues((values) => ({
+        ...values,
+        profilePicture: {
+          value: profilePictureData.data,
+          changed: true,
+        },
+      }));
+    }
+  }, [profilePictureData]);
 
   if (!updateValues || !userInfo) {
     return (
@@ -38,6 +58,17 @@ export default function UpdateProfilePage() {
         <Card.Header>Edit</Card.Header>
         <Card.Body>
           <ListGroup>
+            <ListGroup.Item>
+              <div className="profile-picture-input-container">
+                <ProfilePictureInput
+                  value={profilePictureData}
+                  onChange={setProfilePictureData}
+                  initialValueURL={getProfilePictureURL(
+                    userInfo.profilePictureId
+                  )}
+                />
+              </div>
+            </ListGroup.Item>
             <ListGroup.Item>
               <Form.Label
                 className={`profile-field-label ${

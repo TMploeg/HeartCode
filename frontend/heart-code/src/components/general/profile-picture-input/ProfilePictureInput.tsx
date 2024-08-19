@@ -1,5 +1,39 @@
-export default function useImageInput() {
-  function chooseImage(onLoaded: (imageData: ImageData) => void): void {
+import "./ProfilePictureInput.css";
+
+interface Props {
+  value?: ImageData;
+  onChange?: (imageData: ImageData) => void;
+  initialValueURL?: string;
+}
+
+export default function ProfilePictureInput({
+  value,
+  onChange,
+  initialValueURL,
+}: Props) {
+  const imageURL = value?.dataURL ?? initialValueURL;
+  return (
+    <div className="profile-picture-input" onClick={chooseImage}>
+      {imageURL != undefined ? (
+        <img src={imageURL} className="profile-picture-display" />
+      ) : (
+        <>
+          Click here
+          <br />
+          to select a
+          <br />
+          profile picture
+        </>
+      )}
+    </div>
+  );
+
+  function chooseImage(): void {
+    if (onChange === null) {
+      console.error("onChange is undefined");
+      return;
+    }
+
     const input = document.createElement("input");
     input.accept = "image/*";
     input.type = "file";
@@ -19,7 +53,7 @@ export default function useImageInput() {
           return;
         }
 
-        onLoaded?.({
+        onChange?.({
           data: bytes,
           dataURL: reader.result,
         });
@@ -28,8 +62,6 @@ export default function useImageInput() {
       reader.readAsDataURL(files[0]);
     });
   }
-
-  return chooseImage;
 }
 
 export interface ImageData {

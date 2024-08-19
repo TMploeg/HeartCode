@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../Auth.css";
-import { useApi, useAuthentication, useImageInput } from "../../../hooks";
-import { Link, useNavigate } from "react-router-dom";
+import { useAuthentication } from "../../../hooks";
+import { Link } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
 import { isValidEmail, isValidPassword } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import Gender, { genders } from "../../../enums/Gender";
+import ProfilePictureInput, {
+  ImageData,
+} from "../../general/profile-picture-input/ProfilePictureInput";
 
 interface Props {
   onRegister: () => void;
@@ -22,45 +25,24 @@ export default function RegisterPage({ onRegister }: Props) {
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
   const [passwordConfirmationVisible, setpasswordConfirmationVisible] =
     useState<Boolean>(false);
-  const [profilePictureDataURL, setProfilePictureDataURL] = useState<
-    string | null
-  >(null);
+  const [profilePictureData, setProfilePictureData] = useState<
+    ImageData | undefined
+  >(undefined);
 
   const { register } = useAuthentication();
-  const chooseImage = useImageInput();
+
+  useEffect(() => {
+    registerData.profilePicture = profilePictureData?.data;
+  }, [profilePictureData]);
 
   const formErrors: String[] = getFormErrors();
 
   return (
     <div className="auth-form">
-      <div
-        className="profile-picture-input-field"
-        onClick={() =>
-          chooseImage((imageData) => {
-            console.log("TEST");
-            setRegisterData((data) => ({
-              ...data,
-              profilePicture: imageData.data,
-            }));
-            setProfilePictureDataURL(imageData.dataURL);
-          })
-        }
-      >
-        {profilePictureDataURL != null ? (
-          <img
-            src={profilePictureDataURL}
-            className="profile-picture-display"
-          />
-        ) : (
-          <>
-            Click here
-            <br />
-            to select a
-            <br />
-            profile picture
-          </>
-        )}
-      </div>
+      <ProfilePictureInput
+        value={profilePictureData}
+        onChange={setProfilePictureData}
+      />
       <InputGroup>
         <Form.Control
           placeholder="Email Address"
