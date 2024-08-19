@@ -39,6 +39,13 @@ public class AuthController {
       throw new BadRequestException("gender must have at least one character");
     }
 
+    if (registerDTO.dateOfBirth() == null || registerDTO.dateOfBirth().isBlank()) {
+      throw new BadRequestException("Date of birth is required");
+    }
+    if (registerDTO.dateOfBirth() == null) {
+      throw new BadRequestException("Date of birth is not a real date");
+    }
+
     if (registerDTO.profilePicture() == null) {
       throw new BadRequestException("profilePicture is required");
     } else if (registerDTO.profilePicture().isEmpty()) {
@@ -54,6 +61,14 @@ public class AuthController {
                             + getGenderOptionsString()
                             + "]"));
 
+    userService
+        .parseDateOfBirth(registerDTO.dateOfBirth())
+        .filter(date -> userService.isOver18(date))
+        .orElseThrow(
+            () ->
+                new BadRequestException(
+                    "date of birth field doesn't include a valid date or is younger then 18"));
+
     ProfilePicture profilePicture = profilePictureService.save(registerDTO.profilePicture());
 
     User user =
@@ -62,6 +77,8 @@ public class AuthController {
             registerDTO.alias(),
             registerDTO.password(),
             gender,
+            registerDTO.dateOfBirth(),
+            registerDTO.bio(),
             profilePicture);
 
     return new AuthTokenDTO(
@@ -89,7 +106,7 @@ public class AuthController {
                 () -> new RuntimeException("could not generate token for unknown reasons")));
   }
 
-    private static String getGenderOptionsString() {
-        return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
-    }
+  private static String getGenderOptionsString() {
+    return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
+  }
 }
