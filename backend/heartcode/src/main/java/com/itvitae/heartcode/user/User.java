@@ -1,9 +1,9 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
-import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -24,9 +24,7 @@ public class User implements UserDetails {
 
   @Setter private String alias;
 
-  @Setter
-  @Lob
-  private String bio;
+  @Setter @Lob private String bio;
 
   private String password;
 

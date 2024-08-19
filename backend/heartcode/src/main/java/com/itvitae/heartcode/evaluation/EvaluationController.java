@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/evaluations")
 @CrossOrigin("http://localhost:5173")
 public class EvaluationController {
-
   private final EvaluationService evaluationService;
   private final MatchService matchService;
   private final UserService userService;
