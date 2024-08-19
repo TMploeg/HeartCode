@@ -4,6 +4,9 @@ import "./Profile.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import Gender from "../../enums/Gender";
 import { AppRoute } from "../../enums/AppRoute";
+import { useEffect, useState } from "react";
+import { useApi } from "../../hooks";
+import axios from "axios";
 
 interface Props {
   user: User;
@@ -18,7 +21,12 @@ export default function Profile({ user, isPersonalPage }: Props) {
       <Card className="profile-card">
         <Card.Img
           variant="top"
-          src="https://optimaldataintelligence.com/wp-content/themes/optimaldataintelligence/images/image-not-found.png"
+          src={
+            import.meta.env.VITE_API_URL +
+            "users/profilepictures/" +
+            user.profilePictureId
+          }
+          // src="https://optimaldataintelligence.com/wp-content/themes/optimaldataintelligence/images/image-not-found.png"
         />
         <Card.Body className="card-content">
           <Card.Title>{user.alias}</Card.Title>
