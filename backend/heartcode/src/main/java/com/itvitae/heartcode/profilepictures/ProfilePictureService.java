@@ -2,6 +2,8 @@ package com.itvitae.heartcode.profilepictures;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProfilePictureService {
   private final ProfilePictureRepository profilePictureRepository;
+
+  public Optional<ProfilePicture> findById(UUID id){
+    return profilePictureRepository.findById(id);
+  }
 
   public ProfilePicture save(Map<Long, Byte> pictureData) {
     if (pictureData == null || pictureData.isEmpty()) {
