@@ -7,9 +7,20 @@
 
 .update-profile-form-container {
   padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  gap: 8px;
+  width: 80dvw !important;
+  height: 85dvb !important;
+  background: rgba(255, 255, 255, 0.6) !important;
 }
 
 .profile-update-save-button {
+  border-color: #c4256a !important;
+  background-color: #c4256a !important;
   margin-top: 10px;
 }
 

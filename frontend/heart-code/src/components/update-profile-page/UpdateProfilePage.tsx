@@ -35,8 +35,8 @@ export default function UpdateProfilePage() {
 
   return (
     <div className="update-profile-form-container">
-      <Card border="primary">
-        <Card.Header>Edit</Card.Header>
+      <Card className="card">
+        <Card.Header>Edit Profile</Card.Header>
         <Card.Body>
           <ListGroup>
             <ListGroup.Item>
