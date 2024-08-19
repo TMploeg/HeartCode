@@ -26,7 +26,6 @@ export default function Profile({ user, isPersonalPage }: Props) {
             "users/profilepictures/" +
             user.profilePictureId
           }
-          // src="https://optimaldataintelligence.com/wp-content/themes/optimaldataintelligence/images/image-not-found.png"
         />
         <Card.Body className="card-content">
           <Card.Title>{user.alias}</Card.Title>
