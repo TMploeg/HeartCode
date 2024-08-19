@@ -16,7 +16,7 @@ export default function Browsing() {
   return (
     <div className="browse">
       {user !== undefined && user !== null ? (
-        <Profile user={user} isPersonalPage={true} />
+        <Profile user={user} isPersonalPage={false} />
       ) : (
         "Loading..."
       )}

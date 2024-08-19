@@ -1,6 +1,6 @@
 package com.itvitae.heartcode.user;
 
-import java.util.List;
+import com.itvitae.heartcode.exceptions.NotFoundException;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,18 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
-  public List<User> findAll() {
-    return userRepository.findAll();
+  public User findRandomUser() {
+    User randomUser =
+        userRepository
+            .findRandomUserExcludingCurrentAndEvaluator(getCurrentUser().getEmail())
+            .stream()
+            .findFirst()
+            .orElse(null);
+    if (randomUser != null) {
+      return randomUser;
+    } else {
+      throw new NotFoundException();
+    }
   }
 
   public User save(String email, String alias, String password) {
