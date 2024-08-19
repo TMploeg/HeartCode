@@ -4,6 +4,7 @@ import "./Profile.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import Gender from "../../enums/Gender";
 import { AppRoute } from "../../enums/AppRoute";
+import { BsFillGearFill } from "react-icons/bs";
 
 interface Props {
   user: User;
@@ -35,7 +36,7 @@ export default function Profile({ user, isPersonalPage }: Props) {
             className="edit-button"
             onClick={() => navigate(AppRoute.ACCOUNT_UPDATE)}
           >
-            Edit
+            <BsFillGearFill />
           </Button>
         ) : (
           <></>

@@ -38,11 +38,7 @@ export default function ChatPage() {
 
   return (
     <div className="chat-page">
-      <button
-        className="me-2 mb-2"
-        onClick={() => handleShowProfile()}
-        style={{ border: "none" }}
-      >
+      <button className="header-button " onClick={() => handleShowProfile()}>
         <div className="chat-page-header">
           <img
             className="match-img"
@@ -53,8 +49,12 @@ export default function ChatPage() {
       </button>
       <Modal show={show} fullscreen={true} onHide={() => setShow(false)}>
         <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
-          <Profile user={matchProfile} isPersonalPage={false} />
+        <Modal.Body className="profile-popup">
+          {matchProfile !== undefined && matchProfile !== null ? (
+            <Profile user={matchProfile} isPersonalPage={false} />
+          ) : (
+            "Loading..."
+          )}
         </Modal.Body>
       </Modal>
       <div className="chat-page-messages">
@@ -72,6 +72,7 @@ export default function ChatPage() {
             onChange={(event) => setNewMessage(event.target.value)}
           />
           <Button
+            variant="outline-secondary"
             disabled={newMessage.length === 0}
             onClick={() => submitNewMessage()}
           >
@@ -83,7 +84,7 @@ export default function ChatPage() {
   );
 
   function getMatchProfile() {
-    get<User>("users", { matchEmail: match.email }).then((response) => {
+    get<User>(`users/${match.email}`).then((response) => {
       setMatchProfile(response.data);
       console.log(matchProfile);
     });
