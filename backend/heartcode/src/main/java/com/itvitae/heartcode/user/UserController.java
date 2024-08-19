@@ -1,6 +1,7 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.profilepictures.ProfilePictureService;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
@@ -104,5 +105,10 @@ public class UserController {
     }
 
     return jwtService.readToken(token).isPresent();
+  }
+
+  @GetMapping("profilepictures/{id}")
+  public byte[] getProfilePicture(@PathVariable UUID id) {
+    return profilePictureService.findById(id).orElseThrow(NotFoundException::new).getImageData();
   }
 }
