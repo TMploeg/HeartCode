@@ -6,4 +6,5 @@ export default interface RegisterData {
   password: string;
   passwordConfirmation: string;
   gender: string;
+  profilePicture?: Uint8Array;
 }

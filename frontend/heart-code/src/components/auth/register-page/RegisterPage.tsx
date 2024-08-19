@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../Auth.css";
-import { useAuthentication } from "../../../hooks";
+import { useApi, useAuthentication } from "../../../hooks";
 import { Link, useNavigate } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
@@ -22,16 +22,31 @@ export default function RegisterPage({ onRegister }: Props) {
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
   const [passwordConfirmationVisible, setpasswordConfirmationVisible] =
     useState<Boolean>(false);
+  const [profilePictureDataURL, setProfilePictureDataURL] = useState<
+    string | null
+  >(null);
 
   const { register } = useAuthentication();
-  const navigate = useNavigate();
 
   const formErrors: String[] = getFormErrors();
 
   return (
     <div className="auth-form">
       <div className="profile-picture-input-field" onClick={chooseImage}>
-        test
+        {profilePictureDataURL != null ? (
+          <img
+            src={profilePictureDataURL}
+            className="profile-picture-display"
+          />
+        ) : (
+          <>
+            Click here
+            <br />
+            to select a
+            <br />
+            profile picture
+          </>
+        )}
       </div>
       <InputGroup>
         <Form.Control
@@ -160,16 +175,27 @@ export default function RegisterPage({ onRegister }: Props) {
 
   function chooseImage(): void {
     const input = document.createElement("input");
+    input.accept = "image/*";
     input.type = "file";
     input.click();
     input.addEventListener("change", async (event) => {
       const files: FileList | null = (event.target as HTMLInputElement).files;
-      if (files === null) {
+      if (files === null || files.length === 0) {
         return;
       }
 
-      const buffer: ArrayBuffer = await files[0].arrayBuffer();
-      const blob: Blob = new Blob(buffer);
+      const bytes: Uint8Array = new Uint8Array(await files[0].arrayBuffer());
+      setRegisterData((data) => ({ ...data, profilePicture: bytes }));
+
+      const reader = new FileReader();
+      reader.addEventListener("load", async () => {
+        if (reader.result === null || reader.result instanceof ArrayBuffer) {
+          return;
+        }
+
+        setProfilePictureDataURL(reader.result);
+      });
+      reader.readAsDataURL(files[0]);
     });
   }
 }

@@ -178,13 +178,4 @@ public class UserController {
 
     return jwtService.readToken(token).isPresent();
   }
-
-  @PostMapping("picture-test")
-  public void pictureTest(@RequestBody byte[] bytes) {
-    System.out.println("BYTES START");
-    for (byte b : bytes) {
-      System.out.println(b);
-    }
-    System.out.println("BYTES END");
-  }
 }
