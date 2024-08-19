@@ -6,4 +6,5 @@ export default interface RegisterData {
   gender: string;
   dateOfBirth: string;
   bio: string;
+  genderPreference: string;
 }

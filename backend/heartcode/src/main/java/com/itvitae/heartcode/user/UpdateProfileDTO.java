@@ -1,3 +1,3 @@
 package com.itvitae.heartcode.user;
 
-public record UpdateProfileDTO(String alias, String gender, String bio) {}
+public record UpdateProfileDTO(String alias, String gender, String bio, String genderPreference) {}

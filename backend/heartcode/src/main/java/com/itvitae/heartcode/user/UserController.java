@@ -44,6 +44,13 @@ public class UserController {
     } else if (registerDTO.gender().isBlank()) {
       throw new BadRequestException("gender must have at least one character");
     }
+
+    if (registerDTO.genderPreference() == null) {
+      throw new BadRequestException("gender preference is required");
+    } else if (registerDTO.genderPreference().isBlank()) {
+      throw new BadRequestException("gender preference must have at least one character");
+    }
+
     if (registerDTO.dateOfBirth() == null || registerDTO.dateOfBirth().isBlank()) {
       throw new BadRequestException("Date of birth is required");
     }
@@ -68,6 +75,15 @@ public class UserController {
                             + getGenderOptionsString()
                             + "]"));
 
+    GenderPreference genderPreference =
+            GenderPreference.parse(registerDTO.genderPreference())
+                    .orElseThrow(
+                            () ->
+                                    new BadRequestException(
+                                            "gender is invalid, valid options include: ["
+                                                    + getGenderPreferenceOptionsToString()
+                                                    + "]"));
+
     User user =
         userService.save(
             registerDTO.email(),
@@ -75,7 +91,8 @@ public class UserController {
             registerDTO.password(),
             gender,
             registerDTO.dateOfBirth(),
-            registerDTO.bio());
+            registerDTO.bio(),
+            genderPreference);
 
     return new AuthTokenDTO(
         jwtService
@@ -123,6 +140,7 @@ public class UserController {
     updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
     updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
+    updateGenderPreference(updateProfileDTO.genderPreference(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
@@ -170,8 +188,30 @@ public class UserController {
         : Optional.of("gender is invalid, valid options: [" + getGenderOptionsString() + "]");
   }
 
+  private Optional<String> updateGenderPreference(String newGenderPreference, User user) {
+    if (newGenderPreference == null) {
+      return Optional.empty();
+    }
+
+    if (newGenderPreference.isBlank()) {
+      return Optional.of("gender preference must have at least one character");
+    }
+
+    Optional<GenderPreference> gender = GenderPreference.parse(newGenderPreference);
+    gender.ifPresent(user::setGenderPreference);
+
+    return gender.isPresent()
+            ? Optional.empty()
+            : Optional.of("gender is invalid, valid options: [" + getGenderPreferenceOptionsToString()+ "]");
+
+  }
+
   private static String getGenderOptionsString() {
     return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
+  }
+
+  private static String getGenderPreferenceOptionsToString() {
+    return String.join(", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
   }
 
   @GetMapping("validate-token")

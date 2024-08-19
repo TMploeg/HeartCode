@@ -28,7 +28,7 @@ public class UserService implements UserDetailsService {
   }
 
   public User save(
-      String email, String alias, String password, UserGender gender, String dateOfBirthString, String bio) {
+      String email, String alias, String password, UserGender gender, String dateOfBirthString, String bio, GenderPreference genderPreference) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
             .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
 
     return userRepository.save(
-        new User(email, alias, passwordEncoder.encode(password), gender, dateOfBirth, bio));
+        new User(email, alias, passwordEncoder.encode(password), gender, dateOfBirth, bio, genderPreference));
   }
 
   public User update(User user) {

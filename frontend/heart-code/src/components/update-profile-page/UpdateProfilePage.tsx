@@ -7,6 +7,7 @@ import "./UpdateProfilePage.css";
 import Spinner from "react-bootstrap/Spinner";
 import { genders } from "../../enums/Gender";
 import { AppRoute } from "../../enums/AppRoute";
+import { genderPreferences } from "../../enums/GenderPreference";
 
 interface UpdateValue {
   value: any;
@@ -59,7 +60,6 @@ export default function UpdateProfilePage() {
                 }
               />
             </ListGroup.Item>
-
             <ListGroup.Item>
               <Form.Label
                 className={`profile-field-label ${
@@ -83,6 +83,34 @@ export default function UpdateProfilePage() {
                 {genders.map((gender) => (
                   <option key={gender} value={gender}>
                     {gender.split("_").join(" ")}
+                  </option>
+                ))}
+              </Form.Select>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Label
+                className={`profile-field-label ${
+                  updateValues.genderPreference.changed ? "changed" : ""
+                }`}
+              >
+                Gender Preference
+                {updateValues.genderPreference.changed ? "*" : ""}
+              </Form.Label>
+              <Form.Select
+                defaultValue={userInfo.genderPreference}
+                onChange={(event) =>
+                  setUpdateValues((values) => ({
+                    ...values,
+                    genderPreference: {
+                      value: event.target.value,
+                      changed: userInfo.genderPreference !== event.target.value,
+                    },
+                  }))
+                }
+              >
+                {genderPreferences.map((genderPreference) => (
+                  <option key={genderPreference} value={genderPreference}>
+                    {genderPreference}
                   </option>
                 ))}
               </Form.Select>
@@ -139,6 +167,7 @@ export default function UpdateProfilePage() {
       alias: { value: userInfo.alias, changed: false },
       gender: { value: userInfo.gender, changed: false },
       bio: { value: userInfo.bio, changed: false },
+      genderPreference: { value: userInfo.genderPreference, changed: false },
     });
   }
 
@@ -160,6 +189,9 @@ export default function UpdateProfilePage() {
         ? updateValues.gender.value
         : undefined,
       bio: updateValues.bio.changed ? updateValues.bio.value : undefined,
+      genderPreference: updateValues.gegenderPreferencender.changed
+        ? updateValues.genderPreference.value
+        : undefined,
     };
 
     patch("users/account", updatedFields)

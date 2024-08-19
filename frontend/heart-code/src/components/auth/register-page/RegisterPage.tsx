@@ -12,6 +12,9 @@ import {
 } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import Gender, { genders } from "../../../enums/Gender";
+import GenderPreference, {
+  genderPreferences,
+} from "../../../enums/GenderPreference";
 
 interface Props {
   onRegister: () => void;
@@ -25,6 +28,7 @@ export default function RegisterPage({ onRegister }: Props) {
     gender: Gender.MALE,
     dateOfBirth: "",
     bio: "",
+    genderPreference: GenderPreference.ANYONE,
   });
 
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
@@ -134,6 +138,21 @@ export default function RegisterPage({ onRegister }: Props) {
             }
           />
         </InputGroup>
+      </InputGroup>
+      <h6>Preferences</h6>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              genderPreference: event.target.value,
+            }))
+          }
+        >
+          {genderPreferences.map((genderPreference) => (
+            <option key={genderPreference}>{genderPreference}</option>
+          ))}
+        </Form.Select>
       </InputGroup>
       <Button
         className="submit-button"

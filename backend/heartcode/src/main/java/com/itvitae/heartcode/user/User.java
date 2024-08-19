@@ -37,8 +37,12 @@ public class User implements UserDetails {
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
+  @Setter
+  @Enumerated(EnumType.ORDINAL)
+  private GenderPreference genderPreference;
+
   public User(
-      String email, String alias, String password, UserGender gender, LocalDate dateOfBirth, String bio) {
+      String email, String alias, String password, UserGender gender, LocalDate dateOfBirth, String bio, GenderPreference genderPreference) {
     this.email = email;
     this.alias = alias;
     this.password = password;
@@ -46,6 +50,7 @@ public class User implements UserDetails {
     this.gender = gender;
     this.dateOfBirth = dateOfBirth;
     this.bio = bio;
+    this.genderPreference = genderPreference;
   }
 
   public int getAge() {
