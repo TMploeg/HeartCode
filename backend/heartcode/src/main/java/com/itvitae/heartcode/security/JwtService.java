@@ -6,12 +6,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.util.*;
 import javax.crypto.SecretKey;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class JwtService {
   private final SecretKey jwtSecretKey;

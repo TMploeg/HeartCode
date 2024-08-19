@@ -1,12 +1,11 @@
 .profile-page {
   display: flex;
-  margin: 24px;
+  margin-top: 12px;
   justify-content: center;
 }
 
 .profile-card {
   gap: 8px;
-  margin-bottom: 16px;
   width: 80dvw !important;
   height: 85dvb !important;
   background: rgba(255, 255, 255, 0.6) !important;
@@ -24,7 +23,10 @@
 }
 
 .edit-button {
-  width: 60px;
+  width: 40px;
+  height: 40px;
+  display: flex !important;
+  align-items: center !important;
   align-self: flex-end;
   border-radius: 20px !important;
   margin: 8px;

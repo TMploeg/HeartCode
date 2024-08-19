@@ -3,6 +3,7 @@ package com.itvitae.heartcode.user;
 import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.profilepictures.ProfilePictureService;
+import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
 import java.util.*;
@@ -41,6 +42,7 @@ public class UserController {
 
     updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
+    updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
     updateProfilePicture(updateProfileDTO.profilePicture(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
@@ -60,6 +62,15 @@ public class UserController {
     }
 
     user.setAlias(newAlias);
+    return Optional.empty();
+  }
+
+  private Optional<String> updateBio(String newBio, User user) {
+    if (newBio == null) {
+      return Optional.empty();
+    }
+
+    user.setBio(newBio);
     return Optional.empty();
   }
 

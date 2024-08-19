@@ -1,6 +1,8 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
+import java.time.LocalDate;
+import java.time.Period;
 import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
@@ -22,11 +24,17 @@ public class User implements UserDetails {
 
   @Setter private String alias;
 
+  @Setter
+  @Lob
+  private String bio;
+
   private String password;
 
   private UserRole role;
 
   @Setter @OneToOne private ProfilePicture profilePicture;
+
+  private LocalDate dateOfBirth;
 
   @Setter
   @Enumerated(EnumType.ORDINAL)
@@ -37,6 +45,8 @@ public class User implements UserDetails {
       String alias,
       String password,
       UserGender gender,
+      LocalDate dateOfBirth,
+      String bio,
       ProfilePicture profilePicture) {
     this.email = email;
     this.alias = alias;
@@ -44,6 +54,14 @@ public class User implements UserDetails {
     this.role = UserRole.USER;
     this.gender = gender;
     this.profilePicture = profilePicture;
+    this.dateOfBirth = dateOfBirth;
+    this.bio = bio;
+  }
+
+  public int getAge() {
+    LocalDate now = LocalDate.now();
+    Period period = Period.between(dateOfBirth, now);
+    return period.getYears();
   }
 
   @Override

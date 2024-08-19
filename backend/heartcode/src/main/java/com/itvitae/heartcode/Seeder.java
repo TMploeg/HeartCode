@@ -14,6 +14,7 @@ import com.itvitae.heartcode.user.UserRepository;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
@@ -67,6 +68,8 @@ public class Seeder implements CommandLineRunner {
                         s,
                         "{noop}" + s + "_password",
                         getRandomGender(),
+                        LocalDate.now(),
+                        "bio",
                         profilePictureRepository.save(new ProfilePicture(placeholderImageBytes))))
             .toList());
   }

@@ -3,6 +3,10 @@ package com.itvitae.heartcode.user;
 import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +32,17 @@ public class UserService implements UserDetailsService {
       String alias,
       String password,
       UserGender gender,
+      String dateOfBirthString,
+      String bio,
       ProfilePicture profilePicture) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
+
     if (alias.isBlank()) {
       throw new IllegalArgumentException("alias is invalid");
     }
+
     if (password.isBlank()) {
       throw new IllegalArgumentException("password is invalid");
     }
@@ -42,8 +50,20 @@ public class UserService implements UserDetailsService {
       throw new BadRequestException("profilePicture is null");
     }
 
+    LocalDate dateOfBirth =
+        parseDateOfBirth(dateOfBirthString)
+            .filter(date -> isOver18(date))
+            .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
+
     return userRepository.save(
-        new User(email, alias, passwordEncoder.encode(password), gender, profilePicture));
+        new User(
+            email,
+            alias,
+            passwordEncoder.encode(password),
+            gender,
+            dateOfBirth,
+            bio,
+            profilePicture));
   }
 
   public User update(User user) {
@@ -64,6 +84,34 @@ public class UserService implements UserDetailsService {
 
   public boolean userWithEmailExists(String email) {
     return userRepository.findById(email).isPresent();
+  }
+
+  public Optional<LocalDate> parseDateOfBirth(String dateString) {
+    if (dateString == null || dateString.isBlank()) {
+      Optional.empty();
+    }
+    String data[] = dateString.split("-");
+    dateString = String.join("/", data);
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+
+    try {
+      return Optional.of(LocalDate.parse(dateString, formatter));
+    } catch (DateTimeParseException e) {
+      return Optional.empty();
+    }
+  }
+
+  public boolean isOver18(LocalDate dateOfBirthString) {
+    LocalDate localToday = LocalDate.now();
+
+    Period period = Period.between(dateOfBirthString, localToday);
+
+    System.out.println(period.getYears());
+    if (period.getYears() >= 18) {
+      return true;
+    }
+    return false;
   }
 
   public User getCurrentUser() {
