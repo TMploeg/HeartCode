@@ -1,5 +1,6 @@
 package com.itvitae.heartcode.profilepictures;
 
+import com.itvitae.heartcode.user.UserService;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -11,8 +12,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProfilePictureService {
   private final ProfilePictureRepository profilePictureRepository;
+  private final UserService userService;
 
-  public Optional<ProfilePicture> findById(UUID id){
+  public Optional<ProfilePicture> findById(UUID id) {
     return profilePictureRepository.findById(id);
   }
 

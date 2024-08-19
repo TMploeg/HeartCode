@@ -156,7 +156,8 @@ export default function UpdateProfilePage() {
   }
 
   function save() {
-    if (!updateValues) {
+    if (!userInfo || !updateValues || !profilePictureData) {
+      console.error("one or more values is undefined");
       return;
     }
 
@@ -165,10 +166,13 @@ export default function UpdateProfilePage() {
       gender: updateValues.gender.changed
         ? updateValues.gender.value
         : undefined,
+      profilePicture: updateValues.profilePicture.changed
+        ? updateValues.profilePicture.value
+        : undefined,
     };
 
     patch("users/account", updatedFields)
-      .then(() => navigateBack())
+      .then(navigateBack)
       .catch(() => alert("failed to save changes"));
   }
 
