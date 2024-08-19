@@ -26,7 +26,9 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             requests ->
                 requests
-                    .requestMatchers("api/v1/users/**")
+                    .requestMatchers("api/v1/auth/**")
+                    .permitAll()
+                    .requestMatchers("api/v1/users/profilepictures/*")
                     .permitAll()
                     .anyRequest()
                     .authenticated())
