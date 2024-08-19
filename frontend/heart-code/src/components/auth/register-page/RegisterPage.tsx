@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../Auth.css";
-import { useApi, useAuthentication } from "../../../hooks";
+import { useApi, useAuthentication, useImageInput } from "../../../hooks";
 import { Link, useNavigate } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
@@ -27,12 +27,25 @@ export default function RegisterPage({ onRegister }: Props) {
   >(null);
 
   const { register } = useAuthentication();
+  const chooseImage = useImageInput();
 
   const formErrors: String[] = getFormErrors();
 
   return (
     <div className="auth-form">
-      <div className="profile-picture-input-field" onClick={chooseImage}>
+      <div
+        className="profile-picture-input-field"
+        onClick={() =>
+          chooseImage((imageData) => {
+            console.log("TEST");
+            setRegisterData((data) => ({
+              ...data,
+              profilePicture: imageData.data,
+            }));
+            setProfilePictureDataURL(imageData.dataURL);
+          })
+        }
+      >
         {profilePictureDataURL != null ? (
           <img
             src={profilePictureDataURL}
@@ -173,29 +186,29 @@ export default function RegisterPage({ onRegister }: Props) {
       .catch(() => alert("registration failed"));
   }
 
-  function chooseImage(): void {
-    const input = document.createElement("input");
-    input.accept = "image/*";
-    input.type = "file";
-    input.click();
-    input.addEventListener("change", async (event) => {
-      const files: FileList | null = (event.target as HTMLInputElement).files;
-      if (files === null || files.length === 0) {
-        return;
-      }
+  // function chooseImage(): void {
+  //   const input = document.createElement("input");
+  //   input.accept = "image/*";
+  //   input.type = "file";
+  //   input.click();
+  //   input.addEventListener("change", async (event) => {
+  //     const files: FileList | null = (event.target as HTMLInputElement).files;
+  //     if (files === null || files.length === 0) {
+  //       return;
+  //     }
 
-      const bytes: Uint8Array = new Uint8Array(await files[0].arrayBuffer());
-      setRegisterData((data) => ({ ...data, profilePicture: bytes }));
+  //     const bytes: Uint8Array = new Uint8Array(await files[0].arrayBuffer());
+  //     setRegisterData((data) => ({ ...data, profilePicture: bytes }));
 
-      const reader = new FileReader();
-      reader.addEventListener("load", async () => {
-        if (reader.result === null || reader.result instanceof ArrayBuffer) {
-          return;
-        }
+  //     const reader = new FileReader();
+  //     reader.addEventListener("load", async () => {
+  //       if (reader.result === null || reader.result instanceof ArrayBuffer) {
+  //         return;
+  //       }
 
-        setProfilePictureDataURL(reader.result);
-      });
-      reader.readAsDataURL(files[0]);
-    });
-  }
+  //       setProfilePictureDataURL(reader.result);
+  //     });
+  //     reader.readAsDataURL(files[0]);
+  //   });
+  // }
 }
