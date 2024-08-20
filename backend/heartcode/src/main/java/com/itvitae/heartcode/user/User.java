@@ -38,22 +38,21 @@ public class User implements UserDetails {
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
+  @Setter
+  @Enumerated(EnumType.ORDINAL)
+  private GenderPreference genderPreference;
+
   public User(
-      String email,
-      String alias,
-      String password,
-      UserGender gender,
-      LocalDate dateOfBirth,
-      String bio,
-      ProfilePicture profilePicture) {
+      String email, String alias, String password, UserGender gender, LocalDate dateOfBirth, String bio, ProfilePicture profilePicture, GenderPreference genderPreference) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
     this.gender = gender;
-    this.profilePicture = profilePicture;
     this.dateOfBirth = dateOfBirth;
     this.bio = bio;
+    this.profilePicture = profilePicture;
+    this.genderPreference = genderPreference;
   }
 
   public int getAge() {
