@@ -4,8 +4,8 @@ import "./Profile.css";
 import { useNavigate } from "react-router-dom";
 import Gender from "../../enums/Gender";
 import { AppRoute } from "../../enums/AppRoute";
-import { useProfilePicture } from "../../hooks";
-import { BsFillGearFill } from "react-icons/bs";
+import { useAuthentication, useProfilePicture } from "../../hooks";
+import { BsBoxArrowRight, BsFillGearFill } from "react-icons/bs";
 
 interface Props {
   user: User;
@@ -15,6 +15,7 @@ interface Props {
 export default function Profile({ user, isPersonalPage }: Props) {
   const navigate = useNavigate();
   const getProfilePictureURL = useProfilePicture();
+  const { logout } = useAuthentication();
 
   return (
     <div className="profile-page">
@@ -28,20 +29,26 @@ export default function Profile({ user, isPersonalPage }: Props) {
           <Card.Subtitle className="card-content">
             {convertGender(user.gender)}, {user.age}
           </Card.Subtitle>
-          <Card.Subtitle>Relationship type</Card.Subtitle>
+          <Card.Subtitle>{user.relationshipType}</Card.Subtitle>
           <Card className="bio">
             <Card.Text>{user.bio}</Card.Text>
           </Card>
         </Card.Body>
-        {isPersonalPage ? (
-          <Button
-            className="edit-button"
-            onClick={() => navigate(AppRoute.ACCOUNT_UPDATE)}
-          >
-            <BsFillGearFill />
-          </Button>
-        ) : (
-          <></>
+        {isPersonalPage && (
+          <div className="profile-page-bottom-buttons">
+            <Button
+              className="profile-page-bottom-button"
+              onClick={() => navigate(AppRoute.ACCOUNT_UPDATE)}
+            >
+              <BsFillGearFill />
+            </Button>
+            <Button
+              className="profile-page-bottom-button"
+              onClick={() => logout()}
+            >
+              <BsBoxArrowRight />
+            </Button>
+          </div>
         )}
       </Card>
     </div>

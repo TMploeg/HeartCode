@@ -15,6 +15,12 @@ import Gender, { genders } from "../../../enums/Gender";
 import ProfilePictureInput, {
   ImageData,
 } from "../../general/profile-picture-input/ProfilePictureInput";
+import GenderPreference, {
+  genderPreferences,
+} from "../../../enums/GenderPreference";
+import RelationshipType, {
+  relationshipTypes,
+} from "../../../enums/RelationshipType";
 
 interface Props {
   onRegister: () => void;
@@ -25,9 +31,11 @@ export default function RegisterPage({ onRegister }: Props) {
     alias: "",
     password: "",
     passwordConfirmation: "",
-    gender: Gender.MALE,
     dateOfBirth: "",
+    gender: Gender.MALE,
+    relationshipType: RelationshipType.CASUAL,
     bio: "",
+    genderPreference: GenderPreference.ANYONE,
   });
 
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
@@ -82,6 +90,7 @@ export default function RegisterPage({ onRegister }: Props) {
           }
         />
         <Button
+          variant="outline-secondary"
           className="visibility-button"
           onClick={() => setPasswordVisible((visible) => !visible)}
         >
@@ -103,6 +112,7 @@ export default function RegisterPage({ onRegister }: Props) {
           }
         />
         <Button
+          variant="outline-secondary"
           className="visibility-button"
           onClick={() => setpasswordConfirmationVisible((visible) => !visible)}
         >
@@ -133,21 +143,50 @@ export default function RegisterPage({ onRegister }: Props) {
             <option key={gender}>{gender}</option>
           ))}
         </Form.Select>
-        <InputGroup>
-          <Form.Control
-            as="textarea"
-            rows={5}
-            className="bio-field"
-            placeholder="Bio"
-            value={registerData.bio}
-            onChange={(event) =>
-              setRegisterData((data) => ({
-                ...data,
-                bio: event.target.value,
-              }))
-            }
-          />
-        </InputGroup>
+      </InputGroup>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              relationshipType: event.target.value,
+            }))
+          }
+        >
+          {relationshipTypes.map((relationshipType) => (
+            <option key={relationshipType}>{relationshipType}</option>
+          ))}
+        </Form.Select>
+      </InputGroup>
+      <h6>Preferences</h6>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) => {
+            setRegisterData((data) => ({
+              ...data,
+              genderPreference: event.target.value,
+            }));
+          }}
+        >
+          {genderPreferences.map((genderPreference) => (
+            <option key={genderPreference}>{genderPreference}</option>
+          ))}
+        </Form.Select>
+      </InputGroup>
+      <InputGroup>
+        <Form.Control
+          as="textarea"
+          rows={5}
+          className="bio-field"
+          placeholder="Bio"
+          value={registerData.bio}
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              bio: event.target.value,
+            }))
+          }
+        />
       </InputGroup>
       <Button
         className="submit-button"

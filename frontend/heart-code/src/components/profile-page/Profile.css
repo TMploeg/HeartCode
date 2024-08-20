@@ -1,3 +1,7 @@
+.personal-page {
+  overflow-y: scroll;
+}
+
 .profile-page {
   display: flex;
   margin-top: 12px;
@@ -7,7 +11,6 @@
 .profile-card {
   gap: 8px;
   width: 80dvw !important;
-  height: 85dvb !important;
   background: rgba(255, 255, 255, 0.6) !important;
 }
 
@@ -18,19 +21,25 @@
 .bio {
   margin-top: 8px;
   font-size: medium;
-  height: 75% !important;
   background: rgba(255, 255, 255, 0.2) !important;
 }
 
-.edit-button {
+.profile-page-bottom-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  width: 100%;
+}
+
+.profile-page-bottom-buttons > button {
   width: 40px;
   height: 40px;
-  display: flex !important;
-  align-items: center !important;
-  align-self: flex-end;
   border-radius: 20px !important;
   margin: 8px;
   background-color: #c4256a !important;
   border-color: #c4256a !important;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }

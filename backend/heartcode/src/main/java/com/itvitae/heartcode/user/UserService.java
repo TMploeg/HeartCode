@@ -34,7 +34,9 @@ public class UserService implements UserDetailsService {
       UserGender gender,
       String dateOfBirthString,
       String bio,
-      ProfilePicture profilePicture) {
+      ProfilePicture profilePicture,
+      GenderPreference genderPreference,
+      UserRelationshipType relationshipType) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -63,7 +65,9 @@ public class UserService implements UserDetailsService {
             gender,
             dateOfBirth,
             bio,
-            profilePicture));
+            profilePicture,
+            genderPreference,
+            relationshipType));
   }
 
   public User update(User user) {

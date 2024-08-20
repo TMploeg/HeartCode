@@ -46,7 +46,7 @@
 }
 
 .chat-message {
-  background-color: #0099ee;
+  background: rgba(255, 255, 255, 0.6) !important;
   align-self: flex-start;
   display: flex;
   max-width: 80%;
@@ -59,7 +59,7 @@
 
 .chat-message.owned {
   align-self: flex-end;
-  background-color: #9977ee;
+  background: rgba(196, 37, 106, 0.6) !important;
   border-top-left-radius: var(--message-border-radius);
   border-top-right-radius: 0px;
   border-bottom-left-radius: var(--message-border-radius);
@@ -68,6 +68,13 @@
 
 .chat-message-input-container {
   padding: 10px;
+}
+
+.send-button {
+  border-color: #c4256a !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
 }
 
 .message {
@@ -80,4 +87,5 @@
   font-size: small;
   color: rgb(82, 82, 82);
   align-self: flex-end;
+  width: 50px;
 }
