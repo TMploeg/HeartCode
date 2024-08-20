@@ -8,5 +8,5 @@ public record RegisterDTO(
     String gender,
     String dateOfBirth,
     String bio,
-    String genderPreference,
-    Map<Long, Byte> profilePicture) {}
+    Map<Long, Byte> profilePicture,
+    String genderPreference) {}

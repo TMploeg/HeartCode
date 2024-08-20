@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
   }
 
   public User save(
-          String email, String alias, String password, UserGender gender, String dateOfBirthString, String bio, GenderPreference genderPreference, ProfilePicture profilePicture) {
+          String email, String alias, String password, UserGender gender, String dateOfBirthString, String bio, ProfilePicture profilePicture, GenderPreference genderPreference) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
