@@ -104,9 +104,9 @@ public class UserController {
     gender.ifPresent(user::setGenderPreference);
 
     return gender.isPresent()
-            ? Optional.empty()
-            : Optional.of("gender is invalid, valid options: [" + getGenderPreferenceOptionsToString()+ "]");
-
+        ? Optional.empty()
+        : Optional.of(
+            "gender is invalid, valid options: [" + getGenderPreferenceOptionsToString() + "]");
   }
 
   private Optional<String> updateProfilePicture(Map<Long, Byte> profilePicture, User user) {
@@ -128,7 +128,8 @@ public class UserController {
   }
 
   private static String getGenderPreferenceOptionsToString() {
-    return String.join(", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
+    return String.join(
+        ", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
   }
 
   @GetMapping("validate-token")
@@ -147,7 +148,6 @@ public class UserController {
 
   @GetMapping("get-random-user")
   public UserDTO getRandomUser() {
-    UserDTO randomUser = UserDTO.from(userService.findRandomUser());
-    return randomUser;
+    return UserDTO.from(userService.findRandomUser());
   }
 }
