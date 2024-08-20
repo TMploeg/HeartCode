@@ -10,4 +10,4 @@ public record RegisterDTO(
     String dateOfBirth,
     String bio,
     Map<Long, Byte> profilePicture,
-    Integer agePreference) {}
+    AgePreferenceDTO agePreference) {}

@@ -39,7 +39,7 @@ public class User implements UserDetails {
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
-  private int agePreference;
+  @Embedded private AgePreference agePreference;
 
   public User(
       String email,
@@ -57,6 +57,7 @@ public class User implements UserDetails {
     this.profilePicture = profilePicture;
     this.dateOfBirth = dateOfBirth;
     this.bio = bio;
+    this.agePreference = new AgePreference();
   }
 
   public int getAge() {
@@ -65,9 +66,12 @@ public class User implements UserDetails {
     return period.getYears();
   }
 
-  public void setAgePreference(int agePreference) {
-    if (agePreference < MIN_AGE) {
+  public void setAgePreference(AgePreference agePreference) {
+    if (agePreference.getMinAge() < MIN_AGE) {
       throw new IllegalArgumentException("age must 18+");
+    }
+    if (agePreference.getMinAge() <= agePreference.getMaxAge()) {
+      throw new IllegalArgumentException("minAge must be smaller than maxAge");
     }
 
     this.agePreference = agePreference;

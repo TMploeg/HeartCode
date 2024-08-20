@@ -9,7 +9,7 @@ public record UserDTO(
     int age,
     String bio,
     UUID profilePictureId,
-    int agePreference) {
+    AgePreferenceDTO agePreference) {
   public static UserDTO from(User user) {
     return new UserDTO(
         user.getEmail(),
@@ -18,6 +18,6 @@ public record UserDTO(
         user.getAge(),
         user.getBio(),
         user.getProfilePicture().getId(),
-        user.getAgePreference());
+        AgePreferenceDTO.from(user.getAgePreference()));
   }
 }

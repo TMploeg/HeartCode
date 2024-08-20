@@ -106,12 +106,15 @@ public class UserController {
     return Optional.empty();
   }
 
-  private Optional<String> updateAgePreference(int newAgePreference, User user) {
-    if (newAgePreference < User.MIN_AGE) {
-      return Optional.of("agePreference is invalid: must be 18+");
+  private Optional<String> updateAgePreference(AgePreferenceDTO newAgePreference, User user) {
+    if (newAgePreference.minAge() < User.MIN_AGE) {
+      return Optional.of("agePreference.minAge is invalid: must be 18+");
+    }
+    if (newAgePreference.maxAge() < newAgePreference.minAge()) {
+      return Optional.of("agePreference.maxAge is invalid: must be greater than minAge");
     }
 
-    user.setAgePreference(newAgePreference);
+    user.setAgePreference(newAgePreference.convert());
 
     return Optional.empty();
   }

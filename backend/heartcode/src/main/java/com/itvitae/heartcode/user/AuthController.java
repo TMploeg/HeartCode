@@ -72,11 +72,15 @@ public class AuthController {
 
     ProfilePicture profilePicture = profilePictureService.save(registerDTO.profilePicture());
 
-    Optional<Integer> agePreference = Optional.ofNullable(registerDTO.agePreference());
+    Optional<AgePreferenceDTO> agePreference = Optional.ofNullable(registerDTO.agePreference());
     agePreference.ifPresent(
         pref -> {
-          if (pref < User.MIN_AGE) {
-            throw new BadRequestException("agePreference is invalid: must be 18+");
+          if (pref.minAge() < User.MIN_AGE) {
+            throw new BadRequestException("agePreference.minAge is invalid: must be 18+");
+          }
+          if (pref.minAge() <= pref.maxAge()) {
+            throw new BadRequestException(
+                "agePreference.maxAge is invalid: maxAge must be greater than minAge");
           }
         });
 
@@ -92,7 +96,7 @@ public class AuthController {
 
     agePreference.ifPresent(
         pref -> {
-          user.setAgePreference(pref);
+          user.setAgePreference(pref.convert());
           userService.update(user);
         });
 
