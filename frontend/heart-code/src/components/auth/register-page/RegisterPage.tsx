@@ -142,12 +142,14 @@ export default function RegisterPage({ onRegister }: Props) {
       <h6>Preferences</h6>
       <InputGroup>
         <Form.Select
-          onChange={(event) =>
+          onChange={(event) => {
+            console.log(registerData.genderPreference);
+            console.log(event.target.value);
             setRegisterData((data) => ({
               ...data,
               genderPreference: event.target.value,
-            }))
-          }
+            }));
+          }}
         >
           {genderPreferences.map((genderPreference) => (
             <option key={genderPreference}>{genderPreference}</option>

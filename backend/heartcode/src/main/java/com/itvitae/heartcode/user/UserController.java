@@ -147,7 +147,7 @@ public class UserController {
       throw new BadRequestException(String.join(";", errors));
     }
 
-    System.out.println(user.getGenderPreference());
+    System.out.println(user.getGenderPreference().toString());
     userService.update(user);
   }
 

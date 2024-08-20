@@ -35,7 +35,7 @@ export default function UpdateProfilePage() {
 
   return (
     <div className="update-profile-form-container">
-      <Card className="card">
+      <Card className="edit-profile-page">
         <Card.Header>Edit Profile</Card.Header>
         <Card.Body>
           <ListGroup>
@@ -70,15 +70,16 @@ export default function UpdateProfilePage() {
               </Form.Label>
               <Form.Select
                 defaultValue={userInfo.gender}
-                onChange={(event) =>
+                onChange={(event) => {
+                  console.log(userInfo.gender);
                   setUpdateValues((values) => ({
                     ...values,
                     gender: {
                       value: event.target.value,
                       changed: userInfo.gender !== event.target.value,
                     },
-                  }))
-                }
+                  }));
+                }}
               >
                 {genders.map((gender) => (
                   <option key={gender} value={gender}>
@@ -98,15 +99,17 @@ export default function UpdateProfilePage() {
               </Form.Label>
               <Form.Select
                 defaultValue={userInfo.genderPreference}
-                onChange={(event) =>
+                onChange={(event) => {
+                  console.log("genderpreferences", userInfo.genderPreference);
+                  console.log("updatevalues", updateValues);
                   setUpdateValues((values) => ({
                     ...values,
                     genderPreference: {
                       value: event.target.value,
                       changed: userInfo.genderPreference !== event.target.value,
                     },
-                  }))
-                }
+                  }));
+                }}
               >
                 {genderPreferences.map((genderPreference) => (
                   <option key={genderPreference} value={genderPreference}>
@@ -186,7 +189,7 @@ export default function UpdateProfilePage() {
     if (!updateValues) {
       return;
     }
-
+    console.log(updateValues.genderPreference);
     const updatedFields = {
       alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
       gender: updateValues.gender.changed

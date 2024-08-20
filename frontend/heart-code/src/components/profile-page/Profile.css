@@ -18,8 +18,8 @@
 .bio {
   margin-top: 8px;
   font-size: medium;
-  height: 10px !important;
-  background-color: red !important;
+  height: 75% !important;
+  background: rgba(255, 255, 255, 0.2) !important;
 }
 
 .edit-button {
