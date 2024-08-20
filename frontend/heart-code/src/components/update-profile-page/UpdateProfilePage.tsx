@@ -10,6 +10,7 @@ import ProfilePictureInput, {
   ImageData,
 } from "../general/profile-picture-input/ProfilePictureInput";
 import { useApi, useProfilePicture } from "../../hooks";
+import { genderPreferences } from "../../enums/GenderPreference";
 
 interface UpdateValue {
   value: any;
@@ -54,8 +55,8 @@ export default function UpdateProfilePage() {
 
   return (
     <div className="update-profile-form-container">
-      <Card border="primary">
-        <Card.Header>Edit</Card.Header>
+      <Card className="edit-profile-page">
+        <Card.Header>Edit Profile</Card.Header>
         <Card.Body>
           <ListGroup>
             <ListGroup.Item>
@@ -90,7 +91,6 @@ export default function UpdateProfilePage() {
                 }
               />
             </ListGroup.Item>
-
             <ListGroup.Item>
               <Form.Label
                 className={`profile-field-label ${
@@ -114,6 +114,34 @@ export default function UpdateProfilePage() {
                 {genders.map((gender) => (
                   <option key={gender} value={gender}>
                     {gender.split("_").join(" ")}
+                  </option>
+                ))}
+              </Form.Select>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Label
+                className={`profile-field-label ${
+                  updateValues.genderPreference.changed ? "changed" : ""
+                }`}
+              >
+                Gender Preference
+                {updateValues.genderPreference.changed ? "*" : ""}
+              </Form.Label>
+              <Form.Select
+                defaultValue={userInfo.genderPreference}
+                onChange={(event) =>
+                  setUpdateValues((values) => ({
+                    ...values,
+                    genderPreference: {
+                      value: event.target.value,
+                      changed: userInfo.genderPreference !== event.target.value,
+                    },
+                  }))
+                }
+              >
+                {genderPreferences.map((genderPreference) => (
+                  <option key={genderPreference} value={genderPreference}>
+                    {genderPreference}
                   </option>
                 ))}
               </Form.Select>
@@ -170,6 +198,7 @@ export default function UpdateProfilePage() {
       alias: { value: userInfo.alias, changed: false },
       gender: { value: userInfo.gender, changed: false },
       bio: { value: userInfo.bio, changed: false },
+      genderPreference: { value: userInfo.genderPreference, changed: false },
     });
   }
 
@@ -185,7 +214,7 @@ export default function UpdateProfilePage() {
       console.error("one or more values is undefined");
       return;
     }
-
+    console.log(updateValues.genderPreference);
     const updatedFields = {
       alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
       gender: updateValues.gender.changed
@@ -194,6 +223,9 @@ export default function UpdateProfilePage() {
       bio: updateValues.bio.changed ? updateValues.bio.value : undefined,
       profilePicture: updateValues.profilePicture.changed
         ? updateValues.profilePicture.value
+        : undefined,
+      genderPreference: updateValues.genderPreference.changed
+        ? updateValues.genderPreference.value
         : undefined,
     };
 

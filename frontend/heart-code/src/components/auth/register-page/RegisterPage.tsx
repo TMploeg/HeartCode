@@ -15,6 +15,9 @@ import Gender, { genders } from "../../../enums/Gender";
 import ProfilePictureInput, {
   ImageData,
 } from "../../general/profile-picture-input/ProfilePictureInput";
+import GenderPreference, {
+  genderPreferences,
+} from "../../../enums/GenderPreference";
 import AgePreference from "../../../models/AgePreference";
 
 interface Props {
@@ -42,6 +45,7 @@ export default function RegisterPage({ onRegister }: Props) {
     gender: Gender.MALE,
     dateOfBirth: "",
     bio: "",
+    genderPreference: GenderPreference.ANYONE,
     agePreference: {},
   });
 
@@ -122,6 +126,7 @@ export default function RegisterPage({ onRegister }: Props) {
           }
         />
         <Button
+          variant="outline-secondary"
           className="visibility-button"
           onClick={() => setPasswordVisible((visible) => !visible)}
         >
@@ -143,6 +148,7 @@ export default function RegisterPage({ onRegister }: Props) {
           }
         />
         <Button
+          variant="outline-secondary"
           className="visibility-button"
           onClick={() => setpasswordConfirmationVisible((visible) => !visible)}
         >
@@ -188,6 +194,21 @@ export default function RegisterPage({ onRegister }: Props) {
             }
           />
         </InputGroup>
+      </InputGroup>
+      <h6>Preferences</h6>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) => {
+            setRegisterData((data) => ({
+              ...data,
+              genderPreference: event.target.value,
+            }));
+          }}
+        >
+          {genderPreferences.map((genderPreference) => (
+            <option key={genderPreference}>{genderPreference}</option>
+          ))}
+        </Form.Select>
       </InputGroup>
       <InputGroup>
         <InputGroup.Checkbox

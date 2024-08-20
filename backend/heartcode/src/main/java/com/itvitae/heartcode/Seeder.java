@@ -6,6 +6,7 @@ import com.itvitae.heartcode.evaluation.Evaluation;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.match.MatchService;
+import com.itvitae.heartcode.user.GenderPreference;
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import com.itvitae.heartcode.profilepictures.ProfilePictureRepository;
 import com.itvitae.heartcode.user.User;
@@ -70,12 +71,18 @@ public class Seeder implements CommandLineRunner {
                         getRandomGender(),
                         LocalDate.now(),
                         "bio",
-                        profilePictureRepository.save(new ProfilePicture(placeholderImageBytes))))
+                        profilePictureRepository.save(new ProfilePicture(placeholderImageBytes)),
+                        getRandomGenderPreference()))
             .toList());
   }
 
   private UserGender getRandomGender() {
     UserGender[] genders = UserGender.values();
+    return genders[new Random().nextInt(genders.length)];
+  }
+
+  private GenderPreference getRandomGenderPreference() {
+    GenderPreference[] genders = GenderPreference.values();
     return genders[new Random().nextInt(genders.length)];
   }
 

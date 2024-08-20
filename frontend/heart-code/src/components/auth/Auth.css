@@ -10,6 +10,7 @@
   align-self: center;
   justify-self: center;
   margin-top: 40px;
+  overflow-y: scroll;
 }
 
 .input-field {
@@ -40,11 +41,6 @@
   background-color: #c4256a !important;
   border-color: #c4256a !important;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
-}
-
-.visibility-button {
-  background-color: #c4256a !important;
-  border-color: #c4256a !important;
 }
 
 .profile-picture-display {

@@ -7,4 +7,5 @@ public record UpdateProfileDTO(
     String gender,
     String bio,
     Map<Long, Byte> profilePicture,
+    String genderPreference,
     AgePreferenceDTO agePreference) {}
