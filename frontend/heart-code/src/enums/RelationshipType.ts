@@ -1,12 +1,12 @@
 enum RelationshipType {
-  CASUAL = "Casual",
-  SERIOUS_COMMITMENT = "Serious commitment",
-  OPEN_TO_ANYTHING = "Open to anything",
+  CASUAL = "casual",
+  SERIOUS_COMMITMENT = "serious commitment",
+  OPEN_TO_ANYTHING = "open to anything",
 }
 
 export default RelationshipType;
 
-export const relationshipType: string[] = [
+export const relationshipTypes: string[] = [
   RelationshipType.CASUAL,
   RelationshipType.SERIOUS_COMMITMENT,
   RelationshipType.OPEN_TO_ANYTHING,

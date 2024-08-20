@@ -19,7 +19,7 @@ import GenderPreference, {
   genderPreferences,
 } from "../../../enums/GenderPreference";
 import RelationshipType, {
-  relationshipType,
+  relationshipTypes,
 } from "../../../enums/RelationshipType";
 
 interface Props {
@@ -153,7 +153,7 @@ export default function RegisterPage({ onRegister }: Props) {
             }))
           }
         >
-          {relationshipType.map((relationshipType) => (
+          {relationshipTypes.map((relationshipType) => (
             <option key={relationshipType}>{relationshipType}</option>
           ))}
         </Form.Select>

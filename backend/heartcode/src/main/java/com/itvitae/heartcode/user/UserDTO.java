@@ -20,6 +20,6 @@ public record UserDTO(
         user.getBio(),
         user.getProfilePicture().getId(),
         user.getGenderPreference().getName(),
-            user.getRelationshipType().getName());
+        user.getRelationshipType().getName());
   }
 }
