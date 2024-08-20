@@ -54,7 +54,7 @@ export default function ChatPage() {
       </button>
       <Modal show={show} fullscreen={true} onHide={() => setShow(false)}>
         <Modal.Header closeButton></Modal.Header>
-        <Modal.Body className="profile-popup">
+        <Modal.Body>
           {matchProfile !== undefined && matchProfile !== null ? (
             <Profile user={matchProfile} isPersonalPage={false} />
           ) : (
@@ -69,7 +69,6 @@ export default function ChatPage() {
               <ChatMessageView key={index} chatMessage={message} />
             ))}
       </div>
-
       <div className="chat-message-input-container">
         <InputGroup>
           <Form.Control
@@ -77,7 +76,8 @@ export default function ChatPage() {
             onChange={(event) => setNewMessage(event.target.value)}
           />
           <Button
-            variant="outline-primary"
+            variant="outline-secondary"
+            className="send-button"
             disabled={newMessage.length === 0}
             onClick={() => submitNewMessage()}
           >

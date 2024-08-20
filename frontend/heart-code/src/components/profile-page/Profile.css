@@ -1,3 +1,7 @@
+.personal-page {
+  overflow-y: scroll;
+}
+
 .profile-page {
   display: flex;
   margin-top: 12px;
@@ -7,7 +11,6 @@
 .profile-card {
   gap: 8px;
   width: 80dvw !important;
-  height: 85dvb !important;
   background: rgba(255, 255, 255, 0.6) !important;
 }
 
@@ -18,7 +21,6 @@
 .bio {
   margin-top: 8px;
   font-size: medium;
-  height: 75% !important;
   background: rgba(255, 255, 255, 0.2) !important;
 }
 

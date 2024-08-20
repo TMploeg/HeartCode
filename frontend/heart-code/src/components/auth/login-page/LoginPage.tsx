@@ -47,6 +47,7 @@ export default function LoginPage({ onLogin }: Props) {
           }
         />
         <Button
+          variant="outline-secondary"
           className="visibility-button"
           onClick={() => setPasswordVisible((visible) => !visible)}
         >
