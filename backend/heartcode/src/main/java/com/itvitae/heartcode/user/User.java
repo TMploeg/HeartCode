@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,7 +40,7 @@ public class User implements UserDetails {
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
 
-  @Embedded private AgePreference agePreference;
+  @Setter @Embedded private AgePreference agePreference;
 
   public User(
       String email,
@@ -66,15 +67,8 @@ public class User implements UserDetails {
     return period.getYears();
   }
 
-  public void setAgePreference(AgePreference agePreference) {
-    if (agePreference.getMinAge() < MIN_AGE) {
-      throw new IllegalArgumentException("age must 18+");
-    }
-    if (agePreference.getMinAge() <= agePreference.getMaxAge()) {
-      throw new IllegalArgumentException("minAge must be smaller than maxAge");
-    }
-
-    this.agePreference = agePreference;
+  public Optional<AgePreference> getAgePreference() {
+    return Optional.ofNullable(this.agePreference);
   }
 
   @Override

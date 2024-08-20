@@ -1,7 +1,6 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
-import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import com.itvitae.heartcode.profilepictures.ProfilePictureService;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
@@ -70,17 +69,16 @@ public class AuthController {
                 new BadRequestException(
                     "date of birth field doesn't include a valid date or is younger then 18"));
 
-    ProfilePicture profilePicture = profilePictureService.save(registerDTO.profilePicture());
-
-    Optional<AgePreferenceDTO> agePreference = Optional.ofNullable(registerDTO.agePreference());
+    Optional<AgePreference> agePreference =
+        Optional.ofNullable(registerDTO.agePreference()).map(AgePreferenceDTO::convert);
     agePreference.ifPresent(
         pref -> {
-          if (pref.minAge() < User.MIN_AGE) {
+          if (pref.minAgeUnder18()) {
             throw new BadRequestException("agePreference.minAge is invalid: must be 18+");
           }
-          if (pref.minAge() <= pref.maxAge()) {
+          if (pref.maxAgeSmallerThanMinAge()) {
             throw new BadRequestException(
-                "agePreference.maxAge is invalid: maxAge must be greater than minAge");
+                "agePreference.maxAge is invalid: must be greater or equal to minAge");
           }
         });
 
@@ -92,11 +90,11 @@ public class AuthController {
             gender,
             registerDTO.dateOfBirth(),
             registerDTO.bio(),
-            profilePicture);
+            profilePictureService.save(registerDTO.profilePicture()));
 
     agePreference.ifPresent(
         pref -> {
-          user.setAgePreference(pref.convert());
+          user.setAgePreference(pref);
           userService.update(user);
         });
 

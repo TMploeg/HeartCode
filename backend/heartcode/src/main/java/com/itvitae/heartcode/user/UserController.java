@@ -43,7 +43,7 @@ public class UserController {
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
     updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
     updateProfilePicture(updateProfileDTO.profilePicture(), user).ifPresent(errors::add);
-    updateAgePreference(updateProfileDTO.agePreference(), user).ifPresent(errors::add);
+    updateAgePreference(updateProfileDTO.agePreference().convert(), user).ifPresent(errors::add);
     ;
 
     if (!errors.isEmpty()) {
@@ -106,15 +106,16 @@ public class UserController {
     return Optional.empty();
   }
 
-  private Optional<String> updateAgePreference(AgePreferenceDTO newAgePreference, User user) {
-    if (newAgePreference.minAge() < User.MIN_AGE) {
+  private Optional<String> updateAgePreference(AgePreference newAgePreference, User user) {
+    if (newAgePreference.minAgeUnder18()) {
       return Optional.of("agePreference.minAge is invalid: must be 18+");
     }
-    if (newAgePreference.maxAge() < newAgePreference.minAge()) {
-      return Optional.of("agePreference.maxAge is invalid: must be greater than minAge");
+    if (newAgePreference.maxAgeSmallerThanMinAge()) {
+      return Optional.of(
+          "agePreference.maxAge is invalid: must be greater or equal to than minAge");
     }
 
-    user.setAgePreference(newAgePreference.convert());
+    user.setAgePreference(newAgePreference);
 
     return Optional.empty();
   }

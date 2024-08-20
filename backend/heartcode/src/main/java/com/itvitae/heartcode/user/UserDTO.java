@@ -18,6 +18,6 @@ public record UserDTO(
         user.getAge(),
         user.getBio(),
         user.getProfilePicture().getId(),
-        AgePreferenceDTO.from(user.getAgePreference()));
+        AgePreferenceDTO.from(user.getAgePreference().orElseGet(AgePreference::new)));
   }
 }

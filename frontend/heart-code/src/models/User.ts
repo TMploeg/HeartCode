@@ -1,3 +1,5 @@
+import AgePreference from "./AgePreference";
+
 export interface User {
   email: string;
   alias: string;
@@ -5,4 +7,5 @@ export interface User {
   age: number;
   bio: string;
   profilePictureId: string;
+  agePreference: AgePreference;
 }
