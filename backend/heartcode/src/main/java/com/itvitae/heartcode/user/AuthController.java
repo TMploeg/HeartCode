@@ -22,10 +22,13 @@ public class AuthController {
   public AuthTokenDTO register(@RequestBody RegisterDTO registerDTO) {
     if (registerDTO.email() == null) {
       throw new BadRequestException("email is required");
-    } else if (userService.isInvalidEmail(registerDTO.email())
-        || userService.userWithEmailExists(registerDTO.email())) {
-      throw new BadRequestException("email is invalid");
+    } else if (userService.isInvalidEmail(registerDTO.email())) {
+      throw new BadRequestException("email not valid");
+    } else if (userService.userWithEmailExists(registerDTO.email())) {
+      throw new BadRequestException("email is already in use");
     }
+
+
     if (registerDTO.alias() == null || registerDTO.alias().isBlank()) {
       throw new BadRequestException("alias is required");
     }
