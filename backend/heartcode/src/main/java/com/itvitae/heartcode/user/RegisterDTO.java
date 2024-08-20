@@ -1,5 +1,4 @@
 package com.itvitae.heartcode.user;
-
 import java.util.Map;
 
 public record RegisterDTO(
@@ -9,4 +8,5 @@ public record RegisterDTO(
     String gender,
     String dateOfBirth,
     String bio,
-    Map<Long, Byte> profilePicture) {}
+    Map<Long, Byte> profilePicture,
+    String genderPreference) {}
