@@ -99,8 +99,17 @@ public class UserController {
 
   @GetMapping("get-random-user")
   public UserDTO getRandomUser() {
-    User randomUser2 = userService.findRandomUser();
     UserDTO randomUser = UserDTO.from(userService.findRandomUser());
     return randomUser;
+  }
+
+  @GetMapping("debug-get-random-user")
+  public List<UserDTO> getRandomUsers() {
+    List<UserDTO> userList = new ArrayList<>();
+    for (int i = 0; i < 30; i++) {
+      UserDTO randomUser = UserDTO.from(userService.findRandomUser());
+      userList.add(randomUser);
+    }
+    return userList;
   }
 }
