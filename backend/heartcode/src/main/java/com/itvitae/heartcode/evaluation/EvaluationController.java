@@ -47,7 +47,7 @@ public class EvaluationController {
         evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked());
 
     if (possibleEvaluation == null) {
-      throw new BadRequestException("Match already exist");
+      throw new BadRequestException("Evaluation for user already exist");
     } else {
       matchService.createMatch(evaluator, evaluatee, possibleEvaluation.isLiked());
       return ResponseEntity.ok().build();
