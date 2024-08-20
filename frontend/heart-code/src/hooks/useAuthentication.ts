@@ -45,9 +45,14 @@ export default function useAuthentication() {
       });
   }
 
+  function logout(): void {
+    clearToken();
+  }
+
   return {
     register,
     login,
     isLoggedIn,
+    logout,
   };
 }
