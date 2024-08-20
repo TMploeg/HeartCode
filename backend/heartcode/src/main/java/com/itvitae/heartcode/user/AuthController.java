@@ -6,6 +6,7 @@ import com.itvitae.heartcode.profilepictures.ProfilePictureService;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import java.util.Arrays;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,6 +72,14 @@ public class AuthController {
 
     ProfilePicture profilePicture = profilePictureService.save(registerDTO.profilePicture());
 
+    Optional<Integer> agePreference = Optional.ofNullable(registerDTO.agePreference());
+    agePreference.ifPresent(
+        pref -> {
+          if (pref < User.MIN_AGE) {
+            throw new BadRequestException("agePreference is invalid: must be 18+");
+          }
+        });
+
     User user =
         userService.save(
             registerDTO.email(),
@@ -80,6 +89,12 @@ public class AuthController {
             registerDTO.dateOfBirth(),
             registerDTO.bio(),
             profilePicture);
+
+    agePreference.ifPresent(
+        pref -> {
+          user.setAgePreference(pref);
+          userService.update(user);
+        });
 
     return new AuthTokenDTO(
         jwtService

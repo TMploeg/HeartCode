@@ -43,6 +43,8 @@ public class UserController {
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
     updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
     updateProfilePicture(updateProfileDTO.profilePicture(), user).ifPresent(errors::add);
+    updateAgePreference(updateProfileDTO.agePreference(), user).ifPresent(errors::add);
+    ;
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
@@ -100,6 +102,16 @@ public class UserController {
     }
 
     profilePictureService.update(user.getProfilePicture(), profilePicture);
+
+    return Optional.empty();
+  }
+
+  private Optional<String> updateAgePreference(int newAgePreference, User user) {
+    if (newAgePreference < User.MIN_AGE) {
+      return Optional.of("agePreference is invalid: must be 18+");
+    }
+
+    user.setAgePreference(newAgePreference);
 
     return Optional.empty();
   }

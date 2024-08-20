@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
   public static final String TEST_USER_NAME =
       "testuser"; // temporary, remove after implementing login
+  public static final int MIN_AGE = 18;
 
   @Id private String email;
 
@@ -37,6 +38,8 @@ public class User implements UserDetails {
   @Setter
   @Enumerated(EnumType.ORDINAL)
   private UserGender gender;
+
+  private int agePreference;
 
   public User(
       String email,
@@ -60,6 +63,14 @@ public class User implements UserDetails {
     LocalDate now = LocalDate.now();
     Period period = Period.between(dateOfBirth, now);
     return period.getYears();
+  }
+
+  public void setAgePreference(int agePreference) {
+    if (agePreference < MIN_AGE) {
+      throw new IllegalArgumentException("age must 18+");
+    }
+
+    this.agePreference = agePreference;
   }
 
   @Override

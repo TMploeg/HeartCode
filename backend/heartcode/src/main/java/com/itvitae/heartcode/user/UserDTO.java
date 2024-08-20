@@ -3,7 +3,13 @@ package com.itvitae.heartcode.user;
 import java.util.UUID;
 
 public record UserDTO(
-    String email, String alias, String gender, int age, String bio, UUID profilePictureId) {
+    String email,
+    String alias,
+    String gender,
+    int age,
+    String bio,
+    UUID profilePictureId,
+    int agePreference) {
   public static UserDTO from(User user) {
     return new UserDTO(
         user.getEmail(),
@@ -11,6 +17,7 @@ public record UserDTO(
         user.getGender().getName(),
         user.getAge(),
         user.getBio(),
-        user.getProfilePicture().getId());
+        user.getProfilePicture().getId(),
+        user.getAgePreference());
   }
 }
