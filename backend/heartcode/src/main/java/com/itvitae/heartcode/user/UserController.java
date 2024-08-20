@@ -3,7 +3,6 @@ package com.itvitae.heartcode.user;
 import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.profilepictures.ProfilePictureService;
-import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
 import java.util.*;
@@ -150,15 +149,5 @@ public class UserController {
   public UserDTO getRandomUser() {
     UserDTO randomUser = UserDTO.from(userService.findRandomUser());
     return randomUser;
-  }
-
-  @GetMapping("debug-get-random-user")
-  public List<UserDTO> getRandomUsers() {
-    List<UserDTO> userList = new ArrayList<>();
-    for (int i = 0; i < 30; i++) {
-      UserDTO randomUser = UserDTO.from(userService.findRandomUser());
-      userList.add(randomUser);
-    }
-    return userList;
   }
 }

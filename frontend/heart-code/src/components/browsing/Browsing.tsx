@@ -27,10 +27,6 @@ export default function Browsing() {
   }
 
   function createEvaluation(likedBool: boolean) {
-    console.log("You pressed the button for " + likedBool);
-    console.log("You evaluated " + user?.email);
-    console.log("You are currently logged in as: " + currentUser?.email);
-
     post("evaluations/create-evaluation-and-check", {
       evaluatorAddress: currentUser?.email,
       evaluateeAddress: user?.email,
