@@ -3,6 +3,7 @@ package com.itvitae.heartcode.user;
 import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.profilepictures.ProfilePictureService;
+import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
 import java.util.*;
@@ -42,6 +43,7 @@ public class UserController {
     updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
     updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
+    updateGenderPreference(updateProfileDTO.genderPreference(), user).ifPresent(errors::add);
     updateProfilePicture(updateProfileDTO.profilePicture(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
@@ -90,6 +92,24 @@ public class UserController {
         : Optional.of("gender is invalid, valid options: [" + getGenderOptionsString() + "]");
   }
 
+  private Optional<String> updateGenderPreference(String newGenderPreference, User user) {
+    if (newGenderPreference == null) {
+      return Optional.empty();
+    }
+
+    if (newGenderPreference.isBlank()) {
+      return Optional.of("gender preference must have at least one character");
+    }
+
+    Optional<GenderPreference> gender = GenderPreference.parse(newGenderPreference);
+    gender.ifPresent(user::setGenderPreference);
+
+    return gender.isPresent()
+            ? Optional.empty()
+            : Optional.of("gender is invalid, valid options: [" + getGenderPreferenceOptionsToString()+ "]");
+
+  }
+
   private Optional<String> updateProfilePicture(Map<Long, Byte> profilePicture, User user) {
     if (profilePicture == null) {
       return Optional.empty();
@@ -106,6 +126,10 @@ public class UserController {
 
   private static String getGenderOptionsString() {
     return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
+  }
+
+  private static String getGenderPreferenceOptionsToString() {
+    return String.join(", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
   }
 
   @GetMapping("validate-token")

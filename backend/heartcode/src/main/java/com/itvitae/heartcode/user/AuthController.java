@@ -76,6 +76,15 @@ public class AuthController {
                             + getRelationshipTypeOptionsString()
                             + "]"));
 
+    GenderPreference genderPreference =
+        GenderPreference.parse(registerDTO.genderPreference())
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "gender is invalid, valid options include: ["
+                            + getGenderPreferenceOptionsToString()
+                            + "]"));
+
     userService
         .parseDateOfBirth(registerDTO.dateOfBirth())
         .filter(date -> userService.isOver18(date))
@@ -95,6 +104,7 @@ public class AuthController {
             registerDTO.dateOfBirth(),
             registerDTO.bio(),
             profilePicture,
+            genderPreference,
             relationshipType);
 
     return new AuthTokenDTO(
@@ -124,6 +134,11 @@ public class AuthController {
 
   private static String getGenderOptionsString() {
     return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
+  }
+
+  private static String getGenderPreferenceOptionsToString() {
+    return String.join(
+        ", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
   }
 
   private static String getRelationshipTypeOptionsString() {

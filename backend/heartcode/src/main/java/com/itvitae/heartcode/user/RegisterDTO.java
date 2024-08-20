@@ -1,6 +1,4 @@
 package com.itvitae.heartcode.user;
-import java.sql.Clob;
-
 import java.util.Map;
 
 public record RegisterDTO(
@@ -11,4 +9,5 @@ public record RegisterDTO(
     String dateOfBirth,
     String bio,
     Map<Long, Byte> profilePicture,
+    String genderPreference,
     String relationshipType) {}

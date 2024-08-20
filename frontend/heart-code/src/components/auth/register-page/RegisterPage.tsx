@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
 import { Link } from "react-router-dom";
@@ -15,6 +15,9 @@ import Gender, { genders } from "../../../enums/Gender";
 import ProfilePictureInput, {
   ImageData,
 } from "../../general/profile-picture-input/ProfilePictureInput";
+import GenderPreference, {
+  genderPreferences,
+} from "../../../enums/GenderPreference";
 import RelationshipType, {
   relationshipType,
 } from "../../../enums/RelationshipType";
@@ -32,6 +35,7 @@ export default function RegisterPage({ onRegister }: Props) {
     gender: Gender.MALE,
     relationshipType: RelationshipType.CASUAL,
     bio: "",
+    genderPreference: GenderPreference.ANYONE,
   });
 
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
@@ -152,6 +156,20 @@ export default function RegisterPage({ onRegister }: Props) {
           ))}
         </Form.Select>
       </InputGroup>
+      <h6>Preferences</h6>
+            <InputGroup>
+              <Form.Select
+                onChange={(event) => {
+                  setRegisterData((data) => ({
+                    ...data,
+                    genderPreference: event.target.value,
+                  }));
+                }}
+              >
+                {genderPreferences.map((genderPreference) => (
+                  <option key={genderPreference}>{genderPreference}</option>
+                ))}
+              </Form.Select>
       <InputGroup>
         <Form.Control
           as="textarea"

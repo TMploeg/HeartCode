@@ -6,4 +6,5 @@ export interface User {
   relationshipType: string;
   bio: string;
   profilePictureId: string;
+  genderPreference: string;
 }

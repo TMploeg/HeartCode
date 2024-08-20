@@ -9,6 +9,7 @@ public record UserDTO(
     int age,
     String bio,
     UUID profilePictureId,
+    String genderPreference,
     String relationshipType) {
   public static UserDTO from(User user) {
     return new UserDTO(
@@ -18,6 +19,7 @@ public record UserDTO(
         user.getAge(),
         user.getBio(),
         user.getProfilePicture().getId(),
-        user.getRelationshipType().getName());
+        user.getGenderPreference().getName(),
+            user.getRelationshipType().getName());
   }
 }

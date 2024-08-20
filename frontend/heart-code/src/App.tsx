@@ -19,7 +19,7 @@ import { Spinner } from "react-bootstrap";
 import { AppRoute } from "./enums/AppRoute";
 
 export default function App() {
-  const { isLoggedIn } = useAuthentication();
+  const { isLoggedIn, addLogoutListener } = useAuthentication();
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,6 +28,12 @@ export default function App() {
       checkLoggedIn();
     }, 1000);
   }, []);
+  useEffect(() => addLogoutListener(() => setLoggedIn(false)), []);
+  useEffect(() => {
+    if (loggedIn === false) {
+      navigate("/");
+    }
+  }, [loggedIn]);
 
   return (
     <div className="app-container">

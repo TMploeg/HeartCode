@@ -40,6 +40,10 @@ public class User implements UserDetails {
 
   @Setter
   @Enumerated(EnumType.ORDINAL)
+  private GenderPreference genderPreference;
+
+  @Setter
+  @Enumerated(EnumType.ORDINAL)
   private UserRelationshipType relationshipType;
 
   public User(
@@ -50,16 +54,17 @@ public class User implements UserDetails {
       LocalDate dateOfBirth,
       String bio,
       ProfilePicture profilePicture,
+      GenderPreference genderPreference,
       UserRelationshipType relationshipType) {
     this.email = email;
     this.alias = alias;
     this.password = password;
     this.role = UserRole.USER;
-    this.dateOfBirth = dateOfBirth;
     this.gender = gender;
-    this.profilePicture = profilePicture;
     this.dateOfBirth = dateOfBirth;
     this.bio = bio;
+    this.profilePicture = profilePicture;
+    this.genderPreference = genderPreference;
     this.relationshipType = relationshipType;
   }
 
