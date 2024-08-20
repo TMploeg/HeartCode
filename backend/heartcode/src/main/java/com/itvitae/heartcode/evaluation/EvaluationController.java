@@ -1,7 +1,6 @@
 package com.itvitae.heartcode.evaluation;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
-import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
@@ -21,36 +20,36 @@ public class EvaluationController {
   @PostMapping("create-evaluation-and-check")
   public ResponseEntity<?> createEvaluationAndCheck(@RequestBody NewEvaluationDTO newEvaluation) {
 
-    if (newEvaluation.evaluatorAddress() == null
-        || newEvaluation.evaluateeAddress() == null
-        || newEvaluation.liked() == null) {
-      throw new BadRequestException("Request body does not meet minimum requirements");
+    if (newEvaluation.evaluateeAddress() == null) {
+      throw new BadRequestException("evaluateeAddress is required");
+    }
+    if (newEvaluation.liked() == null) {
+      throw new BadRequestException("liked is required");
     }
 
-    if (newEvaluation.evaluatorAddress().equals(newEvaluation.evaluateeAddress())) {
-      return ResponseEntity.badRequest().body("You cannot evaluate yourself");
+    User evaluator = userService.getCurrentUser();
+    User evaluatee =
+        userService
+            .findById(newEvaluation.evaluateeAddress())
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "user '" + newEvaluation.evaluateeAddress() + "' not found"));
+
+    if (evaluator.getEmail().equals(evaluatee.getEmail())) {
+      {
+        throw new BadRequestException("You cannot evaluate yourself");
+      }
     }
 
-    var possibleEvaluator = userService.findById(newEvaluation.evaluatorAddress());
-    if (possibleEvaluator.isEmpty()) {
-      throw new NotFoundException();
+    if (evaluationService.getEvaluation(evaluator, evaluatee).isPresent()) {
+      throw new BadRequestException("Evaluation for user already exist");
     }
-    User evaluator = possibleEvaluator.get();
-
-    var possibleEvaluatee = userService.findById(newEvaluation.evaluateeAddress());
-    if (possibleEvaluatee.isEmpty()) {
-      throw new NotFoundException();
-    }
-    User evaluatee = possibleEvaluatee.get();
 
     var possibleEvaluation =
         evaluationService.createEvaluation(evaluator, evaluatee, newEvaluation.liked());
 
-    if (possibleEvaluation == null) {
-      throw new BadRequestException("Evaluation for user already exist");
-    } else {
-      matchService.createMatch(evaluator, evaluatee, possibleEvaluation.isLiked());
-      return ResponseEntity.ok().build();
-    }
+    matchService.createMatch(evaluator, evaluatee, possibleEvaluation.isLiked());
+    return ResponseEntity.ok().build();
   }
 }
