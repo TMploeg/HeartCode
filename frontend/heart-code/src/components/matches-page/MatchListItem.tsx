@@ -6,9 +6,10 @@ import { AiOutlineUser } from "react-icons/ai";
 interface Props {
   match: Match;
   onClick?: () => void;
+  lastMessage: string;
 }
 
-export default function MatchListItem({ match, onClick }: Props) {
+export default function MatchListItem({ match, onClick, lastMessage }: Props) {
   const getProfilePictureURL = useProfilePicture();
 
   return (
@@ -17,7 +18,10 @@ export default function MatchListItem({ match, onClick }: Props) {
         src={getProfilePictureURL(match.profilePictureId)}
         className="match-profile-picture"
       />
-      <div className="match-alias-display">{match.alias}</div>
+      <div>
+        <div className="match-alias-display">{match.alias}</div>
+        <div className="last-message">{lastMessage}</div>
+      </div>
     </div>
   );
 }

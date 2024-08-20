@@ -19,6 +19,13 @@ public class ChatMessageService {
     return chatMessageRepository.getAllForUsers(user1, user2);
   }
 
+  public ChatMessage getLastMessageForUsers(User user1, User user2) {
+    List<ChatMessage> allMessages = chatMessageRepository.getAllForUsers(user1, user2);
+
+    int lastMessageIndex = allMessages.size() - 1;
+    return allMessages.get(lastMessageIndex);
+  }
+
   public ChatMessage save(String text, User receiver) {
     LocalDateTime now = LocalDateTime.now();
     User sender = userService.getCurrentUser();
