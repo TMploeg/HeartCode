@@ -71,8 +71,8 @@ public class Seeder implements CommandLineRunner {
                         getRandomGender(),
                         LocalDate.now(),
                         "bio",
-
-                        profilePictureRepository.save(new ProfilePicture(placeholderImageBytes)), getRandomGenderPreference()))
+                        profilePictureRepository.save(new ProfilePicture(placeholderImageBytes)),
+                        getRandomGenderPreference()))
             .toList());
   }
 

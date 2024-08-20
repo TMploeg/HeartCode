@@ -62,13 +62,13 @@ public class AuthController {
                             + "]"));
 
     GenderPreference genderPreference =
-            GenderPreference.parse(registerDTO.genderPreference())
-                    .orElseThrow(
-                            () ->
-                                    new BadRequestException(
-                                            "gender is invalid, valid options include: ["
-                                                    + getGenderPreferenceOptionsToString()
-                                                    + "]"));
+        GenderPreference.parse(registerDTO.genderPreference())
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "gender is invalid, valid options include: ["
+                            + getGenderPreferenceOptionsToString()
+                            + "]"));
 
     userService
         .parseDateOfBirth(registerDTO.dateOfBirth())
@@ -88,7 +88,8 @@ public class AuthController {
             gender,
             registerDTO.dateOfBirth(),
             registerDTO.bio(),
-            profilePicture, genderPreference);
+            profilePicture,
+            genderPreference);
 
     return new AuthTokenDTO(
         jwtService
@@ -118,8 +119,9 @@ public class AuthController {
   private static String getGenderOptionsString() {
     return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
   }
-  private static String getGenderPreferenceOptionsToString() {
-    return String.join(", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
-  }
 
+  private static String getGenderPreferenceOptionsToString() {
+    return String.join(
+        ", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
+  }
 }
