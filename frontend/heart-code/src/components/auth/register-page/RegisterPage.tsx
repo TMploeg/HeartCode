@@ -12,6 +12,9 @@ import {
 } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import Gender, { genders } from "../../../enums/Gender";
+import ProfilePictureInput, {
+  ImageData,
+} from "../../general/profile-picture-input/ProfilePictureInput";
 import RelationshipType, {
   relationshipType,
 } from "../../../enums/RelationshipType";
@@ -34,13 +37,24 @@ export default function RegisterPage({ onRegister }: Props) {
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
   const [passwordConfirmationVisible, setpasswordConfirmationVisible] =
     useState<Boolean>(false);
+  const [profilePictureData, setProfilePictureData] = useState<
+    ImageData | undefined
+  >(undefined);
 
   const { register } = useAuthentication();
+
+  useEffect(() => {
+    registerData.profilePicture = profilePictureData?.data;
+  }, [profilePictureData]);
 
   const formErrors: String[] = getFormErrors();
 
   return (
     <div className="auth-form">
+      <ProfilePictureInput
+        value={profilePictureData}
+        onChange={setProfilePictureData}
+      />
       <InputGroup>
         <Form.Control
           placeholder="Email Address"
@@ -213,9 +227,36 @@ export default function RegisterPage({ onRegister }: Props) {
 
     return errors;
   }
+
   function submit() {
     register(registerData)
       .then(onRegister)
       .catch(() => alert("registration failed"));
   }
+
+  // function chooseImage(): void {
+  //   const input = document.createElement("input");
+  //   input.accept = "image/*";
+  //   input.type = "file";
+  //   input.click();
+  //   input.addEventListener("change", async (event) => {
+  //     const files: FileList | null = (event.target as HTMLInputElement).files;
+  //     if (files === null || files.length === 0) {
+  //       return;
+  //     }
+
+  //     const bytes: Uint8Array = new Uint8Array(await files[0].arrayBuffer());
+  //     setRegisterData((data) => ({ ...data, profilePicture: bytes }));
+
+  //     const reader = new FileReader();
+  //     reader.addEventListener("load", async () => {
+  //       if (reader.result === null || reader.result instanceof ArrayBuffer) {
+  //         return;
+  //       }
+
+  //       setProfilePictureDataURL(reader.result);
+  //     });
+  //     reader.readAsDataURL(files[0]);
+  //   });
+  // }
 }

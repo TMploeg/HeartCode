@@ -7,6 +7,7 @@
 
 .update-profile-form-container {
   padding: 20px;
+  overflow-y: scroll;
 }
 
 .profile-update-save-button {
@@ -18,4 +19,10 @@
 }
 .profile-field-label.changed {
   color: black;
+}
+
+.profile-picture-input-container {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
 }

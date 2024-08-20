@@ -4,6 +4,8 @@ import "./Profile.css";
 import { useNavigate } from "react-router-dom";
 import Gender from "../../enums/Gender";
 import { AppRoute } from "../../enums/AppRoute";
+import { useProfilePicture } from "../../hooks";
+import { BsFillGearFill } from "react-icons/bs";
 
 interface Props {
   user: User;
@@ -12,13 +14,14 @@ interface Props {
 
 export default function Profile({ user, isPersonalPage }: Props) {
   const navigate = useNavigate();
+  const getProfilePictureURL = useProfilePicture();
 
   return (
     <div className="profile-page">
       <Card className="profile-card">
         <Card.Img
           variant="top"
-          src="https://optimaldataintelligence.com/wp-content/themes/optimaldataintelligence/images/image-not-found.png"
+          src={getProfilePictureURL(user.profilePictureId)}
         />
         <Card.Body className="card-content">
           <Card.Title>{user.alias}</Card.Title>
@@ -35,7 +38,7 @@ export default function Profile({ user, isPersonalPage }: Props) {
             className="edit-button"
             onClick={() => navigate(AppRoute.ACCOUNT_UPDATE)}
           >
-            Edit
+            <BsFillGearFill />
           </Button>
         ) : (
           <></>

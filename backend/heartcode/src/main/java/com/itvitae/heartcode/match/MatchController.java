@@ -21,7 +21,9 @@ public class MatchController {
   @GetMapping
   public List<MatchDTO> getAll() {
     return matchService.getMatchedUsers().stream()
-        .map(user -> new MatchDTO(user.getEmail(), user.getAlias()))
+        .map(
+            user ->
+                new MatchDTO(user.getEmail(), user.getAlias(), user.getProfilePicture().getId()))
         .toList();
   }
 }

@@ -5,4 +5,5 @@ export interface User {
   age: number;
   relationshipType: string;
   bio: string;
+  profilePictureId: string;
 }

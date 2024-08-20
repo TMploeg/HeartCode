@@ -1,5 +1,8 @@
 package com.itvitae.heartcode.user;
 
+import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.profilepictures.ProfilePicture;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
@@ -27,10 +31,11 @@ public class UserService implements UserDetailsService {
       String email,
       String alias,
       String password,
-      String dateOfBirthString,
       UserGender gender,
-      UserRelationshipType relationshipType,
-      String bio) {
+      String dateOfBirthString,
+      String bio,
+      ProfilePicture profilePicture,
+      UserRelationshipType relationshipType) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -41,6 +46,9 @@ public class UserService implements UserDetailsService {
 
     if (password.isBlank()) {
       throw new IllegalArgumentException("password is invalid");
+    }
+    if (profilePicture == null) {
+      throw new BadRequestException("profilePicture is null");
     }
 
     LocalDate dateOfBirth =
@@ -53,10 +61,11 @@ public class UserService implements UserDetailsService {
             email,
             alias,
             passwordEncoder.encode(password),
-            dateOfBirth,
             gender,
-            relationshipType,
-            bio));
+            dateOfBirth,
+            bio,
+            profilePicture,
+            relationshipType));
   }
 
   public User update(User user) {
