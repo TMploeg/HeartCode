@@ -77,7 +77,8 @@ export default function ChatPage() {
             onChange={(event) => setNewMessage(event.target.value)}
           />
           <Button
-            variant="outline-primary"
+            variant="outline-secondary"
+            className="send-button"
             disabled={newMessage.length === 0}
             onClick={() => submitNewMessage()}
           >

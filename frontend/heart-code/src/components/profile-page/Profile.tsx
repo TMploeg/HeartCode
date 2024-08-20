@@ -17,33 +17,35 @@ export default function Profile({ user, isPersonalPage }: Props) {
   const getProfilePictureURL = useProfilePicture();
 
   return (
-    <div className="profile-page">
-      <Card className="profile-card">
-        <Card.Img
-          variant="top"
-          src={getProfilePictureURL(user.profilePictureId)}
-        />
-        <Card.Body className="card-content">
-          <Card.Title>{user.alias}</Card.Title>
-          <Card.Subtitle className="card-content">
-            {convertGender(user.gender)}, {user.age}
-          </Card.Subtitle>
-          <Card.Subtitle>Relationship type</Card.Subtitle>
-          <Card className="bio">
-            <Card.Text>{user.bio}</Card.Text>
-          </Card>
-        </Card.Body>
-        {isPersonalPage ? (
-          <Button
-            className="edit-button"
-            onClick={() => navigate(AppRoute.ACCOUNT_UPDATE)}
-          >
-            <BsFillGearFill />
-          </Button>
-        ) : (
-          <></>
-        )}
-      </Card>
+    <div className="test">
+      <div className="profile-page">
+        <Card className="profile-card">
+          <Card.Img
+            variant="top"
+            src={getProfilePictureURL(user.profilePictureId)}
+          />
+          <Card.Body className="card-content">
+            <Card.Title>{user.alias}</Card.Title>
+            <Card.Subtitle className="card-content">
+              {convertGender(user.gender)}, {user.age}
+            </Card.Subtitle>
+            <Card.Subtitle>Relationship type</Card.Subtitle>
+            <Card className="bio">
+              <Card.Text>{user.bio}</Card.Text>
+            </Card>
+          </Card.Body>
+          {isPersonalPage ? (
+            <Button
+              className="edit-button"
+              onClick={() => navigate(AppRoute.ACCOUNT_UPDATE)}
+            >
+              <BsFillGearFill />
+            </Button>
+          ) : (
+            <></>
+          )}
+        </Card>
+      </div>
     </div>
   );
 
