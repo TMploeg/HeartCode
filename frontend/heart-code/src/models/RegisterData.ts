@@ -3,8 +3,9 @@ export default interface RegisterData {
   alias: string;
   password: string;
   passwordConfirmation: string;
-  gender: string;
   dateOfBirth: string;
+  gender: string;
+  relationshipType: string;
   bio: string;
   genderPreference: string;
   profilePicture?: Uint8Array;

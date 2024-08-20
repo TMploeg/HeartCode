@@ -11,6 +11,7 @@ import ProfilePictureInput, {
 } from "../general/profile-picture-input/ProfilePictureInput";
 import { useApi, useProfilePicture } from "../../hooks";
 import { genderPreferences } from "../../enums/GenderPreference";
+import { relationshipTypes } from "../../enums/RelationshipType";
 
 interface UpdateValue {
   value: any;
@@ -149,6 +150,34 @@ export default function UpdateProfilePage() {
             <ListGroup.Item>
               <Form.Label
                 className={`profile-field-label ${
+                  updateValues.relationshipType.changed ? "changed" : ""
+                }`}
+              >
+                Relationship Type
+                {updateValues.relationshipType.changed ? "*" : ""}
+              </Form.Label>
+              <Form.Select
+                defaultValue={userInfo.relationshipType}
+                onChange={(event) =>
+                  setUpdateValues((values) => ({
+                    ...values,
+                    relationshipType: {
+                      value: event.target.value,
+                      changed: userInfo.relationshipType !== event.target.value,
+                    },
+                  }))
+                }
+              >
+                {relationshipTypes.map((relationshipType) => (
+                  <option key={relationshipType} value={relationshipType}>
+                    {relationshipType}
+                  </option>
+                ))}
+              </Form.Select>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Label
+                className={`profile-field-label ${
                   updateValues.bio.changed ? "changed" : ""
                 }`}
               >
@@ -199,6 +228,7 @@ export default function UpdateProfilePage() {
       gender: { value: userInfo.gender, changed: false },
       bio: { value: userInfo.bio, changed: false },
       genderPreference: { value: userInfo.genderPreference, changed: false },
+      relationshipType: { value: userInfo.relationshipType, changed: false },
     });
   }
 
@@ -214,7 +244,6 @@ export default function UpdateProfilePage() {
       console.error("one or more values is undefined");
       return;
     }
-    console.log(updateValues.genderPreference);
     const updatedFields = {
       alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
       gender: updateValues.gender.changed
@@ -226,6 +255,9 @@ export default function UpdateProfilePage() {
         : undefined,
       genderPreference: updateValues.genderPreference.changed
         ? updateValues.genderPreference.value
+        : undefined,
+      relationshipType: updateValues.relationshipType.changed
+        ? updateValues.relationshipType.value
         : undefined,
     };
 
