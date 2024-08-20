@@ -60,12 +60,11 @@ export default function App() {
   function getRoutes() {
     return loggedIn ? (
       <>
-        <Route path={AppRoute.HOME} element={<div>Hello, HeartCode!</div>} />
+        <Route path={AppRoute.HOME} element={<BrowsingPage />} />
         <Route path={AppRoute.MATCHES} element={<MatchesPage />} />
         <Route path={AppRoute.CHAT} element={<ChatPage />} />
         <Route path={AppRoute.ACCOUNT} element={<ProfilePage />} />
         <Route path={AppRoute.ACCOUNT_UPDATE} element={<UpdateProfilePage />} />
-        <Route path={AppRoute.BROWSE} element={<BrowsingPage />} />
       </>
     ) : (
       <>
