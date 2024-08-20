@@ -32,6 +32,8 @@ export default function Browsing() {
       evaluateeAddress: user?.email,
       liked: likedBool,
     }).catch((error) => console.log(error.response.data));
+
+    setUser(undefined);
     getRandomUser();
   }
 
