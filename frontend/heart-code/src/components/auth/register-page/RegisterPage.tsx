@@ -12,6 +12,9 @@ import {
 } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import Gender, { genders } from "../../../enums/Gender";
+import RelationshipType, {
+  relationshipType,
+} from "../../../enums/RelationshipType";
 
 interface Props {
   onRegister: () => void;
@@ -22,8 +25,9 @@ export default function RegisterPage({ onRegister }: Props) {
     alias: "",
     password: "",
     passwordConfirmation: "",
-    gender: Gender.MALE,
     dateOfBirth: "",
+    gender: Gender.MALE,
+    relationshipType: RelationshipType.CASUAL,
     bio: "",
   });
 
@@ -119,21 +123,35 @@ export default function RegisterPage({ onRegister }: Props) {
             <option key={gender}>{gender}</option>
           ))}
         </Form.Select>
-        <InputGroup>
-          <Form.Control
-            as="textarea"
-            rows={5}
-            className="bio-field"
-            placeholder="Bio"
-            value={registerData.bio}
-            onChange={(event) =>
-              setRegisterData((data) => ({
-                ...data,
-                bio: event.target.value,
-              }))
-            }
-          />
-        </InputGroup>
+      </InputGroup>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              relationshipType: event.target.value,
+            }))
+          }
+        >
+          {relationshipType.map((relationshipType) => (
+            <option key={relationshipType}>{relationshipType}</option>
+          ))}
+        </Form.Select>
+      </InputGroup>
+      <InputGroup>
+        <Form.Control
+          as="textarea"
+          rows={5}
+          className="bio-field"
+          placeholder="Bio"
+          value={registerData.bio}
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              bio: event.target.value,
+            }))
+          }
+        />
       </InputGroup>
       <Button
         className="submit-button"

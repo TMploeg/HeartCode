@@ -4,8 +4,6 @@ import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,16 +37,23 @@ public class UserController {
       throw new BadRequestException("password is not valid");
     }
 
-    if (registerDTO.gender() == null) {
-      throw new BadRequestException("gender is required");
-    } else if (registerDTO.gender().isBlank()) {
-      throw new BadRequestException("gender must have at least one character");
-    }
     if (registerDTO.dateOfBirth() == null || registerDTO.dateOfBirth().isBlank()) {
       throw new BadRequestException("Date of birth is required");
     }
     if (registerDTO.dateOfBirth() == null) {
       throw new BadRequestException("Date of birth is not a real date");
+    }
+
+    if (registerDTO.gender() == null) {
+      throw new BadRequestException("gender is required");
+    } else if (registerDTO.gender().isBlank()) {
+      throw new BadRequestException("gender must have at least one character");
+    }
+
+    if (registerDTO.relationshipType() == null) {
+      throw new BadRequestException("relationshipType is required");
+    } else if (registerDTO.relationshipType().isBlank()) {
+      throw new BadRequestException("relationshipType must have at least one character");
     }
 
     userService
@@ -68,13 +73,23 @@ public class UserController {
                             + getGenderOptionsString()
                             + "]"));
 
+    UserRelationshipType relationshipType =
+        UserRelationshipType.parse(registerDTO.relationshipType())
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "relationshipType is invalid, valid options include: ["
+                            + getRelationshipTypeOptionsString()
+                            + "]"));
+
     User user =
         userService.save(
             registerDTO.email(),
             registerDTO.alias(),
             registerDTO.password(),
-            gender,
             registerDTO.dateOfBirth(),
+            gender,
+            relationshipType,
             registerDTO.bio());
 
     return new AuthTokenDTO(
@@ -172,6 +187,12 @@ public class UserController {
 
   private static String getGenderOptionsString() {
     return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
+  }
+
+  private static String getRelationshipTypeOptionsString() {
+    return String.join(
+        ", ",
+        Arrays.stream(UserRelationshipType.values()).map(UserRelationshipType::getName).toList());
   }
 
   @GetMapping("validate-token")

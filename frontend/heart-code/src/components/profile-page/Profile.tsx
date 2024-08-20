@@ -25,7 +25,7 @@ export default function Profile({ user, isPersonalPage }: Props) {
           <Card.Subtitle className="card-content">
             {convertGender(user.gender)}, {user.age}
           </Card.Subtitle>
-          <Card.Subtitle>Relationship type</Card.Subtitle>
+          <Card.Subtitle>{user.relationshipType}</Card.Subtitle>
           <Card className="bio">
             <Card.Text>{user.bio}</Card.Text>
           </Card>

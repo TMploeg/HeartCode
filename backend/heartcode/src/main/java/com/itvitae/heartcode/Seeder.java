@@ -8,14 +8,14 @@ import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserGender;
+import com.itvitae.heartcode.user.UserRelationshipType;
 import com.itvitae.heartcode.user.UserRepository;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
-
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -58,13 +58,24 @@ public class Seeder implements CommandLineRunner {
             .map(
                 s ->
                     new User(
-                        s + "@heartcode.com", s, "{noop}" + s + "_password", getRandomGender(), LocalDate.now(), "bio"))
+                        s + "@heartcode.com",
+                        s,
+                        "{noop}" + s + "_password",
+                        LocalDate.now(),
+                        getRandomGender(),
+                        getRandomRelationshipType(),
+                        "bio"))
             .toList());
   }
 
   private UserGender getRandomGender() {
     UserGender[] genders = UserGender.values();
     return genders[new Random().nextInt(genders.length)];
+  }
+
+  private UserRelationshipType getRandomRelationshipType() {
+    UserRelationshipType[] relationshipType = UserRelationshipType.values();
+    return relationshipType[new Random().nextInt(relationshipType.length)];
   }
 
   private void seedEvaluationsAndMatches() {

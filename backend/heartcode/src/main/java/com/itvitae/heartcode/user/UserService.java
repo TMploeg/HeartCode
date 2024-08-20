@@ -6,8 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.regex.Pattern;
-
-import com.itvitae.heartcode.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,7 +24,13 @@ public class UserService implements UserDetailsService {
   }
 
   public User save(
-      String email, String alias, String password, UserGender gender, String dateOfBirthString, String bio) {
+      String email,
+      String alias,
+      String password,
+      String dateOfBirthString,
+      UserGender gender,
+      UserRelationshipType relationshipType,
+      String bio) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -45,7 +49,14 @@ public class UserService implements UserDetailsService {
             .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
 
     return userRepository.save(
-        new User(email, alias, passwordEncoder.encode(password), gender, dateOfBirth, bio));
+        new User(
+            email,
+            alias,
+            passwordEncoder.encode(password),
+            dateOfBirth,
+            gender,
+            relationshipType,
+            bio));
   }
 
   public User update(User user) {
