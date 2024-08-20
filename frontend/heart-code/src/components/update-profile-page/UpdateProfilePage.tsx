@@ -1,17 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { useApi } from "../../hooks";
 import { useEffect, useState } from "react";
 import { User } from "../../models/User";
-import { Button, Card, Form, InputGroup, ListGroup } from "react-bootstrap";
+import { Button, Card, Form, ListGroup } from "react-bootstrap";
 import "./UpdateProfilePage.css";
 import Spinner from "react-bootstrap/Spinner";
+import { genders } from "../../enums/Gender";
+import { AppRoute } from "../../enums/AppRoute";
+import ProfilePictureInput, {
+  ImageData,
+} from "../general/profile-picture-input/ProfilePictureInput";
+import { useApi, useProfilePicture } from "../../hooks";
 
-interface UpdateValues {
-  alias: UpdateValue<string>;
-}
-
-interface UpdateValue<TValue> {
-  value: TValue;
+interface UpdateValue {
+  value: any;
   changed: boolean;
 }
 
@@ -19,12 +20,31 @@ export default function UpdateProfilePage() {
   const { get, patch } = useApi();
   const [userInfo, setUserInfo] = useState<User>();
   const navigate = useNavigate();
+  const getProfilePictureURL = useProfilePicture();
+
   useEffect(getUserInfo, []);
   useEffect(loadUserInfo, [userInfo]);
 
-  const [updateValues, setUpdateValues] = useState<UpdateValues>();
+  const [updateValues, setUpdateValues] = useState<{
+    [key: string]: UpdateValue;
+  }>();
+  const [profilePictureData, setProfilePictureData] = useState<
+    ImageData | undefined
+  >(undefined);
 
-  if (!updateValues) {
+  useEffect(() => {
+    if (profilePictureData != undefined) {
+      setUpdateValues((values) => ({
+        ...values,
+        profilePicture: {
+          value: profilePictureData.data,
+          changed: true,
+        },
+      }));
+    }
+  }, [profilePictureData]);
+
+  if (!updateValues || !userInfo) {
     return (
       <div className="spinner-container">
         <Spinner animation="border" variant="primary" />
@@ -38,6 +58,17 @@ export default function UpdateProfilePage() {
         <Card.Header>Edit</Card.Header>
         <Card.Body>
           <ListGroup>
+            <ListGroup.Item>
+              <div className="profile-picture-input-container">
+                <ProfilePictureInput
+                  value={profilePictureData}
+                  onChange={setProfilePictureData}
+                  initialValueURL={getProfilePictureURL(
+                    userInfo.profilePictureId
+                  )}
+                />
+              </div>
+            </ListGroup.Item>
             <ListGroup.Item>
               <Form.Label
                 className={`profile-field-label ${
@@ -53,7 +84,58 @@ export default function UpdateProfilePage() {
                     ...values,
                     alias: {
                       value: event.target.value,
-                      changed: (userInfo?.alias ?? "") !== event.target.value,
+                      changed: (userInfo.alias ?? "") !== event.target.value,
+                    },
+                  }))
+                }
+              />
+            </ListGroup.Item>
+
+            <ListGroup.Item>
+              <Form.Label
+                className={`profile-field-label ${
+                  updateValues.gender.changed ? "changed" : ""
+                }`}
+              >
+                Gender{updateValues.gender.changed ? "*" : ""}
+              </Form.Label>
+              <Form.Select
+                defaultValue={userInfo.gender}
+                onChange={(event) =>
+                  setUpdateValues((values) => ({
+                    ...values,
+                    gender: {
+                      value: event.target.value,
+                      changed: userInfo.gender !== event.target.value,
+                    },
+                  }))
+                }
+              >
+                {genders.map((gender) => (
+                  <option key={gender} value={gender}>
+                    {gender.split("_").join(" ")}
+                  </option>
+                ))}
+              </Form.Select>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Label
+                className={`profile-field-label ${
+                  updateValues.bio.changed ? "changed" : ""
+                }`}
+              >
+                Bio{updateValues.bio.changed ? "*" : ""}
+              </Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={5}
+                value={updateValues.bio.value}
+                onChange={(event) =>
+                  setUpdateValues((values) => ({
+                    ...values,
+                    bio: {
+                      value: event.target.value,
+                      changed: (userInfo.bio ?? "") !== event.target.value,
                     },
                   }))
                 }
@@ -86,6 +168,8 @@ export default function UpdateProfilePage() {
 
     setUpdateValues({
       alias: { value: userInfo.alias, changed: false },
+      gender: { value: userInfo.gender, changed: false },
+      bio: { value: userInfo.bio, changed: false },
     });
   }
 
@@ -97,20 +181,28 @@ export default function UpdateProfilePage() {
   }
 
   function save() {
-    if (!updateValues) {
+    if (!userInfo || !updateValues || !profilePictureData) {
+      console.error("one or more values is undefined");
       return;
     }
 
     const updatedFields = {
       alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
+      gender: updateValues.gender.changed
+        ? updateValues.gender.value
+        : undefined,
+      bio: updateValues.bio.changed ? updateValues.bio.value : undefined,
+      profilePicture: updateValues.profilePicture.changed
+        ? updateValues.profilePicture.value
+        : undefined,
     };
 
     patch("users/account", updatedFields)
-      .then(() => navigateBack())
+      .then(navigateBack)
       .catch(() => alert("failed to save changes"));
   }
 
   function navigateBack(): void {
-    navigate("/account");
+    navigate(AppRoute.ACCOUNT);
   }
 }

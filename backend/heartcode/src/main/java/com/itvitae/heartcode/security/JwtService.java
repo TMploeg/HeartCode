@@ -4,6 +4,7 @@ import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.transaction.Transactional;
 import java.util.*;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class JwtService {
   private final SecretKey jwtSecretKey;

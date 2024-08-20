@@ -1,27 +1,56 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import RegisterData from "../../../models/RegisterData";
-import { isValidEmail } from "../AuthValidation";
+import {
+  isValidEmail,
+  isValidDateOfBirth,
+  isValidAge,
+  isValidPassword,
+} from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
+import Gender, { genders } from "../../../enums/Gender";
+import ProfilePictureInput, {
+  ImageData,
+} from "../../general/profile-picture-input/ProfilePictureInput";
 
-export default function RegisterPage() {
+interface Props {
+  onRegister: () => void;
+}
+export default function RegisterPage({ onRegister }: Props) {
   const [registerData, setRegisterData] = useState<RegisterData>({
     email: "",
     alias: "",
     password: "",
+    passwordConfirmation: "",
+    gender: Gender.MALE,
+    dateOfBirth: "",
+    bio: "",
   });
+
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
+  const [passwordConfirmationVisible, setpasswordConfirmationVisible] =
+    useState<Boolean>(false);
+  const [profilePictureData, setProfilePictureData] = useState<
+    ImageData | undefined
+  >(undefined);
 
   const { register } = useAuthentication();
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    registerData.profilePicture = profilePictureData?.data;
+  }, [profilePictureData]);
 
   const formErrors: String[] = getFormErrors();
 
   return (
     <div className="auth-form">
+      <ProfilePictureInput
+        value={profilePictureData}
+        onChange={setProfilePictureData}
+      />
       <InputGroup>
         <Form.Control
           placeholder="Email Address"
@@ -52,20 +81,89 @@ export default function RegisterPage() {
             }))
           }
         />
-        <Button onClick={() => setPasswordVisible((visible) => !visible)}>
+        <Button
+          className="visibility-button"
+          onClick={() => setPasswordVisible((visible) => !visible)}
+        >
           <div className="icon-button-content">
             {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
           </div>
         </Button>
       </InputGroup>
-      <Button disabled={formErrors.length > 0} onClick={submit}>
+      <InputGroup>
+        <Form.Control
+          placeholder="Confirm Password"
+          value={registerData.passwordConfirmation}
+          type={passwordConfirmationVisible ? "text" : "password"}
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              passwordConfirmation: event.target.value,
+            }))
+          }
+        />
+        <Button
+          className="visibility-button"
+          onClick={() => setpasswordConfirmationVisible((visible) => !visible)}
+        >
+          <div className="icon-button-content">
+            {passwordConfirmationVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
+          </div>
+        </Button>
+      </InputGroup>
+      <InputGroup>
+        <Form.Control
+          placeholder="Birthday DD/MM/YYYY"
+          value={registerData.dateOfBirth}
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              dateOfBirth: event.target.value,
+            }))
+          }
+        />
+      </InputGroup>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) =>
+            setRegisterData((data) => ({ ...data, gender: event.target.value }))
+          }
+        >
+          {genders.map((gender) => (
+            <option key={gender}>{gender}</option>
+          ))}
+        </Form.Select>
+        <InputGroup>
+          <Form.Control
+            as="textarea"
+            rows={5}
+            className="bio-field"
+            placeholder="Bio"
+            value={registerData.bio}
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                bio: event.target.value,
+              }))
+            }
+          />
+        </InputGroup>
+      </InputGroup>
+      <Button
+        className="submit-button"
+        disabled={formErrors.length > 0}
+        onClick={submit}
+      >
         Register
       </Button>
       <div className="auth-form-errors">
         {formErrors.map((err, index) => (
-          <div key={index}>{err}</div>
+          <div className="error-message" key={index}>
+            {err}
+          </div>
         ))}
       </div>
+      <Link to="/login">or login if you already have an account</Link>
     </div>
   );
 
@@ -73,23 +171,74 @@ export default function RegisterPage() {
     const errors: String[] = [];
 
     if (registerData.email.length === 0) {
-      errors.push("email is required");
+      errors.push("Email is required");
     } else if (!isValidEmail(registerData.email)) {
-      errors.push("email is invalid");
+      errors.push("Email is invalid");
     }
 
     if (registerData.alias.length === 0) {
-      errors.push("alias is required");
+      errors.push("An alias is required");
     }
 
-    if (registerData.password.length === 0) {
-      errors.push("password is required");
+    if (registerData.password !== registerData.passwordConfirmation) {
+      errors.push("Password does not match");
+    }
+
+    if (!isValidPassword(registerData.password)) {
+      errors.push(`password must contain
+          an uppercase letter,
+          a lowercase letter,
+          a number,
+          a special character
+          and must have at least 7 characters
+        `);
+    }
+
+    if (registerData.dateOfBirth.length === 0) {
+      errors.push("A date of birth is required");
+    } else if (!isValidDateOfBirth(registerData.dateOfBirth)) {
+      errors.push("You must enter a valid date of birth");
+    } else {
+      const dataInfo = registerData.dateOfBirth.split("/");
+      const dateString = dataInfo.join("-");
+      const [day, month, year] = dateString.split("-");
+      if (!isValidAge(new Date(+year, +month - 1, +day))) {
+        errors.push("You must be at least 18 years old");
+      }
     }
 
     return errors;
   }
 
   function submit() {
-    register(registerData).then(() => navigate("/"));
+    register(registerData)
+      .then(onRegister)
+      .catch(() => alert("registration failed"));
   }
+
+  // function chooseImage(): void {
+  //   const input = document.createElement("input");
+  //   input.accept = "image/*";
+  //   input.type = "file";
+  //   input.click();
+  //   input.addEventListener("change", async (event) => {
+  //     const files: FileList | null = (event.target as HTMLInputElement).files;
+  //     if (files === null || files.length === 0) {
+  //       return;
+  //     }
+
+  //     const bytes: Uint8Array = new Uint8Array(await files[0].arrayBuffer());
+  //     setRegisterData((data) => ({ ...data, profilePicture: bytes }));
+
+  //     const reader = new FileReader();
+  //     reader.addEventListener("load", async () => {
+  //       if (reader.result === null || reader.result instanceof ArrayBuffer) {
+  //         return;
+  //       }
+
+  //       setProfilePictureDataURL(reader.result);
+  //     });
+  //     reader.readAsDataURL(files[0]);
+  //   });
+  // }
 }

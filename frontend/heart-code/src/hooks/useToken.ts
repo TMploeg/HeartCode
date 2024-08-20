@@ -7,6 +7,9 @@ export default function useToken() {
   function setToken(token: string) {
     sessionStorage.setItem(TOKEN_STORAGE_LOCATION, token);
   }
+  function clearToken() {
+    sessionStorage.removeItem(TOKEN_STORAGE_LOCATION);
+  }
 
-  return { getToken, setToken };
+  return { getToken, setToken, clearToken };
 }
