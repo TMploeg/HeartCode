@@ -2,6 +2,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
   background: rgba(255, 255, 255, 0.6);
   width: 80%;
@@ -44,4 +45,9 @@
 .visibility-button {
   background-color: #c4256a !important;
   border-color: #c4256a !important;
+}
+
+.profile-picture-display {
+  width: 100%;
+  height: 100%;
 }

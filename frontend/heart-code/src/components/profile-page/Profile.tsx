@@ -1,9 +1,10 @@
 import { User } from "../../models/User";
 import { Card, Button } from "react-bootstrap";
 import "./Profile.css";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Gender from "../../enums/Gender";
 import { AppRoute } from "../../enums/AppRoute";
+import { useProfilePicture } from "../../hooks";
 import { BsFillGearFill } from "react-icons/bs";
 
 interface Props {
@@ -13,13 +14,14 @@ interface Props {
 
 export default function Profile({ user, isPersonalPage }: Props) {
   const navigate = useNavigate();
+  const getProfilePictureURL = useProfilePicture();
 
   return (
     <div className="profile-page">
       <Card className="profile-card">
         <Card.Img
           variant="top"
-          src="https://optimaldataintelligence.com/wp-content/themes/optimaldataintelligence/images/image-not-found.png"
+          src={getProfilePictureURL(user.profilePictureId)}
         />
         <Card.Body className="card-content">
           <Card.Title>{user.alias}</Card.Title>

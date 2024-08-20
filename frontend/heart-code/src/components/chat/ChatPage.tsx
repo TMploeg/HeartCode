@@ -3,7 +3,7 @@ import { Match } from "../../models/Match";
 import ChatMessage from "../../models/ChatMessage";
 import { useEffect, useState } from "react";
 import ChatMessageView from "./ChatMessageView";
-import { useApi } from "../../hooks";
+import { useApi, useProfilePicture } from "../../hooks";
 import "./Chat.css";
 import { Button, Form, InputGroup, Modal } from "react-bootstrap";
 import { BsSendFill } from "react-icons/bs";
@@ -15,6 +15,7 @@ const FETCH_MESSAGES_INTERVAL_DELAY = 5000;
 export default function ChatPage() {
   const { state } = useLocation();
   const { get, post } = useApi();
+  const getProfilePictureURL = useProfilePicture();
 
   const [messages, setMessages] = useState<ChatMessage[] | null>(null);
   const [newMessage, setNewMessage] = useState<string>("");
@@ -42,7 +43,11 @@ export default function ChatPage() {
         <div className="chat-page-header">
           <img
             className="match-img"
-            src="https://optimaldataintelligence.com/wp-content/themes/optimaldataintelligence/images/image-not-found.png"
+            src={
+              matchProfile !== undefined
+                ? getProfilePictureURL(matchProfile.profilePictureId)
+                : "https://optimaldataintelligence.com/wp-content/themes/optimaldataintelligence/images/image-not-found.png"
+            }
           />
           {match.alias}
         </div>
@@ -86,7 +91,6 @@ export default function ChatPage() {
   function getMatchProfile() {
     get<User>(`users/${match.email}`).then((response) => {
       setMatchProfile(response.data);
-      console.log(matchProfile);
     });
   }
 
