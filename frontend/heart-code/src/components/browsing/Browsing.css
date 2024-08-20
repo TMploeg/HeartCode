@@ -1,0 +1,10 @@
+.evaluationButton {
+  position: relative;
+  border-radius: 50px !important;
+  width: 40%;
+  margin-left: 5%;
+  margin-top: -35px !important;
+  height: 35px !important;
+  font-size: 23px !important;
+  line-height: 17px !important;
+}
