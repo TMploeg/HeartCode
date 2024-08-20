@@ -5,6 +5,7 @@ import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/evaluations")
 @CrossOrigin("http://localhost:5173")
+@Transactional
 public class EvaluationController {
 
   private final EvaluationService evaluationService;
