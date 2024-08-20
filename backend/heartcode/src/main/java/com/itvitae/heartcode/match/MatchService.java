@@ -33,10 +33,6 @@ public class MatchService {
     return Optional.of(matchRepository.save(new Match(evaluator, evaluatee)));
   }
 
-  public List<Match> getAll() {
-    return matchRepository.findAll().stream().filter(this::containsTestUser).toList();
-  }
-
   public List<User> getMatchedUsers() {
     return getMatchedUsers(userService.getCurrentUser());
   }
@@ -45,10 +41,5 @@ public class MatchService {
     return matchRepository.findForUser(user).stream()
         .map(m -> m.getUser1().getEmail().equals(user.getEmail()) ? m.getUser2() : m.getUser1())
         .toList();
-  }
-
-  public boolean containsTestUser(Match match) {
-    return match.getUser1().getAlias().equals(User.TEST_USER_NAME)
-        || match.getUser2().getAlias().equals(User.TEST_USER_NAME);
   }
 }
