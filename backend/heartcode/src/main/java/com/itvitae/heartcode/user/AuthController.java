@@ -52,6 +52,12 @@ public class AuthController {
       throw new BadRequestException("profilePicture is empty");
     }
 
+    if (registerDTO.relationshipType() == null) {
+      throw new BadRequestException("relationshipType is required");
+    } else if (registerDTO.relationshipType().isBlank()) {
+      throw new BadRequestException("relationshipType must have at least one character");
+    }
+
     UserGender gender =
         UserGender.parse(registerDTO.gender())
             .orElseThrow(
@@ -59,6 +65,15 @@ public class AuthController {
                     new BadRequestException(
                         "gender is invalid, valid options include: ["
                             + getGenderOptionsString()
+                            + "]"));
+
+    UserRelationshipType relationshipType =
+        UserRelationshipType.parse(registerDTO.relationshipType())
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "relationshipType is invalid, valid options include: ["
+                            + getRelationshipTypeOptionsString()
                             + "]"));
 
     userService
@@ -79,7 +94,8 @@ public class AuthController {
             gender,
             registerDTO.dateOfBirth(),
             registerDTO.bio(),
-            profilePicture);
+            profilePicture,
+            relationshipType);
 
     return new AuthTokenDTO(
         jwtService
@@ -108,5 +124,11 @@ public class AuthController {
 
   private static String getGenderOptionsString() {
     return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
+  }
+
+  private static String getRelationshipTypeOptionsString() {
+    return String.join(
+        ", ",
+        Arrays.stream(UserRelationshipType.values()).map(UserRelationshipType::getName).toList());
   }
 }

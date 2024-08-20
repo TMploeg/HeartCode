@@ -1,6 +1,5 @@
 package com.itvitae.heartcode.user;
 
-import jakarta.persistence.*;
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import jakarta.persistence.*;
 import java.time.LocalDate;
