@@ -213,7 +213,12 @@ export default function RegisterPage({ onRegister }: Props) {
   function submit() {
     register(registerData)
       .then(onRegister)
-      .catch(() => alert("registration failed"));
+      .catch((error) => showError(error.response.data.detail));
+  }
+
+  function showError(errorMessage: string): void {
+    alert(errorMessage);
+    console.log(errorMessage);
   }
 
   // function chooseImage(): void {
