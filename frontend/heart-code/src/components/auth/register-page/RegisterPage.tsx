@@ -90,6 +90,7 @@ export default function RegisterPage({ onRegister }: Props) {
           }
         />
         <Button
+          variant="outline-secondary"
           className="visibility-button"
           onClick={() => setPasswordVisible((visible) => !visible)}
         >
@@ -111,6 +112,7 @@ export default function RegisterPage({ onRegister }: Props) {
           }
         />
         <Button
+          variant="outline-secondary"
           className="visibility-button"
           onClick={() => setpasswordConfirmationVisible((visible) => !visible)}
         >
