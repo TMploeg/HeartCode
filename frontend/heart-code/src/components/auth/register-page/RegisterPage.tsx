@@ -157,8 +157,6 @@ export default function RegisterPage({ onRegister }: Props) {
       <InputGroup>
         <Form.Select
           onChange={(event) => {
-            console.log(registerData.genderPreference);
-            console.log(event.target.value);
             setRegisterData((data) => ({
               ...data,
               genderPreference: event.target.value,

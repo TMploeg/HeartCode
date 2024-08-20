@@ -101,16 +101,15 @@ export default function UpdateProfilePage() {
               </Form.Label>
               <Form.Select
                 defaultValue={userInfo.gender}
-                onChange={(event) => {
-                  console.log(userInfo.gender);
+                onChange={(event) =>
                   setUpdateValues((values) => ({
                     ...values,
                     gender: {
                       value: event.target.value,
                       changed: userInfo.gender !== event.target.value,
                     },
-                  }));
-                }}
+                  }))
+                }
               >
                 {genders.map((gender) => (
                   <option key={gender} value={gender}>
@@ -130,17 +129,15 @@ export default function UpdateProfilePage() {
               </Form.Label>
               <Form.Select
                 defaultValue={userInfo.genderPreference}
-                onChange={(event) => {
-                  console.log("genderpreferences", userInfo.genderPreference);
-                  console.log("updatevalues", updateValues);
+                onChange={(event) =>
                   setUpdateValues((values) => ({
                     ...values,
                     genderPreference: {
                       value: event.target.value,
                       changed: userInfo.genderPreference !== event.target.value,
                     },
-                  }));
-                }}
+                  }))
+                }
               >
                 {genderPreferences.map((genderPreference) => (
                   <option key={genderPreference} value={genderPreference}>
@@ -190,16 +187,12 @@ export default function UpdateProfilePage() {
     get<User>("users/account")
       .then((response) => setUserInfo(response.data))
       .catch(() => navigateBack());
-
-    console.log(userInfo?.genderPreference);
   }
 
   function loadUserInfo() {
     if (!userInfo) {
       return;
     }
-
-    console.log(userInfo.genderPreference);
 
     setUpdateValues({
       alias: { value: userInfo.alias, changed: false },
@@ -235,8 +228,6 @@ export default function UpdateProfilePage() {
         ? updateValues.genderPreference.value
         : undefined,
     };
-
-    console.log(updateValues.genderPreference);
 
     patch("users/account", updatedFields)
       .then(navigateBack)
