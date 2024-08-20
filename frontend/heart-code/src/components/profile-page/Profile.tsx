@@ -44,10 +44,7 @@ export default function Profile({ user, isPersonalPage }: Props) {
             </Button>
             <Button
               className="profile-page-bottom-button"
-              onClick={() => {
-                logout();
-                navigate("/");
-              }}
+              onClick={() => logout()}
             >
               <BsBoxArrowRight />
             </Button>

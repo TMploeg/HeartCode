@@ -1,10 +1,15 @@
+import { EventHandler } from "react";
 import LoginData from "../models/LoginData";
 import LoginResponse from "../models/LoginResponse";
 import RegisterData from "../models/RegisterData";
 import useApi from "./useApi";
 import useToken from "./useToken";
 
+const LOGOUT_EVENT_NAME: string = "logout";
+
 export default function useAuthentication() {
+  const logoutEvent = new Event(LOGOUT_EVENT_NAME);
+
   const { get, post } = useApi();
   const { getToken, setToken, clearToken } = useToken();
 
@@ -47,6 +52,11 @@ export default function useAuthentication() {
 
   function logout(): void {
     clearToken();
+    document.dispatchEvent(logoutEvent);
+  }
+
+  function addLogoutListener(handler: () => void): void {
+    document.addEventListener(LOGOUT_EVENT_NAME, handler);
   }
 
   return {
@@ -54,5 +64,6 @@ export default function useAuthentication() {
     login,
     isLoggedIn,
     logout,
+    addLogoutListener,
   };
 }
