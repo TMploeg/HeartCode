@@ -91,7 +91,6 @@ export default function ChatPage() {
   function getMatchProfile() {
     get<User>(`users/${match.email}`).then((response) => {
       setMatchProfile(response.data);
-      console.log(matchProfile);
     });
   }
 
