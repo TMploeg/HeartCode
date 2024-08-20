@@ -22,24 +22,6 @@ public class UserController {
   private final JwtService jwtService;
   private final ProfilePictureService profilePictureService;
 
-  @PostMapping("login")
-  public AuthTokenDTO login(@RequestBody LoginDTO authDTO) {
-    if (authDTO.email() == null || authDTO.password() == null) {
-      throw new BadRequestException("email and password are required");
-    }
-
-    userService
-        .findById(authDTO.email())
-        .filter(user -> userService.isCorrectPassword(user, authDTO.password()))
-        .orElseThrow(() -> new BadRequestException("username or password is incorrect"));
-
-    return new AuthTokenDTO(
-        jwtService
-            .generateTokenForUser(authDTO.email())
-            .orElseThrow(
-                () -> new RuntimeException("could not generate token for unknown reasons")));
-  }
-
   @GetMapping("account")
   public ResponseEntity<UserDTO> getCurrentUser() {
     return ResponseEntity.ok(UserDTO.from(userService.getCurrentUser()));

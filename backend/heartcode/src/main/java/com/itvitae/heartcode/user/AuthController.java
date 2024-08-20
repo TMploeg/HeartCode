@@ -88,8 +88,7 @@ public class AuthController {
             gender,
             registerDTO.dateOfBirth(),
             registerDTO.bio(),
-            profilePicture,
-                genderPreference);
+            profilePicture, genderPreference);
 
     return new AuthTokenDTO(
         jwtService

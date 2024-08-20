@@ -51,8 +51,8 @@ public class User implements UserDetails {
     this.gender = gender;
     this.dateOfBirth = dateOfBirth;
     this.bio = bio;
-    this.genderPreference = genderPreference;
     this.profilePicture = profilePicture;
+    this.genderPreference = genderPreference;
   }
 
   public int getAge() {
