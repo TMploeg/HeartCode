@@ -1,3 +1,5 @@
+import AgePreference from "./AgePreference";
+
 export default interface RegisterData {
   email: string;
   alias: string;
@@ -7,4 +9,5 @@ export default interface RegisterData {
   dateOfBirth: string;
   bio: string;
   profilePicture?: Uint8Array;
+  agePreference?: AgePreference;
 }

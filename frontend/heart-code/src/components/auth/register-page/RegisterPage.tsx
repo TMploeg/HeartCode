@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
 import { Link } from "react-router-dom";
@@ -15,10 +15,24 @@ import Gender, { genders } from "../../../enums/Gender";
 import ProfilePictureInput, {
   ImageData,
 } from "../../general/profile-picture-input/ProfilePictureInput";
+import AgePreference from "../../../models/AgePreference";
 
 interface Props {
   onRegister: () => void;
 }
+
+interface AgePreferenceData {
+  value: string;
+  enabled: boolean;
+}
+
+interface PreferedAgeInputData {
+  minAge: AgePreferenceData;
+  maxAge: AgePreferenceData;
+}
+
+const MINIMUM_ACCEPTABLE_AGE = 18;
+
 export default function RegisterPage({ onRegister }: Props) {
   const [registerData, setRegisterData] = useState<RegisterData>({
     email: "",
@@ -28,6 +42,7 @@ export default function RegisterPage({ onRegister }: Props) {
     gender: Gender.MALE,
     dateOfBirth: "",
     bio: "",
+    agePreference: {},
   });
 
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
@@ -37,13 +52,38 @@ export default function RegisterPage({ onRegister }: Props) {
     ImageData | undefined
   >(undefined);
 
+  const [preferedAgeInputData, setPreferedAgeInputData] =
+    useState<PreferedAgeInputData>({
+      minAge: {
+        value: "",
+        enabled: false,
+      },
+      maxAge: {
+        value: "",
+        enabled: false,
+      },
+    });
+
+  const [formErrors, setFormErrors] = useState<String[]>(getFormErrors());
+
   const { register } = useAuthentication();
 
   useEffect(() => {
     registerData.profilePicture = profilePictureData?.data;
   }, [profilePictureData]);
 
-  const formErrors: String[] = getFormErrors();
+  useEffect(() => {
+    setFormErrors(getFormErrors());
+  }, [registerData, preferedAgeInputData]);
+  useEffect(() => {
+    setRegisterData((data) => ({
+      ...data,
+      agePreference: {
+        minAge: parseInt(preferedAgeInputData.minAge.value),
+        maxAge: parseInt(preferedAgeInputData.maxAge.value),
+      },
+    }));
+  }, [preferedAgeInputData]);
 
   return (
     <div className="auth-form">
@@ -149,6 +189,62 @@ export default function RegisterPage({ onRegister }: Props) {
           />
         </InputGroup>
       </InputGroup>
+      <InputGroup>
+        <InputGroup.Checkbox
+          checked={preferedAgeInputData.minAge.enabled}
+          onChange={(e) =>
+            setPreferedAgeInputData((data) => ({
+              ...data,
+              minAge: { ...data.minAge, enabled: e.target.checked },
+            }))
+          }
+        />
+        <Form.Control
+          disabled={!preferedAgeInputData.minAge.enabled}
+          placeholder="Prefered min age"
+          type="number"
+          value={preferedAgeInputData.minAge.value}
+          onChange={(e) =>
+            setPreferedAgeInputData((data) => ({
+              ...data,
+              minAge: { ...data.minAge, value: e.target.value },
+            }))
+          }
+        />
+      </InputGroup>
+      <InputGroup>
+        <InputGroup.Checkbox
+          disabled={!preferedAgeInputData.minAge.enabled}
+          checked={
+            preferedAgeInputData.minAge.enabled &&
+            preferedAgeInputData.maxAge.enabled
+          }
+          onChange={(e) =>
+            setPreferedAgeInputData((data) => ({
+              ...data,
+              maxAge: { ...data.maxAge, enabled: e.target.checked },
+            }))
+          }
+        />
+        <Form.Control
+          disabled={
+            !preferedAgeInputData.maxAge.enabled ||
+            !preferedAgeInputData.minAge.enabled
+          }
+          placeholder="Prefered max age"
+          type="number"
+          value={preferedAgeInputData.maxAge.value}
+          onChange={(e) =>
+            setPreferedAgeInputData((data) => ({
+              ...data,
+              maxAge: {
+                ...data.maxAge,
+                value: e.target.value,
+              },
+            }))
+          }
+        />
+      </InputGroup>
       <Button
         className="submit-button"
         disabled={formErrors.length > 0}
@@ -207,6 +303,25 @@ export default function RegisterPage({ onRegister }: Props) {
       }
     }
 
+    if (preferedAgeInputData.minAge.value.length > 0) {
+      const agePreference: AgePreference = {};
+      agePreference.minAge = parseInt(preferedAgeInputData.minAge.value);
+      if (isNaN(agePreference.minAge)) {
+        errors.push("Min age must be a valid number");
+      } else if (agePreference.minAge < MINIMUM_ACCEPTABLE_AGE) {
+        errors.push("Min age must be 18+");
+      }
+
+      if (preferedAgeInputData.maxAge.value.length > 0) {
+        agePreference.maxAge = parseInt(preferedAgeInputData.maxAge.value);
+        if (isNaN(agePreference.maxAge)) {
+          errors.push("Max age must be a valid number");
+        } else if (agePreference.maxAge < agePreference.minAge) {
+          errors.push("Max age must be greater than or equals to min age");
+        }
+      }
+    }
+
     return errors;
   }
 
@@ -215,30 +330,4 @@ export default function RegisterPage({ onRegister }: Props) {
       .then(onRegister)
       .catch(() => alert("registration failed"));
   }
-
-  // function chooseImage(): void {
-  //   const input = document.createElement("input");
-  //   input.accept = "image/*";
-  //   input.type = "file";
-  //   input.click();
-  //   input.addEventListener("change", async (event) => {
-  //     const files: FileList | null = (event.target as HTMLInputElement).files;
-  //     if (files === null || files.length === 0) {
-  //       return;
-  //     }
-
-  //     const bytes: Uint8Array = new Uint8Array(await files[0].arrayBuffer());
-  //     setRegisterData((data) => ({ ...data, profilePicture: bytes }));
-
-  //     const reader = new FileReader();
-  //     reader.addEventListener("load", async () => {
-  //       if (reader.result === null || reader.result instanceof ArrayBuffer) {
-  //         return;
-  //       }
-
-  //       setProfilePictureDataURL(reader.result);
-  //     });
-  //     reader.readAsDataURL(files[0]);
-  //   });
-  // }
 }
