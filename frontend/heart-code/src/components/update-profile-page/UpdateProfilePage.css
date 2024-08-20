@@ -15,14 +15,18 @@
 .edit-profile-page {
   gap: 8px;
   width: 80dvw !important;
-  height: 85dvb !important;
   background: rgba(255, 255, 255, 0.6) !important;
+  height: fit-content !important;
 }
 
 .profile-update-save-button {
   border-color: #c4256a !important;
   background-color: #c4256a !important;
   margin-top: 10px;
+  background-color: #c4256a !important;
+  border-color: #c4256a !important;
+  border-radius: 16px !important;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
 .profile-field-label {
