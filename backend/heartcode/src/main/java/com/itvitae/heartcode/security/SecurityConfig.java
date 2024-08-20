@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import javax.crypto.SecretKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -26,7 +27,9 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             requests ->
                 requests
-                    .requestMatchers("api/v1/users/**")
+                    .requestMatchers("api/v1/auth/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "api/v1/users/profilepictures/*")
                     .permitAll()
                     .anyRequest()
                     .authenticated())

@@ -30,3 +30,9 @@
 .profile-field-label.changed {
   color: black;
 }
+
+.profile-picture-input-container {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}

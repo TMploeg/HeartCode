@@ -1,8 +1,9 @@
 package com.itvitae.heartcode.user;
 
+import com.itvitae.heartcode.profilepictures.ProfilePicture;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
-import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -23,13 +24,13 @@ public class User implements UserDetails {
 
   @Setter private String alias;
 
-  @Setter
-  @Lob
-  private String bio;
+  @Setter @Lob private String bio;
 
   private String password;
 
   private UserRole role;
+
+  @Setter @OneToOne private ProfilePicture profilePicture;
 
   private LocalDate dateOfBirth;
 
@@ -42,7 +43,7 @@ public class User implements UserDetails {
   private GenderPreference genderPreference;
 
   public User(
-      String email, String alias, String password, UserGender gender, LocalDate dateOfBirth, String bio, GenderPreference genderPreference) {
+      String email, String alias, String password, UserGender gender, LocalDate dateOfBirth, String bio, ProfilePicture profilePicture, GenderPreference genderPreference) {
     this.email = email;
     this.alias = alias;
     this.password = password;
@@ -51,6 +52,7 @@ public class User implements UserDetails {
     this.dateOfBirth = dateOfBirth;
     this.bio = bio;
     this.genderPreference = genderPreference;
+    this.profilePicture = profilePicture;
   }
 
   public int getAge() {

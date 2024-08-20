@@ -7,29 +7,33 @@ import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.GenderPreference;
+import com.itvitae.heartcode.profilepictures.ProfilePicture;
+import com.itvitae.heartcode.profilepictures.ProfilePictureRepository;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserGender;
 import com.itvitae.heartcode.user.UserRepository;
+import jakarta.transaction.Transactional;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
-
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-@Transactional
 @RequiredArgsConstructor
+@Transactional
 public class Seeder implements CommandLineRunner {
   private final UserRepository userRepository;
   private final EvaluationRepository evaluationRepository;
   private final MatchRepository matchRepository;
   private final MatchService matchService;
   private final ChatMessageRepository chatMessageRepository;
+  private final ProfilePictureRepository profilePictureRepository;
 
   @Override
   public void run(String... args) throws Exception {
@@ -42,6 +46,8 @@ public class Seeder implements CommandLineRunner {
     if (userRepository.count() != 0) {
       return;
     }
+
+    byte[] placeholderImageBytes = getPlaceholderImageBytes();
 
     userRepository.saveAll(
         Stream.of(
@@ -59,7 +65,14 @@ public class Seeder implements CommandLineRunner {
             .map(
                 s ->
                     new User(
-                        s + "@heartcode.com", s, "{noop}" + s + "_password", getRandomGender(), LocalDate.now(), "bio", getRandomGenderPreference()))
+                        s + "@heartcode.com",
+                        s,
+                        "{noop}" + s + "_password",
+                        getRandomGender(),
+                        LocalDate.now(),
+                        "bio",
+
+                        profilePictureRepository.save(new ProfilePicture(placeholderImageBytes)), getRandomGenderPreference()))
             .toList());
   }
 
@@ -71,6 +84,21 @@ public class Seeder implements CommandLineRunner {
   private GenderPreference getRandomGenderPreference() {
     GenderPreference[] genders = GenderPreference.values();
     return genders[new Random().nextInt(genders.length)];
+  }
+
+  private byte[] getPlaceholderImageBytes() {
+    try (InputStream fileStream =
+        HeartCodeApplication.class
+            .getClassLoader()
+            .getResourceAsStream("placeholder_profile_picture")) {
+      if (fileStream == null) {
+        throw new RuntimeException("file stream not found");
+      }
+
+      return fileStream.readAllBytes();
+    } catch (IOException ex) {
+      throw new RuntimeException(ex.getMessage(), ex);
+    }
   }
 
   private void seedEvaluationsAndMatches() {

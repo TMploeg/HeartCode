@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +29,7 @@ public class UserService implements UserDetailsService {
   }
 
   public User save(
-      String email, String alias, String password, UserGender gender, String dateOfBirthString, String bio, GenderPreference genderPreference) {
+          String email, String alias, String password, UserGender gender, String dateOfBirthString, String bio, GenderPreference genderPreference, ProfilePicture profilePicture) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -40,6 +41,9 @@ public class UserService implements UserDetailsService {
     if (password.isBlank()) {
       throw new IllegalArgumentException("password is invalid");
     }
+    if (profilePicture == null) {
+      throw new BadRequestException("profilePicture is null");
+    }
 
     LocalDate dateOfBirth =
         parseDateOfBirth(dateOfBirthString)
@@ -47,7 +51,7 @@ public class UserService implements UserDetailsService {
             .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
 
     return userRepository.save(
-        new User(email, alias, passwordEncoder.encode(password), gender, dateOfBirth, bio, genderPreference));
+        new User(email, alias, passwordEncoder.encode(password), gender, dateOfBirth, bio, profilePicture, genderPreference));
   }
 
   public User update(User user) {

@@ -2,10 +2,9 @@ package com.itvitae.heartcode.chatmessages;
 
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

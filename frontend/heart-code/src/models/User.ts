@@ -4,5 +4,6 @@ export interface User {
   gender: string;
   age: number;
   bio: string;
+  profilePictureId: string;
   genderPreference: string;
 }

@@ -7,4 +7,5 @@ export default interface RegisterData {
   dateOfBirth: string;
   bio: string;
   genderPreference: string;
+  profilePicture?: Uint8Array;
 }

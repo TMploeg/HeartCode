@@ -1,14 +1,11 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
-import com.itvitae.heartcode.security.AuthTokenDTO;
+import com.itvitae.heartcode.exceptions.NotFoundException;
+import com.itvitae.heartcode.profilepictures.ProfilePictureService;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
   private final UserService userService;
   private final JwtService jwtService;
+  private final ProfilePictureService profilePictureService;
 
   @PostMapping("register")
   public AuthTokenDTO register(@RequestBody RegisterDTO registerDTO) {
@@ -136,18 +134,16 @@ public class UserController {
     User user = userService.getCurrentUser();
     List<String> errors = new ArrayList<>();
 
-    System.out.println(user.getGenderPreference());
-
     updateAlias(updateProfileDTO.alias(), user).ifPresent(errors::add);
     updateGender(updateProfileDTO.gender(), user).ifPresent(errors::add);
     updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
     updateGenderPreference(updateProfileDTO.genderPreference(), user).ifPresent(errors::add);
+    updateProfilePicture(updateProfileDTO.profilePicture(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
     }
 
-    System.out.println(user.getGenderPreference().toString());
     userService.update(user);
   }
 
@@ -208,6 +204,20 @@ public class UserController {
 
   }
 
+  private Optional<String> updateProfilePicture(Map<Long, Byte> profilePicture, User user) {
+    if (profilePicture == null) {
+      return Optional.empty();
+    }
+
+    if (profilePicture.isEmpty()) {
+      return Optional.of("profilePicture is empty");
+    }
+
+    profilePictureService.update(user.getProfilePicture(), profilePicture);
+
+    return Optional.empty();
+  }
+
   private static String getGenderOptionsString() {
     return String.join(", ", Arrays.stream(UserGender.values()).map(UserGender::getName).toList());
   }
@@ -223,5 +233,10 @@ public class UserController {
     }
 
     return jwtService.readToken(token).isPresent();
+  }
+
+  @GetMapping("profilepictures/{id}")
+  public byte[] getProfilePicture(@PathVariable UUID id) {
+    return profilePictureService.findById(id).orElseThrow(NotFoundException::new).getImageData();
   }
 }

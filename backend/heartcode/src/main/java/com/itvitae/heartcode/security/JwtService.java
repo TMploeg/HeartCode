@@ -4,10 +4,9 @@ import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.transaction.Transactional;
 import java.util.*;
 import javax.crypto.SecretKey;
-
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;

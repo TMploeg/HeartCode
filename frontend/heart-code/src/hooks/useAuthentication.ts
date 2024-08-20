@@ -10,13 +10,13 @@ export default function useAuthentication() {
 
   function register(registerData: RegisterData) {
     return post<LoginResponse, RegisterData>(
-      "users/register",
+      "auth/register",
       registerData
     ).then((response) => handleLoginResponse(response.data));
   }
 
   function login(loginData: LoginData) {
-    return post<LoginResponse, LoginData>("users/login", loginData).then(
+    return post<LoginResponse, LoginData>("auth/login", loginData).then(
       (response) => handleLoginResponse(response.data)
     );
   }
