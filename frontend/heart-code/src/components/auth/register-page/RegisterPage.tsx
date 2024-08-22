@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
 import { Link } from "react-router-dom";
@@ -21,6 +21,7 @@ import GenderPreference, {
 import AgePreference, {
   PreferedAgeInputData,
 } from "../../../models/AgePreference";
+import AgePreferenceInput from "../../general/age-preference-input/AgePreferenceInput";
 
 interface Props {
   onRegister: () => void;
@@ -202,62 +203,11 @@ export default function RegisterPage({ onRegister }: Props) {
           ))}
         </Form.Select>
       </InputGroup>
-      <InputGroup>
-        <InputGroup.Checkbox
-          checked={preferedAgeInputData.minAge.enabled}
-          onChange={(e) =>
-            setPreferedAgeInputData((data) => ({
-              ...data,
-              minAge: { ...data.minAge, enabled: e.target.checked },
-            }))
-          }
-        />
-        <Form.Control
-          disabled={!preferedAgeInputData.minAge.enabled}
-          placeholder="Prefered min age"
-          type="number"
-          value={preferedAgeInputData.minAge.value}
-          onChange={(e) =>
-            setPreferedAgeInputData((data) => ({
-              ...data,
-              minAge: { ...data.minAge, value: e.target.value },
-            }))
-          }
-        />
-      </InputGroup>
-      <InputGroup>
-        <InputGroup.Checkbox
-          disabled={!preferedAgeInputData.minAge.enabled}
-          checked={
-            preferedAgeInputData.minAge.enabled &&
-            preferedAgeInputData.maxAge.enabled
-          }
-          onChange={(e) =>
-            setPreferedAgeInputData((data) => ({
-              ...data,
-              maxAge: { ...data.maxAge, enabled: e.target.checked },
-            }))
-          }
-        />
-        <Form.Control
-          disabled={
-            !preferedAgeInputData.maxAge.enabled ||
-            !preferedAgeInputData.minAge.enabled
-          }
-          placeholder="Prefered max age"
-          type="number"
-          value={preferedAgeInputData.maxAge.value}
-          onChange={(e) =>
-            setPreferedAgeInputData((data) => ({
-              ...data,
-              maxAge: {
-                ...data.maxAge,
-                value: e.target.value,
-              },
-            }))
-          }
-        />
-      </InputGroup>
+      <AgePreferenceInput
+        onChange={(newValue) =>
+          setRegisterData((data) => ({ ...data, agePreference: newValue }))
+        }
+      />
       <Button
         className="submit-button"
         disabled={formErrors.length > 0}
