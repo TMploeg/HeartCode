@@ -36,10 +36,10 @@ export default function MatchListItem({ match, onClick }: Props) {
           {lastMessage !== undefined && lastMessage !== null ? (
             <div>
               {lastMessage.owned ? (
-                <p>You: {lastMessage.text.substring(0, 30)}...</p>
+                <p>You: {lastMessage.text}</p>
               ) : (
                 <p>
-                  {match.alias}: {lastMessage.text.substring(0, 30)}...
+                  {match.alias}: {lastMessage.text}
                 </p>
               )}
             </div>
