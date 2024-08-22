@@ -11,6 +11,8 @@ import ProfilePictureInput, {
 } from "../general/profile-picture-input/ProfilePictureInput";
 import { useApi, useProfilePicture } from "../../hooks";
 import { genderPreferences } from "../../enums/GenderPreference";
+import AgePreferenceInput from "../general/age-preference-input/AgePreferenceInput";
+import AgePreference from "../../models/AgePreference";
 
 interface UpdateValue {
   value: any;
@@ -34,15 +36,17 @@ export default function UpdateProfilePage() {
   >(undefined);
 
   useEffect(() => {
-    if (profilePictureData != undefined) {
-      setUpdateValues((values) => ({
-        ...values,
-        profilePicture: {
-          value: profilePictureData.data,
-          changed: true,
-        },
-      }));
+    if (profilePictureData === undefined) {
+      return;
     }
+
+    setUpdateValues((values) => ({
+      ...values,
+      profilePicture: {
+        value: profilePictureData.data,
+        changed: true,
+      },
+    }));
   }, [profilePictureData]);
 
   if (!updateValues || !userInfo) {
@@ -169,6 +173,23 @@ export default function UpdateProfilePage() {
                 }
               />
             </ListGroup.Item>
+            <ListGroup.Item>
+              <AgePreferenceInput
+                initialValues={userInfo.agePreference}
+                onChange={(newValue) => {
+                  setUpdateValues((values) => ({
+                    ...values,
+                    agePreference: {
+                      value: newValue,
+                      changed:
+                        newValue.minAge != userInfo.agePreference.minAge ||
+                        newValue.maxAge != userInfo.agePreference.maxAge,
+                    },
+                  }));
+                }}
+                changed={updateValues.agePreference.changed}
+              />
+            </ListGroup.Item>
           </ListGroup>
           <Button
             className="profile-update-save-button"
@@ -199,6 +220,7 @@ export default function UpdateProfilePage() {
       gender: { value: userInfo.gender, changed: false },
       bio: { value: userInfo.bio, changed: false },
       genderPreference: { value: userInfo.genderPreference, changed: false },
+      agePreference: { value: userInfo.agePreference, changed: false },
     });
   }
 
@@ -214,22 +236,15 @@ export default function UpdateProfilePage() {
       console.error("one or more values is undefined");
       return;
     }
-    console.log(updateValues.genderPreference);
-    const updatedFields = {
-      alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
-      gender: updateValues.gender.changed
-        ? updateValues.gender.value
-        : undefined,
-      bio: updateValues.bio.changed ? updateValues.bio.value : undefined,
-      profilePicture: updateValues.profilePicture.changed
-        ? updateValues.profilePicture.value
-        : undefined,
-      genderPreference: updateValues.genderPreference.changed
-        ? updateValues.genderPreference.value
-        : undefined,
-    };
 
-    patch("users/account", updatedFields)
+    const patchBody: { [key: string]: any } = {};
+    for (let key of Object.keys(updateValues)) {
+      if (updateValues[key].changed) {
+        patchBody[key] = updateValues[key].value;
+      }
+    }
+
+    patch("users/account", patchBody)
       .then(navigateBack)
       .catch(() => alert("failed to save changes"));
   }

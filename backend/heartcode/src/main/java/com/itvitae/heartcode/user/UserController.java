@@ -3,7 +3,6 @@ package com.itvitae.heartcode.user;
 import com.itvitae.heartcode.exceptions.BadRequestException;
 import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.profilepictures.ProfilePictureService;
-import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import jakarta.transaction.Transactional;
 import java.util.*;
@@ -45,8 +44,7 @@ public class UserController {
     updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
     updateGenderPreference(updateProfileDTO.genderPreference(), user).ifPresent(errors::add);
     updateProfilePicture(updateProfileDTO.profilePicture(), user).ifPresent(errors::add);
-    updateAgePreference(updateProfileDTO.agePreference().convert(), user).ifPresent(errors::add);
-    ;
+    updateAgePreference(updateProfileDTO.agePreference(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
@@ -107,9 +105,9 @@ public class UserController {
     gender.ifPresent(user::setGenderPreference);
 
     return gender.isPresent()
-            ? Optional.empty()
-            : Optional.of("gender is invalid, valid options: [" + getGenderPreferenceOptionsToString()+ "]");
-
+        ? Optional.empty()
+        : Optional.of(
+            "gender is invalid, valid options: [" + getGenderPreferenceOptionsToString() + "]");
   }
 
   private Optional<String> updateProfilePicture(Map<Long, Byte> profilePicture, User user) {
@@ -126,18 +124,21 @@ public class UserController {
     return Optional.empty();
   }
 
-  private Optional<String> updateAgePreference(AgePreference newAgePreference, User user) {
-    if (newAgePreference.minAgeUnder18()) {
-      return Optional.of("agePreference.minAge is invalid: must be 18+");
-    }
-    if (newAgePreference.maxAgeSmallerThanMinAge()) {
-      return Optional.of(
-          "agePreference.maxAge is invalid: must be greater or equal to than minAge");
-    }
+  private Optional<String> updateAgePreference(AgePreferenceDTO newAgePreference, User user) {
+    return Optional.ofNullable(newAgePreference)
+        .map(AgePreferenceDTO::convert)
+        .map(
+            pref -> {
+              if (pref.minAgeUnder18()) {
+                return "agePreference.minAge is invalid: must be 18+";
+              }
+              if (pref.maxAgeSmallerThanMinAge()) {
+                return "agePreference.maxAge is invalid: must be greater or equal to than minAge";
+              }
 
-    user.setAgePreference(newAgePreference);
-
-    return Optional.empty();
+              user.setAgePreference(pref);
+              return null;
+            });
   }
 
   private static String getGenderOptionsString() {
@@ -145,7 +146,8 @@ public class UserController {
   }
 
   private static String getGenderPreferenceOptionsToString() {
-    return String.join(", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
+    return String.join(
+        ", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
   }
 
   @GetMapping("validate-token")

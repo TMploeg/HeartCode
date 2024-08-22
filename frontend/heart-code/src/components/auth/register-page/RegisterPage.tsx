@@ -18,20 +18,12 @@ import ProfilePictureInput, {
 import GenderPreference, {
   genderPreferences,
 } from "../../../enums/GenderPreference";
-import AgePreference from "../../../models/AgePreference";
+import AgePreference, {
+  PreferedAgeInputData,
+} from "../../../models/AgePreference";
 
 interface Props {
   onRegister: () => void;
-}
-
-interface AgePreferenceData {
-  value: string;
-  enabled: boolean;
-}
-
-interface PreferedAgeInputData {
-  minAge: AgePreferenceData;
-  maxAge: AgePreferenceData;
 }
 
 const MINIMUM_ACCEPTABLE_AGE = 18;
