@@ -29,10 +29,13 @@ public class UserService implements UserDetailsService {
   }
 
   public User findRandomUser() {
+
     User randomUser =
         userRepository
             .findRandomUserExcludingCurrentAndEvaluator(getCurrentUser().getEmail())
             .stream()
+            .filter(this::filterRelationshipType)
+            .filter(this::filterGenderPreference)
             .findFirst()
             .orElse(null);
     if (randomUser != null) {
@@ -69,7 +72,7 @@ public class UserService implements UserDetailsService {
 
     LocalDate dateOfBirth =
         parseDateOfBirth(dateOfBirthString)
-            .filter(date -> isOver18(date))
+            .filter(this::isOver18)
             .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
 
     return userRepository.save(
@@ -127,10 +130,7 @@ public class UserService implements UserDetailsService {
     Period period = Period.between(dateOfBirthString, localToday);
 
     System.out.println(period.getYears());
-    if (period.getYears() >= 18) {
-      return true;
-    }
-    return false;
+    return period.getYears() >= 18;
   }
 
   public User getCurrentUser() {
@@ -140,6 +140,23 @@ public class UserService implements UserDetailsService {
 
   public boolean isCorrectPassword(User user, String password) {
     return passwordEncoder.matches(password, user.getPassword());
+  }
+
+  public boolean filterRelationshipType(User user) {
+    UserRelationshipType relationshipType = getCurrentUser().getRelationshipType();
+    if (relationshipType == UserRelationshipType.OPEN_TO_ANYTHING) {
+      return true;
+    }
+    return relationshipType == user.getRelationshipType()
+        || user.getRelationshipType() == UserRelationshipType.OPEN_TO_ANYTHING;
+  }
+
+  public boolean filterGenderPreference(User user) {
+    GenderPreference genderPreference = getCurrentUser().getGenderPreference();
+    if (genderPreference == GenderPreference.ANYONE) {
+      return true;
+    }
+    return genderPreference == user.getGenderPreference();
   }
 
   public boolean isValidPassword(String password) {
