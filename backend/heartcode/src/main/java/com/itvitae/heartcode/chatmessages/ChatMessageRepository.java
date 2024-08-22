@@ -10,4 +10,8 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, UUID> 
   @Query(
       "SELECT m FROM ChatMessage m WHERE (m.sender = ?1 AND m.receiver = ?2) OR (m.sender = ?2 AND m.receiver = ?1) ORDER BY m.dateTime DESC")
   List<ChatMessage> getAllForUsers(User user1, User user2);
+
+  @Query(
+      "SELECT m FROM ChatMessage m WHERE (m.sender = ?1 AND m.receiver = ?2) OR (m.sender = ?2 AND m.receiver = ?1) ORDER BY m.dateTime DESC LIMIT 1")
+  ChatMessage getLastMessage(User user1, User user2);
 }
