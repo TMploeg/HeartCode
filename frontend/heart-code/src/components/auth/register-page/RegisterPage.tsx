@@ -59,8 +59,6 @@ export default function RegisterPage({ onRegister }: Props) {
     validatePasswordConfirmation();
   }, [registerData]);
 
-  console.log("rendering...");
-
   return (
     <div className="auth-form">
       <ProfilePictureInput
@@ -125,6 +123,7 @@ export default function RegisterPage({ onRegister }: Props) {
           }
         />
         <Button
+          tabIndex={-1}
           variant="outline-secondary"
           className="visibility-button"
           onClick={() => setPasswordVisible((visible) => !visible)}
@@ -160,6 +159,7 @@ export default function RegisterPage({ onRegister }: Props) {
           }
         />
         <Button
+          tabIndex={-1}
           variant="outline-secondary"
           className="visibility-button"
           onClick={() => setPasswordConfirmationVisible((visible) => !visible)}

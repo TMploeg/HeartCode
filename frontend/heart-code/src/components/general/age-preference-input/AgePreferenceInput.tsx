@@ -25,6 +25,7 @@ export default function AgePreferenceInput({
   onBlur,
   touched,
 }: Props) {
+  console.log(touched);
   const [agePreference, setAgePreference] = useState<PreferedAgeInputData>({
     minAge: {
       value: initialValues?.minAge?.toString() ?? "",
@@ -54,9 +55,9 @@ export default function AgePreferenceInput({
       changed &&
       !(
         !!initialValues.minAge &&
-        !agePreference.minAge.enabled &&
+        !isMinAgeEnabled() &&
         !!initialValues.maxAge &&
-        !agePreference.maxAge.enabled
+        !isMaxAgeEnabled()
       );
   }
 
@@ -75,7 +76,8 @@ export default function AgePreferenceInput({
       <div className="age-preference-fields-container">
         <InputGroup>
           <InputGroup.Checkbox
-            checked={agePreference.minAge.enabled}
+            tabIndex={-1}
+            checked={isMinAgeEnabled()}
             onChange={(e) =>
               setAgePreference((data) => ({
                 ...data,
@@ -84,12 +86,10 @@ export default function AgePreferenceInput({
             }
           />
           <Form.Control
-            disabled={!agePreference.minAge.enabled}
+            disabled={!isMinAgeEnabled()}
             placeholder="Prefered min age"
             type="number"
-            value={
-              agePreference.minAge.enabled ? agePreference.minAge.value : ""
-            }
+            value={isMinAgeEnabled() ? agePreference.minAge.value : ""}
             onChange={(e) =>
               setAgePreference((data) => ({
                 ...data,
@@ -98,22 +98,22 @@ export default function AgePreferenceInput({
             }
             isInvalid={
               touched &&
+              isMinAgeEnabled() &&
               (!minAgeValid || validationState?.minAgeError !== undefined)
             }
             onBlur={onBlur}
           />
-          <Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
             {minAgeValid
-              ? validationState!.minAgeError
+              ? validationState?.minAgeError
               : INVALID_NUMBER_MESSAGE}
           </Form.Control.Feedback>
         </InputGroup>
         <InputGroup>
           <InputGroup.Checkbox
-            disabled={!agePreference.minAge.enabled}
-            checked={
-              agePreference.minAge.enabled && agePreference.maxAge.enabled
-            }
+            tabIndex={-1}
+            disabled={!isMinAgeEnabled()}
+            checked={isMaxAgeEnabled()}
             onChange={(e) =>
               setAgePreference((data) => ({
                 ...data,
@@ -122,13 +122,11 @@ export default function AgePreferenceInput({
             }
           />
           <Form.Control
-            disabled={
-              !agePreference.maxAge.enabled || !agePreference.minAge.enabled
-            }
+            disabled={!isMaxAgeEnabled() || !isMinAgeEnabled()}
             placeholder="Prefered max age"
             type="number"
             value={
-              agePreference.maxAge.enabled && agePreference.minAge.enabled
+              isMaxAgeEnabled() && isMinAgeEnabled()
                 ? agePreference.maxAge.value
                 : ""
             }
@@ -143,17 +141,26 @@ export default function AgePreferenceInput({
             }
             isInvalid={
               touched &&
+              isMaxAgeEnabled() &&
               (!maxAgeValid || validationState?.maxAgeError !== undefined)
             }
             onBlur={onBlur}
           />
-          <Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
             {maxAgeValid
-              ? validationState!.maxAgeError
+              ? validationState?.maxAgeError
               : INVALID_NUMBER_MESSAGE}
           </Form.Control.Feedback>
         </InputGroup>
       </div>
     </div>
   );
+
+  function isMinAgeEnabled(): boolean {
+    return agePreference.minAge.enabled;
+  }
+
+  function isMaxAgeEnabled(): boolean {
+    return agePreference.maxAge.enabled && isMinAgeEnabled();
+  }
 }
