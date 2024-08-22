@@ -4,17 +4,26 @@ import AgePreference, {
 } from "../../../models/AgePreference";
 import { useEffect, useState } from "react";
 import "./AgePreferenceInput.css";
+import { AgePreferenceErrors } from "../../auth/AuthValidation";
 
 interface Props {
   initialValues?: AgePreference;
   onChange?: (values: AgePreference) => void;
   changed?: boolean;
+  validationState?: AgePreferenceErrors;
+  onBlur: () => void;
+  touched: boolean;
 }
+
+const INVALID_NUMBER_MESSAGE = "Please enter a valid number";
 
 export default function AgePreferenceInput({
   initialValues,
   onChange,
   changed,
+  validationState,
+  onBlur,
+  touched,
 }: Props) {
   const [agePreference, setAgePreference] = useState<PreferedAgeInputData>({
     minAge: {
@@ -51,6 +60,9 @@ export default function AgePreferenceInput({
       );
   }
 
+  const minAgeValid = !isNaN(parseInt(agePreference.minAge.value));
+  const maxAgeValid = !isNaN(parseInt(agePreference.maxAge.value));
+
   return (
     <div>
       {changed !== undefined && (
@@ -84,7 +96,17 @@ export default function AgePreferenceInput({
                 minAge: { ...data.minAge, value: e.target.value },
               }))
             }
+            isInvalid={
+              touched &&
+              (!minAgeValid || validationState?.minAgeError !== undefined)
+            }
+            onBlur={onBlur}
           />
+          <Form.Control.Feedback>
+            {minAgeValid
+              ? validationState!.minAgeError
+              : INVALID_NUMBER_MESSAGE}
+          </Form.Control.Feedback>
         </InputGroup>
         <InputGroup>
           <InputGroup.Checkbox
@@ -119,7 +141,17 @@ export default function AgePreferenceInput({
                 },
               }))
             }
+            isInvalid={
+              touched &&
+              (!maxAgeValid || validationState?.maxAgeError !== undefined)
+            }
+            onBlur={onBlur}
           />
+          <Form.Control.Feedback>
+            {maxAgeValid
+              ? validationState!.maxAgeError
+              : INVALID_NUMBER_MESSAGE}
+          </Form.Control.Feedback>
         </InputGroup>
       </div>
     </div>

@@ -21,7 +21,7 @@ public record UserDTO(
         user.getBio(),
         user.getProfilePicture().getId(),
         user.getGenderPreference().getName(),
-        user.getRelationshipType().getName());
+        user.getRelationshipType().getName(),
         AgePreferenceDTO.from(user.getAgePreference().orElseGet(AgePreference::new)));
   }
 }
