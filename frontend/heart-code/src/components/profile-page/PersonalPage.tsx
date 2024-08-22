@@ -16,13 +16,11 @@ export default function PersonalPage() {
 
   return (
     <div className="personal-page">
-      <div>
-        {user !== undefined && user !== null ? (
-          <Profile user={user} isPersonalPage={true} />
-        ) : (
-          "Loading..."
-        )}
-      </div>
+      {user !== undefined && user !== null ? (
+        <Profile user={user} isPersonalPage={true} />
+      ) : (
+        "Loading..."
+      )}
     </div>
   );
 }

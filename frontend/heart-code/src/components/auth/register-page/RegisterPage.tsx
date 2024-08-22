@@ -159,36 +159,38 @@ export default function RegisterPage({ onRegister }: Props) {
           }
         />
       </InputGroup>
-      <h6>Preferences</h6>
-      <InputGroup>
-        <Form.Select
-          onChange={(event) =>
-            setRegisterData((data) => ({
-              ...data,
-              relationshipType: event.target.value,
-            }))
-          }
-        >
-          {relationshipTypes.map((relationshipType) => (
-            <option key={relationshipType}>{relationshipType}</option>
-          ))}
-        </Form.Select>
-      </InputGroup>
-      <InputGroup>
-        <Form.Select
-          onChange={(event) => {
-            setRegisterData((data) => ({
-              ...data,
-              genderPreference: event.target.value,
-            }));
-          }}
-        >
-          {genderPreferences.map((genderPreference) => (
-            <option key={genderPreference}>{genderPreference}</option>
-          ))}
-        </Form.Select>
-      </InputGroup>
-      
+      <h6 style={{ color: "#c4256a" }}>What I'm looking for</h6>
+      <div className="preferences">
+        <InputGroup className="preference">
+          <Form.Select
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                relationshipType: event.target.value,
+              }))
+            }
+          >
+            {relationshipTypes.map((relationshipType) => (
+              <option key={relationshipType}>{relationshipType}</option>
+            ))}
+          </Form.Select>
+        </InputGroup>
+        <InputGroup className="preference">
+          <Form.Select
+            onChange={(event) => {
+              setRegisterData((data) => ({
+                ...data,
+                genderPreference: event.target.value,
+              }));
+            }}
+          >
+            {genderPreferences.map((genderPreference) => (
+              <option key={genderPreference}>{genderPreference}</option>
+            ))}
+          </Form.Select>
+        </InputGroup>
+      </div>
+
       <Button
         className="submit-button"
         disabled={formErrors.length > 0}

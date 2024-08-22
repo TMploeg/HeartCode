@@ -6,9 +6,9 @@ import lombok.Getter;
 
 @Getter
 public enum UserRelationshipType {
-  CASUAL("casual"),
-  SERIOUS_COMMITMENT("serious commitment"),
-  OPEN_TO_ANYTHING("open to anything");
+  CASUAL("Something casual"),
+  SERIOUS_COMMITMENT("Something serious"),
+  OPEN_TO_ANYTHING("I'm open to anything");
 
   private final String name;
 
