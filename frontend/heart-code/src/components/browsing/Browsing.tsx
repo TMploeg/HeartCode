@@ -21,8 +21,13 @@ export default function Browsing() {
   }, []);
 
   async function getRandomUser() {
-    const response = await get<User>("users/get-random-user");
-    setUser(response.data);
+    try {
+      const response = await get<User>("users/get-random-user");
+      setUser(response.data);
+    } catch {
+      console.warn("There are no more users left to evaluate");
+      return;
+    }
   }
 
   async function createEvaluation(likedBool: boolean) {
@@ -32,7 +37,6 @@ export default function Browsing() {
       liked: likedBool,
     }).catch((error) => console.log(error.response.data));
 
-    // sometimes shows the user twice despite emptying and getting a new random user. might have to implement a delay?
     setUser(undefined);
     await getRandomUser();
   }
@@ -42,23 +46,25 @@ export default function Browsing() {
       {user !== undefined && user !== null ? (
         <div>
           <Profile user={user} isPersonalPage={false} />
-          <Button
-            className="evaluationButton"
-            onClick={() => createEvaluation(true)}
-            variant="success"
-          >
-            <BsHandThumbsUpFill />
-          </Button>
-          <Button
-            className="evaluationButton"
-            onClick={() => createEvaluation(false)}
-            variant="danger"
-          >
-            <BsHandThumbsDownFill />
-          </Button>
+          <div className="buttonContainer">
+            <Button
+              className="evaluationButton"
+              onClick={() => createEvaluation(false)}
+              variant="danger"
+            >
+              <BsHandThumbsDownFill />
+            </Button>
+            <Button
+              className="evaluationButton"
+              onClick={() => createEvaluation(true)}
+              variant="success"
+            >
+              <BsHandThumbsUpFill />
+            </Button>
+          </div>
         </div>
       ) : (
-        "No more results available."
+        "There are no more users left to evaluate."
       )}
     </div>
   );
