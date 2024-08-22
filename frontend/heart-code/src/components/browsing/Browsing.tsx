@@ -3,8 +3,11 @@ import { Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { User } from "../../models/User";
 import { useApi } from "../../hooks";
-import { BsHandThumbsUpFill } from "react-icons/bs";
-import { BsHandThumbsDownFill } from "react-icons/bs";
+import {
+  BsHandThumbsUpFill,
+  BsHandThumbsDownFill,
+  BsExclamationTriangleFill,
+} from "react-icons/bs";
 import "./Browsing.css";
 
 export default function Browsing() {
@@ -64,7 +67,10 @@ export default function Browsing() {
           </div>
         </div>
       ) : (
-        "There are no more users left to evaluate."
+        <div className="noMoreUsersError">
+          <BsExclamationTriangleFill className="errorImage" />
+          <div className="errorText">There are no more users available.</div>
+        </div>
       )}
     </div>
   );

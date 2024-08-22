@@ -14,3 +14,26 @@
   width: 100%;
   bottom: 80px;
 }
+
+.noMoreUsersError {
+  font-size: 25px;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.errorImage {
+  font-size: 110px;
+  color: black;
+  background-color: yellow;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.errorText {
+  font-weight: bold;
+}
