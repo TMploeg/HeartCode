@@ -1,15 +1,15 @@
 package com.itvitae.heartcode.user;
 
+import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.exceptions.NotFoundException;
+import com.itvitae.heartcode.profilepictures.ProfilePicture;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.regex.Pattern;
-
-import com.itvitae.heartcode.exceptions.BadRequestException;
-import com.itvitae.heartcode.profilepictures.ProfilePicture;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,8 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
 public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
@@ -28,8 +28,30 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
+  public User findRandomUser() {
+    User randomUser =
+        userRepository
+            .findRandomUserExcludingCurrentAndEvaluator(getCurrentUser().getEmail())
+            .stream()
+            .findFirst()
+            .orElse(null);
+    if (randomUser != null) {
+      return randomUser;
+    } else {
+      throw new NotFoundException("There are no more users left to evaluate");
+    }
+  }
+
   public User save(
-          String email, String alias, String password, UserGender gender, String dateOfBirthString, String bio, ProfilePicture profilePicture, GenderPreference genderPreference) {
+      String email,
+      String alias,
+      String password,
+      UserGender gender,
+      String dateOfBirthString,
+      String bio,
+      ProfilePicture profilePicture,
+      GenderPreference genderPreference,
+      UserRelationshipType relationshipType) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -51,7 +73,16 @@ public class UserService implements UserDetailsService {
             .orElseThrow(() -> new IllegalArgumentException("date of birth is invalid"));
 
     return userRepository.save(
-        new User(email, alias, passwordEncoder.encode(password), gender, dateOfBirth, bio, profilePicture, genderPreference));
+        new User(
+            email,
+            alias,
+            passwordEncoder.encode(password),
+            gender,
+            dateOfBirth,
+            bio,
+            profilePicture,
+            genderPreference,
+            relationshipType));
   }
 
   public User update(User user) {

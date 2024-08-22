@@ -22,10 +22,13 @@ public class AuthController {
   public AuthTokenDTO register(@RequestBody RegisterDTO registerDTO) {
     if (registerDTO.email() == null) {
       throw new BadRequestException("email is required");
-    } else if (userService.isInvalidEmail(registerDTO.email())
-        || userService.userWithEmailExists(registerDTO.email())) {
-      throw new BadRequestException("email is invalid");
+    } else if (userService.isInvalidEmail(registerDTO.email())) {
+      throw new BadRequestException("email not valid");
+    } else if (userService.userWithEmailExists(registerDTO.email())) {
+      throw new BadRequestException("email is already in use");
     }
+
+
     if (registerDTO.alias() == null || registerDTO.alias().isBlank()) {
       throw new BadRequestException("alias is required");
     }
@@ -52,6 +55,12 @@ public class AuthController {
       throw new BadRequestException("profilePicture is empty");
     }
 
+    if (registerDTO.relationshipType() == null) {
+      throw new BadRequestException("relationshipType is required");
+    } else if (registerDTO.relationshipType().isBlank()) {
+      throw new BadRequestException("relationshipType must have at least one character");
+    }
+
     UserGender gender =
         UserGender.parse(registerDTO.gender())
             .orElseThrow(
@@ -59,6 +68,15 @@ public class AuthController {
                     new BadRequestException(
                         "gender is invalid, valid options include: ["
                             + getGenderOptionsString()
+                            + "]"));
+
+    UserRelationshipType relationshipType =
+        UserRelationshipType.parse(registerDTO.relationshipType())
+            .orElseThrow(
+                () ->
+                    new BadRequestException(
+                        "relationshipType is invalid, valid options include: ["
+                            + getRelationshipTypeOptionsString()
                             + "]"));
 
     GenderPreference genderPreference =
@@ -100,7 +118,8 @@ public class AuthController {
             registerDTO.dateOfBirth(),
             registerDTO.bio(),
             profilePictureService.save(registerDTO.profilePicture()),
-            genderPreference);
+            genderPreference,
+            relationshipType);
 
     agePreference.ifPresent(
         pref -> {
@@ -140,5 +159,11 @@ public class AuthController {
   private static String getGenderPreferenceOptionsToString() {
     return String.join(
         ", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
+  }
+
+  private static String getRelationshipTypeOptionsString() {
+    return String.join(
+        ", ",
+        Arrays.stream(UserRelationshipType.values()).map(UserRelationshipType::getName).toList());
   }
 }

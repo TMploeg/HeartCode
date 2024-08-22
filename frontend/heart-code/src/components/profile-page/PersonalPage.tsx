@@ -3,7 +3,6 @@ import { User } from "../../models/User";
 import { useApi } from "../../hooks";
 import Profile from "./Profile";
 import "./Profile.css";
-import { Navigate, useNavigate } from "react-router-dom";
 
 export default function PersonalPage() {
   const [user, setUser] = useState<User>();

@@ -18,6 +18,9 @@ import ProfilePictureInput, {
 import GenderPreference, {
   genderPreferences,
 } from "../../../enums/GenderPreference";
+import RelationshipType, {
+  relationshipTypes,
+} from "../../../enums/RelationshipType";
 import AgePreferenceInput from "../../general/age-preference-input/AgePreferenceInput";
 
 interface Props {
@@ -30,8 +33,9 @@ export default function RegisterPage({ onRegister }: Props) {
     alias: "",
     password: "",
     passwordConfirmation: "",
-    gender: Gender.MALE,
     dateOfBirth: "",
+    gender: Gender.MALE,
+    relationshipType: RelationshipType.CASUAL,
     bio: "",
     genderPreference: GenderPreference.ANYONE,
     agePreference: {},
@@ -167,23 +171,37 @@ export default function RegisterPage({ onRegister }: Props) {
             <option key={gender}>{gender}</option>
           ))}
         </Form.Select>
-        <InputGroup>
-          <Form.Control
-            as="textarea"
-            rows={5}
-            className="bio-field"
-            placeholder="Bio"
-            value={registerData.bio}
-            onChange={(event) =>
-              setRegisterData((data) => ({
-                ...data,
-                bio: event.target.value,
-              }))
-            }
-          />
-        </InputGroup>
+      </InputGroup>
+      <InputGroup>
+        <Form.Control
+          as="textarea"
+          rows={5}
+          className="bio-field"
+          placeholder="Bio"
+          value={registerData.bio}
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              bio: event.target.value,
+            }))
+          }
+        />
       </InputGroup>
       <h6>Preferences</h6>
+      <InputGroup>
+        <Form.Select
+          onChange={(event) =>
+            setRegisterData((data) => ({
+              ...data,
+              relationshipType: event.target.value,
+            }))
+          }
+        >
+          {relationshipTypes.map((relationshipType) => (
+            <option key={relationshipType}>{relationshipType}</option>
+          ))}
+        </Form.Select>
+      </InputGroup>
       <InputGroup>
         <Form.Select
           onChange={(event) => {
@@ -286,6 +304,11 @@ export default function RegisterPage({ onRegister }: Props) {
   function submit() {
     register(registerData)
       .then(onRegister)
-      .catch(() => alert("registration failed"));
+      .catch((error) => showError(error.response.data.detail));
+  }
+
+  function showError(errorMessage: string): void {
+    alert(errorMessage);
+    console.log(errorMessage);
   }
 }

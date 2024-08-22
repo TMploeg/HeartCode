@@ -5,6 +5,7 @@ export interface User {
   alias: string;
   gender: string;
   age: number;
+  relationshipType: string;
   bio: string;
   profilePictureId: string;
   genderPreference: string;

@@ -44,10 +44,22 @@ public class User implements UserDetails {
   @Enumerated(EnumType.ORDINAL)
   private GenderPreference genderPreference;
 
+  @Setter
+  @Enumerated(EnumType.ORDINAL)
+  private UserRelationshipType relationshipType;
+  
   @Setter @Embedded private AgePreference agePreference;
 
   public User(
-      String email, String alias, String password, UserGender gender, LocalDate dateOfBirth, String bio, ProfilePicture profilePicture, GenderPreference genderPreference) {
+      String email,
+      String alias,
+      String password,
+      UserGender gender,
+      LocalDate dateOfBirth,
+      String bio,
+      ProfilePicture profilePicture,
+      GenderPreference genderPreference,
+      UserRelationshipType relationshipType) {
     this.email = email;
     this.alias = alias;
     this.password = password;
@@ -57,6 +69,7 @@ public class User implements UserDetails {
     this.bio = bio;
     this.profilePicture = profilePicture;
     this.genderPreference = genderPreference;
+    this.relationshipType = relationshipType;
   }
 
   public int getAge() {

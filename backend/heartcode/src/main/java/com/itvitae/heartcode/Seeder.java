@@ -6,12 +6,9 @@ import com.itvitae.heartcode.evaluation.Evaluation;
 import com.itvitae.heartcode.evaluation.EvaluationRepository;
 import com.itvitae.heartcode.match.MatchRepository;
 import com.itvitae.heartcode.match.MatchService;
-import com.itvitae.heartcode.user.GenderPreference;
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import com.itvitae.heartcode.profilepictures.ProfilePictureRepository;
-import com.itvitae.heartcode.user.User;
-import com.itvitae.heartcode.user.UserGender;
-import com.itvitae.heartcode.user.UserRepository;
+import com.itvitae.heartcode.user.*;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,7 +69,8 @@ public class Seeder implements CommandLineRunner {
                         LocalDate.now(),
                         "bio",
                         profilePictureRepository.save(new ProfilePicture(placeholderImageBytes)),
-                        getRandomGenderPreference()))
+                        getRandomGenderPreference(),
+                        getRandomRelationshipType()))
             .toList());
   }
 
@@ -84,6 +82,11 @@ public class Seeder implements CommandLineRunner {
   private GenderPreference getRandomGenderPreference() {
     GenderPreference[] genders = GenderPreference.values();
     return genders[new Random().nextInt(genders.length)];
+  }
+
+  private UserRelationshipType getRandomRelationshipType() {
+    UserRelationshipType[] relationshipType = UserRelationshipType.values();
+    return relationshipType[new Random().nextInt(relationshipType.length)];
   }
 
   private byte[] getPlaceholderImageBytes() {
