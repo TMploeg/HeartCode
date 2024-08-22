@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import "./AgePreferenceInput.css";
 
 interface Props {
-  initialValues: AgePreference;
+  initialValues?: AgePreference;
   onChange?: (values: AgePreference) => void;
-  changed: boolean;
+  changed?: boolean;
 }
 
 export default function AgePreferenceInput({
@@ -18,14 +18,12 @@ export default function AgePreferenceInput({
 }: Props) {
   const [agePreference, setAgePreference] = useState<PreferedAgeInputData>({
     minAge: {
-      value: initialValues.minAge?.toString() ?? "",
-      enabled:
-        initialValues.minAge !== undefined && initialValues.minAge !== null,
+      value: initialValues?.minAge?.toString() ?? "",
+      enabled: !!initialValues?.minAge,
     },
     maxAge: {
-      value: initialValues.maxAge?.toString() ?? "",
-      enabled:
-        initialValues.maxAge !== undefined && initialValues.maxAge !== null,
+      value: initialValues?.maxAge?.toString() ?? "",
+      enabled: !!initialValues?.maxAge,
     },
   });
 
@@ -42,20 +40,26 @@ export default function AgePreferenceInput({
     });
   }, [agePreference]);
 
-  changed =
-    changed &&
-    !(
-      (initialValues.minAge === undefined || initialValues.minAge === null) &&
-      !agePreference.minAge.enabled &&
-      (initialValues.maxAge === undefined || initialValues.maxAge === null) &&
-      !agePreference.maxAge.enabled
-    );
+  if (changed !== undefined && initialValues !== undefined) {
+    changed =
+      changed &&
+      !(
+        !!initialValues.minAge &&
+        !agePreference.minAge.enabled &&
+        !!initialValues.maxAge &&
+        !agePreference.maxAge.enabled
+      );
+  }
 
   return (
     <div>
-      <Form.Label className={`profile-field-label ${changed ? "changed" : ""}`}>
-        Age preference{changed && "*"}
-      </Form.Label>
+      {changed !== undefined && (
+        <Form.Label
+          className={`profile-field-label ${changed ? "changed" : ""}`}
+        >
+          Age preference{changed && "*"}
+        </Form.Label>
+      )}
       <div className="age-preference-fields-container">
         <InputGroup>
           <InputGroup.Checkbox
