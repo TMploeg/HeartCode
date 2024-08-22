@@ -231,6 +231,7 @@ export default function UpdateProfilePage() {
       bio: { value: userInfo.bio, changed: false },
       genderPreference: { value: userInfo.genderPreference, changed: false },
       relationshipType: { value: userInfo.relationshipType, changed: false },
+      profilePicture: {value: userInfo.profilePictureId, changed : false },
     });
   }
 
