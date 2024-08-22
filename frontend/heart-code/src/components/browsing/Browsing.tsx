@@ -20,21 +20,21 @@ export default function Browsing() {
     });
   }, []);
 
-  function getRandomUser() {
-    get<User>("users/get-random-user").then((response) => {
-      setUser(response.data);
-    });
+  async function getRandomUser() {
+    const response = await get<User>("users/get-random-user");
+    setUser(response.data);
   }
 
-  function createEvaluation(likedBool: boolean) {
-    post("evaluations/create-evaluation-and-check", {
+  async function createEvaluation(likedBool: boolean) {
+    await post("evaluations/create-evaluation-and-check", {
       evaluatorAddress: currentUser?.email,
       evaluateeAddress: user?.email,
       liked: likedBool,
     }).catch((error) => console.log(error.response.data));
 
+    // sometimes shows the user twice despite emptying and getting a new random user. might have to implement a delay?
     setUser(undefined);
-    getRandomUser();
+    await getRandomUser();
   }
 
   return (
