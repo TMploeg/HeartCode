@@ -13,6 +13,7 @@ import ProfilePage from "./components/profile-page/PersonalPage";
 import ChatPage from "./components/chat/ChatPage";
 import LoginPage from "./components/auth/login-page/LoginPage";
 import UpdateProfilePage from "./components/update-profile-page/UpdateProfilePage";
+import BrowsingPage from "./components/browsing/BrowsingPage";
 import { useAuthentication } from "./hooks";
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
@@ -59,7 +60,7 @@ export default function App() {
   function getRoutes() {
     return loggedIn ? (
       <>
-        <Route path={AppRoute.HOME} element={<div>Hello, HeartCode!</div>} />
+        <Route path={AppRoute.HOME} element={<BrowsingPage />} />
         <Route path={AppRoute.MATCHES} element={<MatchesPage />} />
         <Route path={AppRoute.CHAT} element={<ChatPage />} />
         <Route path={AppRoute.ACCOUNT} element={<ProfilePage />} />

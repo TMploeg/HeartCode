@@ -1,6 +1,7 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
+import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
@@ -25,6 +26,20 @@ public class UserService implements UserDetailsService {
 
   public Optional<User> findById(String address) {
     return userRepository.findById(address);
+  }
+
+  public User findRandomUser() {
+    User randomUser =
+        userRepository
+            .findRandomUserExcludingCurrentAndEvaluator(getCurrentUser().getEmail())
+            .stream()
+            .findFirst()
+            .orElse(null);
+    if (randomUser != null) {
+      return randomUser;
+    } else {
+      throw new NotFoundException("There are no more users left to evaluate");
+    }
   }
 
   public User save(
