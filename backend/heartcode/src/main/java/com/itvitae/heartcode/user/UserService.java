@@ -18,8 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
 public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
@@ -50,7 +50,8 @@ public class UserService implements UserDetailsService {
       String dateOfBirthString,
       String bio,
       ProfilePicture profilePicture,
-      GenderPreference genderPreference) {
+      GenderPreference genderPreference,
+      UserRelationshipType relationshipType) {
     if (isInvalidEmail(email) || userWithEmailExists(email)) {
       throw new IllegalArgumentException("email is invalid");
     }
@@ -80,7 +81,8 @@ public class UserService implements UserDetailsService {
             dateOfBirth,
             bio,
             profilePicture,
-            genderPreference));
+            genderPreference,
+            relationshipType));
   }
 
   public User update(User user) {

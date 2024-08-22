@@ -44,6 +44,7 @@ public class UserController {
     updateBio(updateProfileDTO.bio(), user).ifPresent(errors::add);
     updateGenderPreference(updateProfileDTO.genderPreference(), user).ifPresent(errors::add);
     updateProfilePicture(updateProfileDTO.profilePicture(), user).ifPresent(errors::add);
+    updateRelationshipType(updateProfileDTO.relationshipType(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
@@ -109,6 +110,27 @@ public class UserController {
             "gender is invalid, valid options: [" + getGenderPreferenceOptionsToString() + "]");
   }
 
+  private Optional<String> updateRelationshipType(String newRelationshipType, User user) {
+    if (newRelationshipType == null) {
+      return Optional.empty();
+    }
+
+    if (newRelationshipType.isBlank()) {
+      return Optional.of("relationship type must be filled in");
+    }
+
+    Optional<UserRelationshipType> relationshipType =
+        UserRelationshipType.parse(newRelationshipType);
+    relationshipType.ifPresent(user::setRelationshipType);
+
+    return relationshipType.isPresent()
+        ? Optional.empty()
+        : Optional.of(
+            "relationship type is invalid, valid options: ["
+                + getRelationshipTypeOptionsToString()
+                + "]");
+  }
+
   private Optional<String> updateProfilePicture(Map<Long, Byte> profilePicture, User user) {
     if (profilePicture == null) {
       return Optional.empty();
@@ -130,6 +152,12 @@ public class UserController {
   private static String getGenderPreferenceOptionsToString() {
     return String.join(
         ", ", Arrays.stream(GenderPreference.values()).map(GenderPreference::getName).toList());
+  }
+
+  private static String getRelationshipTypeOptionsToString() {
+    return String.join(
+        ", ",
+        Arrays.stream(UserRelationshipType.values()).map(UserRelationshipType::getName).toList());
   }
 
   @GetMapping("validate-token")
