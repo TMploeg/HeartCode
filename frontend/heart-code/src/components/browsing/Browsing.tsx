@@ -21,6 +21,8 @@ export default function Browsing() {
     get<User>("users/account").then((response) => {
       setCurrentUser(response.data);
     });
+
+    console.log(window.location.pathname);
   }, []);
 
   async function getRandomUser() {

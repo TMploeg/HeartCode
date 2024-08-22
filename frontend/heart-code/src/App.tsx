@@ -18,6 +18,7 @@ import { useAuthentication } from "./hooks";
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { AppRoute } from "./enums/AppRoute";
+import BrowseLikedPage from "./components/browsing/BrowseLikedPage";
 
 export default function App() {
   const { isLoggedIn, addLogoutListener } = useAuthentication();
@@ -65,6 +66,7 @@ export default function App() {
         <Route path={AppRoute.CHAT} element={<ChatPage />} />
         <Route path={AppRoute.ACCOUNT} element={<ProfilePage />} />
         <Route path={AppRoute.ACCOUNT_UPDATE} element={<UpdateProfilePage />} />
+        <Route path={AppRoute.LIKED} element={<BrowseLikedPage />} />
       </>
     ) : (
       <>
