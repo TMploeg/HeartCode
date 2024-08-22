@@ -12,7 +12,6 @@ import ProfilePictureInput, {
 import { useApi, useProfilePicture } from "../../hooks";
 import { genderPreferences } from "../../enums/GenderPreference";
 import AgePreferenceInput from "../general/age-preference-input/AgePreferenceInput";
-import AgePreference from "../../models/AgePreference";
 
 interface UpdateValue {
   value: any;

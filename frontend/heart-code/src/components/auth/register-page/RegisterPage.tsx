@@ -18,16 +18,11 @@ import ProfilePictureInput, {
 import GenderPreference, {
   genderPreferences,
 } from "../../../enums/GenderPreference";
-import AgePreference, {
-  PreferedAgeInputData,
-} from "../../../models/AgePreference";
 import AgePreferenceInput from "../../general/age-preference-input/AgePreferenceInput";
 
 interface Props {
   onRegister: () => void;
 }
-
-const MINIMUM_ACCEPTABLE_AGE = 18;
 
 export default function RegisterPage({ onRegister }: Props) {
   const [registerData, setRegisterData] = useState<RegisterData>({
