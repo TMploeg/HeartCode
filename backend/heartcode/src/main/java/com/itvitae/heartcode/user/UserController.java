@@ -173,4 +173,9 @@ public class UserController {
   public byte[] getProfilePicture(@PathVariable UUID id) {
     return profilePictureService.findById(id).orElseThrow(NotFoundException::new).getImageData();
   }
+
+  @GetMapping("get-random-user")
+  public UserDTO getRandomUser() {
+    return UserDTO.from(userService.findRandomUser());
+  }
 }
