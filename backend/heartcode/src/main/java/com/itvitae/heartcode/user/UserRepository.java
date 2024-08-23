@@ -8,17 +8,15 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserRepository
     extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
-  //  @Query(
-  //      value =
-  //          "SELECT * "
-  //              + "FROM users u "
-  //              + "WHERE u.email != :currentUserEmail "
-  //              + "AND u.email NOT IN ("
-  //              + "SELECT e.evaluatee_email "
-  //              + "FROM evaluation e "
-  //              + "WHERE e.evaluator_email = :currentUserEmail) "
-  //              + "ORDER BY RANDOM() LIMIT 1",
-  //      nativeQuery = true)
-  //  Optional<User> findRandomUserExcludingCurrentAndEvaluator(
-  //      @Param("currentUserEmail") String currentUserEmail);
+  @Query(
+      "SELECT u "
+          + "FROM users u "
+          + "WHERE u.email != :currentUserEmail "
+          + "WHERE u.genderPreference = "
+          + "AND u NOT IN ("
+          + "SELECT e.evaluatee "
+          + "FROM u.reveivedEvaluations e "
+          + "WHERE e.evaluator.email = :currentUserEmail) "
+          + "ORDER BY RANDOM() LIMIT 1")
+  Optional<User> getRandomUser(@Param("currentUserEmail") String currentUserEmail);
 }
