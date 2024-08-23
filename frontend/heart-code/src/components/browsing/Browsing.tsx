@@ -27,8 +27,12 @@ export default function Browsing() {
 
   async function getRandomUser() {
     try {
-      const response = await get<User>("users/get-random-user");
-      setUser(response.data);
+      if (window.location.pathname === "/") {
+        const response = await get<User>("users/get-random-user");
+        setUser(response.data);
+      } else {
+        console.log("You are on the other page :)");
+      }
     } catch {
       console.warn("There are no more users left to evaluate");
       return;
