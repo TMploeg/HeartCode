@@ -23,6 +23,10 @@ export default function ProfilePictureInput({
           to select a
           <br />
           profile picture
+          <br />
+          <span className="profile-picture-error-display">
+            Profile picture is required
+          </span>
         </>
       )}
     </div>
