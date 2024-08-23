@@ -6,7 +6,8 @@ import { useApi } from "../../hooks";
 import {
   BsHandThumbsUpFill,
   BsHandThumbsDownFill,
-  BsExclamationTriangleFill,
+  BsArrowThroughHeartFill,
+  BsBalloonHeartFill,
 } from "react-icons/bs";
 import "./Browsing.css";
 
@@ -68,7 +69,7 @@ export default function Browsing() {
         </div>
       ) : (
         <div className="noMoreUsersError">
-          <BsExclamationTriangleFill className="errorImage" />
+          <BsBalloonHeartFill className="errorImage" />
           <div className="errorText">There are no more users available.</div>
         </div>
       )}

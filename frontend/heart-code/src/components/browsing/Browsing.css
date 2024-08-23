@@ -17,6 +17,7 @@
 
 .noMoreUsersError {
   font-size: 25px;
+  color: #c4256a;
   width: 100%;
   text-align: center;
   margin: 0;
@@ -28,8 +29,7 @@
 
 .errorImage {
   font-size: 110px;
-  color: black;
-  background-color: yellow;
+  color: #c4256a;
   padding: 10px;
   border-radius: 20px;
 }
