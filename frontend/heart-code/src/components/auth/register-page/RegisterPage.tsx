@@ -3,12 +3,15 @@ import "../Auth.css";
 import { useAuthentication } from "../../../hooks";
 import { Link } from "react-router-dom";
 import { InputGroup, Button, Form } from "react-bootstrap";
-import RegisterData from "../../../models/RegisterData";
 import {
   isValidEmail,
   isValidDateOfBirth,
-  isValidAge,
   isValidPassword,
+  RegisterInputFieldData,
+  isValidAlias,
+  isValidAgePreference,
+  RegisterValidityState,
+  isValidProfilePicture,
 } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import Gender, { genders } from "../../../enums/Gender";
@@ -21,26 +24,25 @@ import GenderPreference, {
 import RelationshipType, {
   relationshipTypes,
 } from "../../../enums/RelationshipType";
+import AgePreferenceInput from "../../general/age-preference-input/AgePreferenceInput";
+import RegisterData from "../../../models/RegisterData";
 
 interface Props {
   onRegister: () => void;
 }
+
 export default function RegisterPage({ onRegister }: Props) {
-  const [registerData, setRegisterData] = useState<RegisterData>({
-    email: "",
-    alias: "",
-    password: "",
-    passwordConfirmation: "",
-    dateOfBirth: "",
-    gender: Gender.MALE,
-    relationshipType: RelationshipType.CASUAL,
-    bio: "",
-    genderPreference: GenderPreference.ANYONE,
-  });
+  const [registerData, setRegisterData] = useState<RegisterInputFieldData>(
+    getInitialRegisterData()
+  );
+  const [registerValidityState, setRegisterValidityState] =
+    useState<RegisterValidityState>(getInitialValidityState());
 
   const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
-  const [passwordConfirmationVisible, setpasswordConfirmationVisible] =
+
+  const [passwordConfirmationVisible, setPasswordConfirmationVisible] =
     useState<Boolean>(false);
+
   const [profilePictureData, setProfilePictureData] = useState<
     ImageData | undefined
   >(undefined);
@@ -48,10 +50,15 @@ export default function RegisterPage({ onRegister }: Props) {
   const { register } = useAuthentication();
 
   useEffect(() => {
-    registerData.profilePicture = profilePictureData?.data;
+    if (registerData.profilePicture && profilePictureData) {
+      registerData.profilePicture.set(profilePictureData.data);
+    }
   }, [profilePictureData]);
 
-  const formErrors: String[] = getFormErrors();
+  useEffect(() => {
+    updateFormValidation();
+    validatePasswordConfirmation();
+  }, [registerData]);
 
   return (
     <div className="auth-form">
@@ -62,34 +69,62 @@ export default function RegisterPage({ onRegister }: Props) {
       <InputGroup>
         <Form.Control
           placeholder="Email Address"
-          value={registerData.email}
-          onChange={(event) =>
-            setRegisterData((data) => ({ ...data, email: event.target.value }))
+          value={registerData.email.value}
+          onChange={(event) => registerData.email.set(event.target.value)}
+          isInvalid={
+            registerValidityState.email.touched &&
+            registerValidityState.email.error !== undefined
+          }
+          onBlur={() =>
+            setRegisterValidityState((data) => ({
+              ...data,
+              email: { ...data.email, touched: true },
+            }))
           }
         />
+        <Form.Control.Feedback type="invalid">
+          {registerValidityState.email.error}
+        </Form.Control.Feedback>
       </InputGroup>
       <InputGroup>
         <Form.Control
           placeholder="Alias"
-          value={registerData.alias}
-          onChange={(event) =>
-            setRegisterData((data) => ({ ...data, alias: event.target.value }))
+          value={registerData.alias.value}
+          onChange={(event) => registerData.alias.set(event.target.value)}
+          isInvalid={
+            registerValidityState.alias.touched &&
+            registerValidityState.alias.error !== undefined
+          }
+          onBlur={() =>
+            setRegisterValidityState((data) => ({
+              ...data,
+              alias: { ...data.alias, touched: true },
+            }))
           }
         />
+        <Form.Control.Feedback type="invalid">
+          {registerValidityState.alias.error}
+        </Form.Control.Feedback>
       </InputGroup>
       <InputGroup>
         <Form.Control
           placeholder="Password"
-          value={registerData.password}
+          value={registerData.password.value}
           type={passwordVisible ? "text" : "password"}
-          onChange={(event) =>
-            setRegisterData((data) => ({
+          onChange={(event) => registerData.password.set(event.target.value)}
+          isInvalid={
+            registerValidityState.password.touched &&
+            registerValidityState.password.error !== undefined
+          }
+          onBlur={() =>
+            setRegisterValidityState((data) => ({
               ...data,
-              password: event.target.value,
+              password: { ...data.password, touched: true },
             }))
           }
         />
         <Button
+          tabIndex={-1}
           variant="outline-secondary"
           className="visibility-button"
           onClick={() => setPasswordVisible((visible) => !visible)}
@@ -98,45 +133,74 @@ export default function RegisterPage({ onRegister }: Props) {
             {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
           </div>
         </Button>
+        <Form.Control.Feedback type="invalid">
+          {registerValidityState.password.error}
+        </Form.Control.Feedback>
       </InputGroup>
       <InputGroup>
         <Form.Control
           placeholder="Confirm Password"
-          value={registerData.passwordConfirmation}
+          value={registerData.passwordConfirmation.value}
           type={passwordConfirmationVisible ? "text" : "password"}
           onChange={(event) =>
-            setRegisterData((data) => ({
+            registerData.passwordConfirmation.set(event.target.value)
+          }
+          isInvalid={
+            registerValidityState.passwordConfirmation.touched &&
+            registerValidityState.passwordConfirmation.error !== undefined
+          }
+          onBlur={() =>
+            setRegisterValidityState((data) => ({
               ...data,
-              passwordConfirmation: event.target.value,
+              passwordConfirmation: {
+                ...data.passwordConfirmation,
+                touched: true,
+              },
             }))
           }
         />
         <Button
+          tabIndex={-1}
           variant="outline-secondary"
           className="visibility-button"
-          onClick={() => setpasswordConfirmationVisible((visible) => !visible)}
+          onClick={() => setPasswordConfirmationVisible((visible) => !visible)}
         >
           <div className="icon-button-content">
             {passwordConfirmationVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
           </div>
         </Button>
+        <Form.Control.Feedback type="invalid">
+          {registerValidityState.passwordConfirmation.error}
+        </Form.Control.Feedback>
       </InputGroup>
       <InputGroup>
         <Form.Control
           placeholder="Birthday DD/MM/YYYY"
-          value={registerData.dateOfBirth}
-          onChange={(event) =>
-            setRegisterData((data) => ({
+          value={registerData.dateOfBirth.value}
+          onChange={(event) => registerData.dateOfBirth.set(event.target.value)}
+          isInvalid={
+            registerValidityState.dateOfBirth.touched &&
+            registerValidityState.dateOfBirth.error !== undefined
+          }
+          onBlur={() =>
+            setRegisterValidityState((data) => ({
               ...data,
-              dateOfBirth: event.target.value,
+              dateOfBirth: { ...data.dateOfBirth, touched: true },
             }))
           }
         />
+        <Form.Control.Feedback type="invalid">
+          {registerValidityState.dateOfBirth.error}
+        </Form.Control.Feedback>
       </InputGroup>
       <InputGroup>
         <Form.Select
-          onChange={(event) =>
-            setRegisterData((data) => ({ ...data, gender: event.target.value }))
+          onChange={(event) => registerData.gender.set(event.target.value)}
+          onBlur={() =>
+            setRegisterValidityState((data) => ({
+              ...data,
+              gender: { ...data.gender, touched: true },
+            }))
           }
         >
           {genders.map((gender) => (
@@ -150,11 +214,12 @@ export default function RegisterPage({ onRegister }: Props) {
           rows={5}
           className="bio-field"
           placeholder="Bio"
-          value={registerData.bio}
-          onChange={(event) =>
-            setRegisterData((data) => ({
+          value={registerData.bio.value}
+          onChange={(event) => registerData.bio.set(event.target.value)}
+          onBlur={() =>
+            setRegisterValidityState((data) => ({
               ...data,
-              bio: event.target.value,
+              bio: { ...data.bio, touched: true },
             }))
           }
         />
@@ -163,9 +228,12 @@ export default function RegisterPage({ onRegister }: Props) {
       <InputGroup>
         <Form.Select
           onChange={(event) =>
-            setRegisterData((data) => ({
+            registerData.relationshipType.set(event.target.value)
+          }
+          onBlur={() =>
+            setRegisterValidityState((data) => ({
               ...data,
-              relationshipType: event.target.value,
+              relationshipType: { ...data.relationshipType, touched: true },
             }))
           }
         >
@@ -176,114 +244,284 @@ export default function RegisterPage({ onRegister }: Props) {
       </InputGroup>
       <InputGroup>
         <Form.Select
-          onChange={(event) => {
-            setRegisterData((data) => ({
+          onChange={(event) =>
+            registerData.genderPreference.set(event.target.value)
+          }
+          onBlur={() =>
+            setRegisterValidityState((data) => ({
               ...data,
-              genderPreference: event.target.value,
-            }));
-          }}
+              genderPreference: { ...data.genderPreference, touched: true },
+            }))
+          }
         >
           {genderPreferences.map((genderPreference) => (
             <option key={genderPreference}>{genderPreference}</option>
           ))}
         </Form.Select>
       </InputGroup>
-      
+      <AgePreferenceInput
+        onChange={(newValue) => registerData.agePreference.set(newValue)}
+        validationState={registerValidityState.agePreference.error}
+        onBlur={() =>
+          setRegisterValidityState((data) => ({
+            ...data,
+            agePreference: { ...data.agePreference, touched: true },
+          }))
+        }
+        touched={registerValidityState.agePreference.touched}
+      />
       <Button
         className="submit-button"
-        disabled={formErrors.length > 0}
+        disabled={isFormInvalid()}
         onClick={submit}
       >
         Register
       </Button>
-      <div className="auth-form-errors">
-        {formErrors.map((err, index) => (
-          <div className="error-message" key={index}>
-            {err}
-          </div>
-        ))}
-      </div>
       <Link to="/login">or login if you already have an account</Link>
     </div>
   );
 
-  function getFormErrors(): String[] {
-    const errors: String[] = [];
-
-    if (registerData.email.length === 0) {
-      errors.push("Email is required");
-    } else if (!isValidEmail(registerData.email)) {
-      errors.push("Email is invalid");
-    }
-
-    if (registerData.alias.length === 0) {
-      errors.push("An alias is required");
-    }
-
-    if (registerData.password !== registerData.passwordConfirmation) {
-      errors.push("Password does not match");
-    }
-
-    if (!isValidPassword(registerData.password)) {
-      errors.push(`password must contain
-          an uppercase letter,
-          a lowercase letter,
-          a number,
-          a special character
-          and must have at least 7 characters
-        `);
-    }
-
-    if (registerData.dateOfBirth.length === 0) {
-      errors.push("A date of birth is required");
-    } else if (!isValidDateOfBirth(registerData.dateOfBirth)) {
-      errors.push("You must enter a valid date of birth");
-    } else {
-      const dataInfo = registerData.dateOfBirth.split("/");
-      const dateString = dataInfo.join("-");
-      const [day, month, year] = dateString.split("-");
-      if (!isValidAge(new Date(+year, +month - 1, +day))) {
-        errors.push("You must be at least 18 years old");
-      }
-    }
-
-    return errors;
+  function updateFormValidation(): void {
+    setRegisterValidityState((data) => ({
+      ...data,
+      email: {
+        ...data.email,
+        error: data.email.validate?.(registerData.email.value),
+      },
+      alias: {
+        ...data.alias,
+        error: data.alias.validate?.(registerData.alias.value),
+      },
+      password: {
+        ...data.password,
+        error: data.password.validate?.(registerData.password.value),
+      },
+      passwordConfirmation: {
+        ...data.passwordConfirmation,
+        error: data.passwordConfirmation.validate?.(
+          registerData.passwordConfirmation.value
+        ),
+      },
+      dateOfBirth: {
+        ...data.dateOfBirth,
+        error: data.dateOfBirth.validate?.(registerData.dateOfBirth.value),
+      },
+      gender: {
+        ...data.gender,
+        error: data.gender.validate?.(registerData.gender.value),
+      },
+      relationshipType: {
+        ...data.relationshipType,
+        error: data.relationshipType.validate?.(
+          registerData.relationshipType.value
+        ),
+      },
+      bio: { ...data.bio, error: data.bio.validate?.(registerData.bio.value) },
+      genderPreference: {
+        ...data.genderPreference,
+        error: data.genderPreference.validate?.(
+          registerData.genderPreference.value
+        ),
+      },
+      profilePicture: {
+        ...data.profilePicture,
+        error: data.profilePicture.validate?.(
+          registerData.profilePicture.value
+        ),
+      },
+      agePreference: {
+        ...data.agePreference,
+        error: data.agePreference.validate?.(registerData.agePreference.value),
+      },
+    }));
   }
 
   function submit() {
-    register(registerData)
+    const finalRegisterData: RegisterData = {
+      email: registerData.email.value,
+      alias: registerData.alias.value,
+      password: registerData.password.value,
+      passwordConfirmation: registerData.passwordConfirmation.value,
+      dateOfBirth: registerData.dateOfBirth.value,
+      gender: registerData.gender.value,
+      relationshipType: registerData.relationshipType.value,
+      bio: registerData.bio.value,
+      genderPreference: registerData.genderPreference.value,
+      profilePicture: registerData.profilePicture.value,
+      agePreference: registerData.agePreference.value,
+    };
+
+    register(finalRegisterData)
       .then(onRegister)
       .catch((error) => showError(error.response.data.detail));
   }
 
   function showError(errorMessage: string): void {
     alert(errorMessage);
-    console.log(errorMessage);
+    errorMessage;
   }
 
-  // function chooseImage(): void {
-  //   const input = document.createElement("input");
-  //   input.accept = "image/*";
-  //   input.type = "file";
-  //   input.click();
-  //   input.addEventListener("change", async (event) => {
-  //     const files: FileList | null = (event.target as HTMLInputElement).files;
-  //     if (files === null || files.length === 0) {
-  //       return;
-  //     }
+  function isFormInvalid() {
+    return (
+      Object.values(registerValidityState).find(
+        (field) => field.error !== undefined
+      ) !== undefined
+    );
+  }
 
-  //     const bytes: Uint8Array = new Uint8Array(await files[0].arrayBuffer());
-  //     setRegisterData((data) => ({ ...data, profilePicture: bytes }));
+  function getInitialRegisterData(): RegisterInputFieldData {
+    return {
+      email: {
+        value: "",
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            email: { ...data.email, value: newValue },
+          })),
+      },
+      alias: {
+        value: "",
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            alias: { ...data.alias, value: newValue },
+          })),
+      },
+      password: {
+        value: "",
+        set: (newValue) => {
+          newValue;
+          setRegisterData((data) => ({
+            ...data,
+            password: { ...data.password, value: newValue },
+          }));
+        },
+      },
+      passwordConfirmation: {
+        value: "",
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            passwordConfirmation: {
+              ...data.passwordConfirmation,
+              value: newValue,
+            },
+          })),
+      },
+      dateOfBirth: {
+        value: "",
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            dateOfBirth: { ...data.dateOfBirth, value: newValue },
+          })),
+      },
+      gender: {
+        value: Gender.MALE,
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            gender: { ...data.gender, value: newValue },
+          })),
+      },
+      relationshipType: {
+        value: RelationshipType.CASUAL,
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            relationshipType: { ...data.relationshipType, value: newValue },
+          })),
+      },
+      bio: {
+        value: "",
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            bio: { ...data.bio, value: newValue },
+          })),
+      },
+      genderPreference: {
+        value: GenderPreference.ANYONE,
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            genderPreference: { ...data.genderPreference, value: newValue },
+          })),
+      },
+      profilePicture: {
+        value: undefined,
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            profilePicture: { ...data.profilePicture, value: newValue },
+          })),
+      },
+      agePreference: {
+        value: {},
+        set: (newValue) =>
+          setRegisterData((data) => ({
+            ...data,
+            agePreference: { ...data.agePreference, value: newValue },
+          })),
+      },
+    };
+  }
 
-  //     const reader = new FileReader();
-  //     reader.addEventListener("load", async () => {
-  //       if (reader.result === null || reader.result instanceof ArrayBuffer) {
-  //         return;
-  //       }
+  function getInitialValidityState(): RegisterValidityState {
+    return {
+      email: {
+        validate: isValidEmail,
+        touched: false,
+      },
+      alias: {
+        validate: isValidAlias,
+        touched: false,
+      },
+      password: {
+        validate: isValidPassword,
+        touched: false,
+      },
+      passwordConfirmation: {
+        touched: false,
+      },
+      dateOfBirth: {
+        validate: isValidDateOfBirth,
+        touched: false,
+      },
+      gender: {
+        touched: false,
+      },
+      relationshipType: {
+        touched: false,
+      },
+      bio: {
+        touched: false,
+      },
+      genderPreference: {
+        touched: false,
+      },
+      profilePicture: {
+        validate: isValidProfilePicture,
+        touched: false,
+      },
+      agePreference: {
+        validate: isValidAgePreference,
+        touched: false,
+      },
+    };
+  }
 
-  //       setProfilePictureDataURL(reader.result);
-  //     });
-  //     reader.readAsDataURL(files[0]);
-  //   });
-  // }
+  function validatePasswordConfirmation() {
+    setRegisterValidityState((state) => ({
+      ...state,
+      passwordConfirmation: {
+        ...state.passwordConfirmation,
+        error:
+          registerData.password.value !==
+          registerData.passwordConfirmation.value
+            ? "Passwords do not match"
+            : undefined,
+      },
+    }));
+  }
 }

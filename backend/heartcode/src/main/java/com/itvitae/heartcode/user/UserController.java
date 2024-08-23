@@ -45,6 +45,7 @@ public class UserController {
     updateGenderPreference(updateProfileDTO.genderPreference(), user).ifPresent(errors::add);
     updateProfilePicture(updateProfileDTO.profilePicture(), user).ifPresent(errors::add);
     updateRelationshipType(updateProfileDTO.relationshipType(), user).ifPresent(errors::add);
+    updateAgePreference(updateProfileDTO.agePreference(), user).ifPresent(errors::add);
 
     if (!errors.isEmpty()) {
       throw new BadRequestException(String.join(";", errors));
@@ -143,6 +144,23 @@ public class UserController {
     profilePictureService.update(user.getProfilePicture(), profilePicture);
 
     return Optional.empty();
+  }
+
+  private Optional<String> updateAgePreference(AgePreferenceDTO newAgePreference, User user) {
+    return Optional.ofNullable(newAgePreference)
+        .map(AgePreferenceDTO::convert)
+        .map(
+            pref -> {
+              if (pref.minAgeUnder18()) {
+                return "agePreference.minAge is invalid: must be 18+";
+              }
+              if (pref.maxAgeSmallerThanMinAge()) {
+                return "agePreference.maxAge is invalid: must be greater or equal to than minAge";
+              }
+
+              user.setAgePreference(pref);
+              return null;
+            });
   }
 
   private static String getGenderOptionsString() {

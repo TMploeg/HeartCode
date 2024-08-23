@@ -12,6 +12,11 @@ import ProfilePictureInput, {
 import { useApi, useProfilePicture } from "../../hooks";
 import { genderPreferences } from "../../enums/GenderPreference";
 import { relationshipTypes } from "../../enums/RelationshipType";
+import AgePreferenceInput from "../general/age-preference-input/AgePreferenceInput";
+import {
+  AgePreferenceErrors,
+  isValidAgePreference,
+} from "../auth/AuthValidation";
 
 interface UpdateValue {
   value: any;
@@ -34,16 +39,33 @@ export default function UpdateProfilePage() {
     ImageData | undefined
   >(undefined);
 
+  const [agePreferenceTouched, setAgePreferenceTouched] =
+    useState<boolean>(false);
+  const [agePreferenceError, setAgePreferenceError] =
+    useState<AgePreferenceErrors>();
+
   useEffect(() => {
-    if (profilePictureData != undefined) {
-      setUpdateValues((values) => ({
-        ...values,
-        profilePicture: {
-          value: profilePictureData.data,
-          changed: true,
-        },
-      }));
+    if (!updateValues) {
+      return;
     }
+
+    setAgePreferenceError(
+      isValidAgePreference(updateValues.agePreference.value)
+    );
+  }, [updateValues]);
+
+  useEffect(() => {
+    if (profilePictureData === undefined) {
+      return;
+    }
+
+    setUpdateValues((values) => ({
+      ...values,
+      profilePicture: {
+        value: profilePictureData.data,
+        changed: true,
+      },
+    }));
   }, [profilePictureData]);
 
   if (!updateValues || !userInfo) {
@@ -61,9 +83,11 @@ export default function UpdateProfilePage() {
         <Card.Body>
           <ListGroup>
             <ListGroup.Item>
-              <div className={`profile-picture-input-container ${
+              <div
+                className={`profile-picture-input-container ${
                   updateValues.profilePicture.changed ? "changed" : ""
-                }`}>
+                }`}
+              >
                 <ProfilePictureInput
                   value={profilePictureData}
                   onChange={setProfilePictureData}
@@ -200,6 +224,26 @@ export default function UpdateProfilePage() {
                 }
               />
             </ListGroup.Item>
+            <ListGroup.Item>
+              <AgePreferenceInput
+                initialValues={userInfo.agePreference}
+                onChange={(newValue) => {
+                  setUpdateValues((values) => ({
+                    ...values,
+                    agePreference: {
+                      value: newValue,
+                      changed:
+                        newValue.minAge != userInfo.agePreference.minAge ||
+                        newValue.maxAge != userInfo.agePreference.maxAge,
+                    },
+                  }));
+                }}
+                changed={updateValues.agePreference.changed}
+                touched={agePreferenceTouched}
+                onBlur={() => setAgePreferenceTouched(true)}
+                validationState={agePreferenceError}
+              />
+            </ListGroup.Item>
           </ListGroup>
           <Button
             className="profile-update-save-button"
@@ -221,6 +265,7 @@ export default function UpdateProfilePage() {
   }
 
   function loadUserInfo() {
+    console.log(userInfo);
     if (!userInfo) {
       return;
     }
@@ -231,40 +276,50 @@ export default function UpdateProfilePage() {
       bio: { value: userInfo.bio, changed: false },
       genderPreference: { value: userInfo.genderPreference, changed: false },
       relationshipType: { value: userInfo.relationshipType, changed: false },
-      profilePicture: {value: userInfo.profilePictureId, changed : false },
+      profilePicture: { value: userInfo.profilePictureId, changed: false },
+      agePreference: { value: userInfo.agePreference, changed: false },
     });
   }
 
   function canSave() {
+    return isFormValid() && anyChanged();
+  }
+
+  function isFormValid() {
+    if (
+      agePreferenceError?.minAgeError !== undefined ||
+      agePreferenceError?.maxAgeError !== undefined
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  function anyChanged() {
+    if (!updateValues) {
+      return false;
+    }
+
     return (
-      updateValues &&
       Object.values(updateValues).findIndex((value) => value.changed) !== -1
     );
   }
 
   function save() {
-    if (!userInfo || !updateValues ) {
+    if (!userInfo || !updateValues) {
       console.error("one or more values is undefined");
       return;
     }
-    const updatedFields = {
-      alias: updateValues.alias.changed ? updateValues.alias.value : undefined,
-      gender: updateValues.gender.changed
-        ? updateValues.gender.value
-        : undefined,
-      bio: updateValues.bio.changed ? updateValues.bio.value : undefined,
-      profilePicture: updateValues.profilePicture.changed
-        ? updateValues.profilePicture.value
-        : undefined,
-      genderPreference: updateValues.genderPreference.changed
-        ? updateValues.genderPreference.value
-        : undefined,
-      relationshipType: updateValues.relationshipType.changed
-        ? updateValues.relationshipType.value
-        : undefined,
-    };
 
-    patch("users/account", updatedFields)
+    const patchBody: { [key: string]: any } = {};
+    for (let key of Object.keys(updateValues)) {
+      if (updateValues[key].changed) {
+        patchBody[key] = updateValues[key].value;
+      }
+    }
+
+    patch("users/account", patchBody)
       .then(navigateBack)
       .catch(() => alert("failed to save changes"));
   }
