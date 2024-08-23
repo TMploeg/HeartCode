@@ -1,0 +1,22 @@
+.logo {
+  margin-top: 48px !important;
+}
+
+.buttons {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  color: #c4256a;
+  font-weight: 700;
+  align-items: center;
+}
+
+.login-register-button {
+  width: 20%;
+  margin-bottom: 12px;
+  color: #c4256a !important;
+  font-weight: 700 !important;
+  background-color: white !important;
+  border-color: #c4256a !important;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
