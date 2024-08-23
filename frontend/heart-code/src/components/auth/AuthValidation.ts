@@ -171,10 +171,19 @@ function isValidAgePreference(
   return undefined;
 }
 
+function isValidProfilePicture(profilePicture: Uint8Array | undefined) {
+  if (profilePicture === undefined) {
+    return "profilePicture is required";
+  }
+
+  return undefined;
+}
+
 export {
   isValidEmail,
   isValidAlias,
   isValidPassword,
   isValidDateOfBirth,
   isValidAgePreference,
+  isValidProfilePicture,
 };

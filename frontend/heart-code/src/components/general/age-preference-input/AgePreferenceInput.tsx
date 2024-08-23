@@ -25,7 +25,6 @@ export default function AgePreferenceInput({
   onBlur,
   touched,
 }: Props) {
-  console.log(touched);
   const [agePreference, setAgePreference] = useState<PreferedAgeInputData>({
     minAge: {
       value: initialValues?.minAge?.toString() ?? "",

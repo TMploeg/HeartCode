@@ -11,6 +11,7 @@ import {
   isValidAlias,
   isValidAgePreference,
   RegisterValidityState,
+  isValidProfilePicture,
 } from "../AuthValidation";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 import Gender, { genders } from "../../../enums/Gender";
@@ -362,8 +363,9 @@ export default function RegisterPage({ onRegister }: Props) {
 
   function isFormInvalid() {
     return (
-      Object.values(registerData).find((field) => field.error !== undefined) !==
-      undefined
+      Object.values(registerValidityState).find(
+        (field) => field.error !== undefined
+      ) !== undefined
     );
   }
 
@@ -499,6 +501,7 @@ export default function RegisterPage({ onRegister }: Props) {
         touched: false,
       },
       profilePicture: {
+        validate: isValidProfilePicture,
         touched: false,
       },
       agePreference: {
