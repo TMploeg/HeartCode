@@ -47,7 +47,7 @@ export default function Browsing() {
   return (
     <div className="browse">
       {user !== undefined && user !== null ? (
-        <div>
+        <div className="profile">
           <Profile user={user} isPersonalPage={false} />
           <div className="buttonContainer">
             <Button
