@@ -55,112 +55,125 @@ export default function RegisterPage({ onRegister }: Props) {
 
   return (
     <div className="auth-form">
-      <ProfilePictureInput
-        value={profilePictureData}
-        onChange={setProfilePictureData}
-      />
-      <InputGroup>
-        <Form.Control
-          placeholder="Email Address"
-          value={registerData.email}
-          onChange={(event) =>
-            setRegisterData((data) => ({ ...data, email: event.target.value }))
-          }
+      <div className="user-info">
+        <ProfilePictureInput
+          value={profilePictureData}
+          onChange={setProfilePictureData}
         />
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          placeholder="Alias"
-          value={registerData.alias}
-          onChange={(event) =>
-            setRegisterData((data) => ({ ...data, alias: event.target.value }))
-          }
-        />
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          placeholder="Password"
-          value={registerData.password}
-          type={passwordVisible ? "text" : "password"}
-          onChange={(event) =>
-            setRegisterData((data) => ({
-              ...data,
-              password: event.target.value,
-            }))
-          }
-        />
-        <Button
-          variant="outline-secondary"
-          className="visibility-button"
-          onClick={() => setPasswordVisible((visible) => !visible)}
-        >
-          <div className="icon-button-content">
-            {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
-          </div>
-        </Button>
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          placeholder="Confirm Password"
-          value={registerData.passwordConfirmation}
-          type={passwordConfirmationVisible ? "text" : "password"}
-          onChange={(event) =>
-            setRegisterData((data) => ({
-              ...data,
-              passwordConfirmation: event.target.value,
-            }))
-          }
-        />
-        <Button
-          variant="outline-secondary"
-          className="visibility-button"
-          onClick={() => setpasswordConfirmationVisible((visible) => !visible)}
-        >
-          <div className="icon-button-content">
-            {passwordConfirmationVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
-          </div>
-        </Button>
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          placeholder="Birthday DD/MM/YYYY"
-          value={registerData.dateOfBirth}
-          onChange={(event) =>
-            setRegisterData((data) => ({
-              ...data,
-              dateOfBirth: event.target.value,
-            }))
-          }
-        />
-      </InputGroup>
-      <InputGroup>
-        <Form.Select
-          onChange={(event) =>
-            setRegisterData((data) => ({ ...data, gender: event.target.value }))
-          }
-        >
-          {genders.map((gender) => (
-            <option key={gender}>{gender}</option>
-          ))}
-        </Form.Select>
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          as="textarea"
-          rows={5}
-          className="bio-field"
-          placeholder="Bio"
-          value={registerData.bio}
-          onChange={(event) =>
-            setRegisterData((data) => ({
-              ...data,
-              bio: event.target.value,
-            }))
-          }
-        />
-      </InputGroup>
-      <h6 style={{ color: "#c4256a" }}>What I'm looking for</h6>
+        <InputGroup>
+          <Form.Control
+            placeholder="Email Address"
+            value={registerData.email}
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                email: event.target.value,
+              }))
+            }
+          />
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            placeholder="Alias"
+            value={registerData.alias}
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                alias: event.target.value,
+              }))
+            }
+          />
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            placeholder="Password"
+            value={registerData.password}
+            type={passwordVisible ? "text" : "password"}
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                password: event.target.value,
+              }))
+            }
+          />
+          <Button
+            variant="outline-secondary"
+            className="visibility-button"
+            onClick={() => setPasswordVisible((visible) => !visible)}
+          >
+            <div className="icon-button-content">
+              {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
+            </div>
+          </Button>
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            placeholder="Confirm Password"
+            value={registerData.passwordConfirmation}
+            type={passwordConfirmationVisible ? "text" : "password"}
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                passwordConfirmation: event.target.value,
+              }))
+            }
+          />
+          <Button
+            variant="outline-secondary"
+            className="visibility-button"
+            onClick={() =>
+              setpasswordConfirmationVisible((visible) => !visible)
+            }
+          >
+            <div className="icon-button-content">
+              {passwordConfirmationVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
+            </div>
+          </Button>
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            placeholder="Birthday DD/MM/YYYY"
+            value={registerData.dateOfBirth}
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                dateOfBirth: event.target.value,
+              }))
+            }
+          />
+        </InputGroup>
+        <InputGroup>
+          <Form.Select
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                gender: event.target.value,
+              }))
+            }
+          >
+            {genders.map((gender) => (
+              <option key={gender}>{gender}</option>
+            ))}
+          </Form.Select>
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            as="textarea"
+            rows={5}
+            className="bio-field"
+            placeholder="Bio"
+            value={registerData.bio}
+            onChange={(event) =>
+              setRegisterData((data) => ({
+                ...data,
+                bio: event.target.value,
+              }))
+            }
+          />
+        </InputGroup>
+      </div>
       <div className="preferences">
+        <h6 className="preference-header">I'm looking for:</h6>
         <InputGroup className="preference">
           <Form.Select
             onChange={(event) =>
