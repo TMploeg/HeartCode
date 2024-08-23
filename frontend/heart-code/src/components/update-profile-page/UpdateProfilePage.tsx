@@ -13,6 +13,10 @@ import { useApi, useProfilePicture } from "../../hooks";
 import { genderPreferences } from "../../enums/GenderPreference";
 import { relationshipTypes } from "../../enums/RelationshipType";
 import AgePreferenceInput from "../general/age-preference-input/AgePreferenceInput";
+import {
+  AgePreferenceErrors,
+  isValidAgePreference,
+} from "../auth/AuthValidation";
 
 interface UpdateValue {
   value: any;
@@ -34,6 +38,21 @@ export default function UpdateProfilePage() {
   const [profilePictureData, setProfilePictureData] = useState<
     ImageData | undefined
   >(undefined);
+
+  const [agePreferenceTouched, setAgePreferenceTouched] =
+    useState<boolean>(false);
+  const [agePreferenceError, setAgePreferenceError] =
+    useState<AgePreferenceErrors>();
+
+  useEffect(() => {
+    if (!updateValues) {
+      return;
+    }
+
+    setAgePreferenceError(
+      isValidAgePreference(updateValues.agePreference.value)
+    );
+  }, [updateValues]);
 
   useEffect(() => {
     if (profilePictureData === undefined) {
@@ -220,6 +239,9 @@ export default function UpdateProfilePage() {
                   }));
                 }}
                 changed={updateValues.agePreference.changed}
+                touched={agePreferenceTouched}
+                onBlur={() => setAgePreferenceTouched(true)}
+                validationState={agePreferenceError}
               />
             </ListGroup.Item>
           </ListGroup>
@@ -259,8 +281,26 @@ export default function UpdateProfilePage() {
   }
 
   function canSave() {
+    return isFormValid() && anyChanged();
+  }
+
+  function isFormValid() {
+    if (
+      agePreferenceError?.minAgeError !== undefined ||
+      agePreferenceError?.maxAgeError !== undefined
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  function anyChanged() {
+    if (!updateValues) {
+      return false;
+    }
+
     return (
-      updateValues &&
       Object.values(updateValues).findIndex((value) => value.changed) !== -1
     );
   }
