@@ -64,7 +64,11 @@ export default function UpdateProfilePage() {
         <Card.Body>
           <ListGroup>
             <ListGroup.Item>
-              <div className="profile-picture-input-container">
+              <div
+                className={`profile-picture-input-container ${
+                  updateValues.profilePicture.changed ? "changed" : ""
+                }`}
+              >
                 <ProfilePictureInput
                   value={profilePictureData}
                   onChange={setProfilePictureData}
@@ -249,6 +253,7 @@ export default function UpdateProfilePage() {
       bio: { value: userInfo.bio, changed: false },
       genderPreference: { value: userInfo.genderPreference, changed: false },
       relationshipType: { value: userInfo.relationshipType, changed: false },
+      profilePicture: { value: userInfo.profilePictureId, changed: false },
       agePreference: { value: userInfo.agePreference, changed: false },
     });
   }
@@ -261,7 +266,7 @@ export default function UpdateProfilePage() {
   }
 
   function save() {
-    if (!userInfo || !updateValues || !profilePictureData) {
+    if (!userInfo || !updateValues) {
       console.error("one or more values is undefined");
       return;
     }
