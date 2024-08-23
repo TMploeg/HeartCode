@@ -1,11 +1,11 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
-import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import com.itvitae.heartcode.profilepictures.ProfilePictureService;
 import com.itvitae.heartcode.security.AuthTokenDTO;
 import com.itvitae.heartcode.security.JwtService;
 import java.util.Arrays;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -96,7 +96,18 @@ public class AuthController {
                 new BadRequestException(
                     "date of birth field doesn't include a valid date or is younger then 18"));
 
-    ProfilePicture profilePicture = profilePictureService.save(registerDTO.profilePicture());
+    Optional<AgePreference> agePreference =
+        Optional.ofNullable(registerDTO.agePreference()).map(AgePreferenceDTO::convert);
+    agePreference.ifPresent(
+        pref -> {
+          if (pref.minAgeUnder18()) {
+            throw new BadRequestException("agePreference.minAge is invalid: must be 18+");
+          }
+          if (pref.maxAgeSmallerThanMinAge()) {
+            throw new BadRequestException(
+                "agePreference.maxAge is invalid: must be greater or equal to minAge");
+          }
+        });
 
     User user =
         userService.save(
@@ -106,9 +117,15 @@ public class AuthController {
             gender,
             registerDTO.dateOfBirth(),
             registerDTO.bio(),
-            profilePicture,
+            profilePictureService.save(registerDTO.profilePicture()),
             genderPreference,
             relationshipType);
+
+    agePreference.ifPresent(
+        pref -> {
+          user.setAgePreference(pref);
+          userService.update(user);
+        });
 
     return new AuthTokenDTO(
         jwtService

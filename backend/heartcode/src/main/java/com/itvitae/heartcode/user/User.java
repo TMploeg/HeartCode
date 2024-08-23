@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
   public static final String TEST_USER_NAME =
       "testuser"; // temporary, remove after implementing login
+  public static final int MIN_AGE = 18;
 
   @Id private String email;
 
@@ -45,6 +47,8 @@ public class User implements UserDetails {
   @Setter
   @Enumerated(EnumType.ORDINAL)
   private UserRelationshipType relationshipType;
+  
+  @Setter @Embedded private AgePreference agePreference;
 
   public User(
       String email,
@@ -72,6 +76,10 @@ public class User implements UserDetails {
     LocalDate now = LocalDate.now();
     Period period = Period.between(dateOfBirth, now);
     return period.getYears();
+  }
+
+  public Optional<AgePreference> getAgePreference() {
+    return Optional.ofNullable(this.agePreference);
   }
 
   @Override
