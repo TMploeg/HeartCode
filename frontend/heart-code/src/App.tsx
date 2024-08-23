@@ -16,8 +16,8 @@ import UpdateProfilePage from "./components/update-profile-page/UpdateProfilePag
 import BrowsingPage from "./components/browsing/BrowsingPage";
 import { useAuthentication } from "./hooks";
 import { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
 import { AppRoute } from "./enums/AppRoute";
+import StartPage from "./components/start-page/StartPage";
 
 export default function App() {
   const { isLoggedIn, addLogoutListener } = useAuthentication();
@@ -32,14 +32,18 @@ export default function App() {
   useEffect(() => addLogoutListener(() => setLoggedIn(false)), []);
   useEffect(() => {
     if (loggedIn === false) {
-      navigate("/");
+      navigate("/start");
     }
   }, [loggedIn]);
 
   return (
-    <div className="app-container">
+    <div
+      className={`app-container ${
+        location.pathname === AppRoute.HOME && !loggedIn ? "" : "loaded"
+      }`}
+    >
       {loggedIn === null ? (
-        <Spinner animation="border" variant="primary" />
+        <StartPage />
       ) : (
         <>
           <div className="page">
@@ -68,7 +72,7 @@ export default function App() {
       </>
     ) : (
       <>
-        <Route path={AppRoute.HOME} element={<Navigate to="login" />} />
+        <Route path={AppRoute.HOME} element={<StartPage />} />
         <Route
           path={AppRoute.LOGIN}
           element={<LoginPage onLogin={handleAuthenticated} />}
