@@ -1,11 +1,13 @@
 package com.itvitae.heartcode.user;
 
+import com.itvitae.heartcode.evaluation.Evaluation;
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +35,10 @@ public class User implements UserDetails {
   @Setter @OneToOne private ProfilePicture profilePicture;
 
   private LocalDate dateOfBirth;
+
+  @Getter
+  @OneToMany(mappedBy = "evaluatee")
+  private Set<Evaluation> reveivedEvaluations;
 
   @Setter
   @Enumerated(EnumType.ORDINAL)

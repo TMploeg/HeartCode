@@ -8,9 +8,12 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,17 +32,21 @@ public class UserService implements UserDetailsService {
   }
 
   public User findRandomUser() {
-    User randomUser =
-        userRepository
-            .findRandomUserExcludingCurrentAndEvaluator(getCurrentUser().getEmail())
-            .stream()
-            .findFirst()
-            .orElse(null);
-    if (randomUser != null) {
-      return randomUser;
-    } else {
-      throw new NotFoundException("There are no more users left to evaluate");
-    }
+    Specification<User> spec =
+        Specification.where(UserSpecification.isNotSelf(getCurrentUser().getEmail()))
+            .and(UserSpecification.isNotEvaluated(getCurrentUser()));
+
+    List<User> userSet = userRepository.findAll(spec);
+    Random r = new Random();
+    Optional<User> randomUser =
+        switch (userSet.size()) {
+          case 0 -> Optional.empty();
+          case 1 -> Optional.of(userSet.get(0));
+          default -> Optional.of(userSet.get(r.nextInt(userSet.size() - 1)));
+        };
+
+    return randomUser.orElseThrow(
+        () -> new NotFoundException("There are no more users left to evaluate"));
   }
 
   public User save(
