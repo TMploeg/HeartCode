@@ -33,6 +33,16 @@ export default function Browsing() {
     } catch {
       console.warn("There are no more users left to evaluate");
       return;
+
+    // update this part  
+    const response = await get<User>("users/get-random-user");
+
+    switch (response.status) {
+      case 200:
+        setUser(response.data);
+        break;
+      case 204:
+        console.warn("There are no more users left to evaluate");
     }
   }
 

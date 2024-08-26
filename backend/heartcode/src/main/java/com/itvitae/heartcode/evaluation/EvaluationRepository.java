@@ -5,6 +5,5 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EvaluationRepository extends JpaRepository<Evaluation, User> {
-  Optional<Evaluation> findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(
-      User Evaluator, User Evaluatee);
+  Optional<Evaluation> findByEvaluatorAndEvaluatee(User Evaluator, User Evaluatee);
 }
