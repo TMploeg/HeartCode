@@ -3,16 +3,7 @@ import { Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { User } from "../../models/User";
 import { useApi } from "../../hooks";
-import {
-  BsFillPlugFill,
-  BsHeartFill,
-  BsHeartbreakFill,
-  BsPower,
-  BsPlugFill,
-  BsHeart,
-  BsX,
-  BsBalloonHeartFill,
-} from "react-icons/bs";
+import { BsHeart, BsXLg, BsBalloonHeartFill } from "react-icons/bs";
 import "./Browsing.css";
 
 export default function Browsing() {
@@ -60,7 +51,7 @@ export default function Browsing() {
               variant="outline-secondary"
               onClick={() => createEvaluation(false)}
             >
-              X
+              <BsXLg />
             </Button>
             <Button
               className="evaluationButton"
