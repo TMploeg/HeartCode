@@ -3,11 +3,7 @@ import { Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { User } from "../../models/User";
 import { useApi } from "../../hooks";
-import {
-  BsHandThumbsUpFill,
-  BsHandThumbsDownFill,
-  BsExclamationTriangleFill,
-} from "react-icons/bs";
+import { BsHeart, BsXLg, BsBalloonHeartFill } from "react-icons/bs";
 import "./Browsing.css";
 
 export default function Browsing() {
@@ -54,28 +50,28 @@ export default function Browsing() {
   return (
     <div className="browse">
       {user !== undefined && user !== null ? (
-        <div>
+        <div className="profile">
           <Profile user={user} isPersonalPage={false} />
           <div className="buttonContainer">
             <Button
               className="evaluationButton"
+              variant="outline-secondary"
               onClick={() => createEvaluation(false)}
-              variant="danger"
             >
-              <BsHandThumbsDownFill />
+              <BsXLg />
             </Button>
             <Button
               className="evaluationButton"
+              variant="outline-secondary"
               onClick={() => createEvaluation(true)}
-              variant="success"
             >
-              <BsHandThumbsUpFill />
+              <BsHeart />
             </Button>
           </div>
         </div>
       ) : (
         <div className="noMoreUsersError">
-          <BsExclamationTriangleFill className="errorImage" />
+          <BsBalloonHeartFill className="errorImage" />
           <div className="errorText">There are no more users available.</div>
         </div>
       )}
