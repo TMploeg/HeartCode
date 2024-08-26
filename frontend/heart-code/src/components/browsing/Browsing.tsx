@@ -31,7 +31,8 @@ export default function Browsing() {
         const response = await get<User>("users/get-random-user");
         setUser(response.data);
       } else {
-        console.log("You are on the other page :)");
+        const response = await get<User>("users/get-random-liked-user");
+        setUser(response.data);
       }
     } catch {
       console.warn("There are no more users left to evaluate");

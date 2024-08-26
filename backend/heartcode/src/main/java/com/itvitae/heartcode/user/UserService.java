@@ -42,6 +42,20 @@ public class UserService implements UserDetailsService {
     }
   }
 
+  public User findRandomLikedUser() {
+    User randomUser =
+        userRepository
+            .findRandomUserExcludingCurrentAndEvaluatorAndOnlyLiked(getCurrentUser().getEmail())
+            .stream()
+            .findFirst()
+            .orElse(null);
+    if (randomUser != null) {
+      return randomUser;
+    } else {
+      throw new NotFoundException("There are no more users left to evaluate");
+    }
+  }
+
   public User save(
       String email,
       String alias,

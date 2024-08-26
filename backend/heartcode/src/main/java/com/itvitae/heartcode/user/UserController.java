@@ -196,4 +196,9 @@ public class UserController {
   public UserDTO getRandomUser() {
     return UserDTO.from(userService.findRandomUser());
   }
+
+  @GetMapping("get-random-liked-user")
+  public UserDTO getRandomLikedUser() {
+    return UserDTO.from(userService.findRandomLikedUser());
+  }
 }
