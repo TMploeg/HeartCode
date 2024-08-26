@@ -21,7 +21,6 @@ export default function Browsing() {
 
   async function getRandomUser() {
     const response = await get<User>("users/get-random-user");
-    console.log("STATUS: ", response.status);
 
     switch (response.status) {
       case 200:
