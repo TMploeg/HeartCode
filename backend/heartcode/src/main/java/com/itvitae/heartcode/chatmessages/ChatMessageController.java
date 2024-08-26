@@ -43,7 +43,7 @@ public class ChatMessageController {
   }
 
   @GetMapping("/lastmessage")
-  public Optional<ChatMessageDTO> getLastMessage(@RequestParam String matchEmail) {
+  public ChatMessageDTO getLastMessage(@RequestParam String matchEmail) {
     if (userService.isInvalidEmail(matchEmail)) {
       throw new BadRequestException("param 'matchEmail' is not a valid email address");
     }
@@ -59,15 +59,14 @@ public class ChatMessageController {
             .findById(matchEmail)
             .orElseThrow(() -> new BadRequestException("user '" + matchEmail + "' not found"));
 
-    ChatMessage lastmessage = chatMessageService.getLastMessage(currentUser, targetUser);
+    Optional<ChatMessage> lastMessage = chatMessageService.getLastMessage(currentUser, targetUser);
 
-    if (lastmessage != null ) {
+    if (lastMessage.isPresent()) {
       return new ChatMessageDTO(
-              lastmessage.getText(),
-              lastmessage.getSender().getEmail().equals(currentUser.getEmail()),
-              lastmessage.getDateTime());
+          lastMessage.getText(),
+          lastMessage.getSender().getEmail().equals(currentUser.getEmail()),
+          lastMessage.getDateTime());
     }
-
   }
 
   private List<ChatMessageDTO> convertToDTO(List<ChatMessage> messages, User currentUser) {
