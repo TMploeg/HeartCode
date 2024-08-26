@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface UserRepository
-    extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, String> {
   String USER_ALIAS = "u";
   String EVALUATION_ALIAS = "e";
 
@@ -27,7 +26,7 @@ public interface UserRepository
       @Param("preferredGenders") List<UserGender> preferredGenders,
       @Param("preferredRelationshipTypes") List<UserRelationshipType> preferredRelationShipTypes);
 
-        @Query(
+  @Query(
       value =
           "SELECT * "
               + "FROM users u "
@@ -43,6 +42,5 @@ public interface UserRepository
               + "WHERE e.evaluator_email = :currentUserEmail) "
               + "ORDER BY RANDOM() LIMIT 1",
       nativeQuery = true)
-  Optional<User> findRandomUserExcludingCurrentAndEvaluatorAndOnlyLiked(
-      @Param("currentUserEmail") String currentUserEmail);
+  Optional<User> getRandomLikedUser(@Param("currentUserEmail") String currentUserEmail);
 }

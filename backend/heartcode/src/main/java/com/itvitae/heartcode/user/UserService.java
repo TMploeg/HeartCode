@@ -66,18 +66,10 @@ public class UserService implements UserDetailsService {
         .toList();
   }
 
-  public User findRandomLikedUser() {
-    User randomUser =
-        userRepository
-            .findRandomUserExcludingCurrentAndEvaluatorAndOnlyLiked(getCurrentUser().getEmail())
-            .stream()
-            .findFirst()
-            .orElse(null);
-    if (randomUser != null) {
-      return randomUser;
-    } else {
-      throw new NotFoundException("There are no more users left to evaluate");
-    }
+  public Optional<User> findRandomLikedUser() {
+    User currentUser = getCurrentUser();
+
+    return userRepository.getRandomLikedUser(currentUser.getEmail());
   }
 
   public User save(

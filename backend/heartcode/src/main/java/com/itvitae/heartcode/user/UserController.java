@@ -202,7 +202,11 @@ public class UserController {
   }
 
   @GetMapping("get-random-liked-user")
-  public UserDTO getRandomLikedUser() {
-    return UserDTO.from(userService.findRandomLikedUser());
+  public ResponseEntity<UserDTO> getRandomLikedUser() {
+    return userService
+        .findRandomLikedUser()
+        .map(UserDTO::from)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.noContent().build());
   }
 }

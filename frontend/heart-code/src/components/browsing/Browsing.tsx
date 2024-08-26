@@ -22,22 +22,14 @@ export default function Browsing() {
   }, []);
 
   async function getRandomUser() {
-    try {
-      if (window.location.pathname === "/") {
-        const response = await get<User>("users/get-random-user");
-        setUser(response.data);
-      } else {
-        const response = await get<User>("users/get-random-liked-user");
-        setUser(response.data);
-      }
-    } catch {
-      console.warn("There are no more users left to evaluate");
-      return;
+    let response;
 
-    // update this part  
-    const response = await get<User>("users/get-random-user");
-
-    switch (response.status) {
+    if (window.location.pathname === "/") {
+      response = await get<User>("users/get-random-user");
+    } else {
+      response = await get<User>("users/get-random-liked-user");
+    }
+    switch (response?.status) {
       case 200:
         setUser(response.data);
         break;
