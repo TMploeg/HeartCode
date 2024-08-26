@@ -18,6 +18,7 @@ import { useAuthentication } from "./hooks";
 import { useEffect, useState } from "react";
 import { AppRoute } from "./enums/AppRoute";
 import StartPage from "./components/start-page/StartPage";
+import Spinner from "react-bootstrap/Spinner";
 
 export default function App() {
   const { isLoggedIn, addLogoutListener } = useAuthentication();
@@ -43,7 +44,7 @@ export default function App() {
       }`}
     >
       {loggedIn === null ? (
-        <StartPage />
+        <Spinner />
       ) : (
         <>
           <div className="page">
