@@ -15,8 +15,9 @@
   justify-content: center !important;
   align-items: center !important;
   margin-bottom: 8px;
-  color: #c4256a !important;
+  background-color: #c4256a !important;
   border-color: #c4256a !important;
+  color: white !important;
   font-size: 26px !important;
 }
 
