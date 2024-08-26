@@ -1,10 +1,10 @@
 enum Gender {
-  MALE = "male",
-  FEMALE = "female",
-  NON_BINARY = "non-binary",
-  BINARY = "binary",
-  OTHER = "other",
-  PREFER_NOT_TO_SAY = "prefer_not_to_say",
+  MALE = "Male",
+  FEMALE = "Female",
+  NON_BINARY = "Non-binary",
+  BINARY = "Binary",
+  OTHER = "Other",
+  PREFER_NOT_TO_SAY = "I prefer not to say",
 }
 
 export default Gender;
