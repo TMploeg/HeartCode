@@ -265,7 +265,6 @@ export default function UpdateProfilePage() {
   }
 
   function loadUserInfo() {
-    console.log(userInfo);
     if (!userInfo) {
       return;
     }
