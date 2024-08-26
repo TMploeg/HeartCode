@@ -13,18 +13,8 @@ public class Evaluation {
 
   @Id private User evaluator;
   @Id private User evaluatee;
-  //  @EmbeddedId private EvaluationId evaluationId;
 
   private boolean liked;
-
-  //  @ManyToOne
-  //  public User getEvaluator() {
-  //    return evaluationId.getEvaluator();
-  //  }
-
-  //  public User getEvaluatee() {
-  //    return evaluationId.getEvaluatee();
-  //  }
 
   public Evaluation(User evaluator, User evaluatee, boolean liked) {
     this.evaluator = evaluator;
