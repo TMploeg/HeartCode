@@ -32,34 +32,38 @@ public class UserService implements UserDetailsService {
   public Optional<User> findRandomUser() {
     User currentUser = getCurrentUser();
 
-    List<UserGender> preferredGenders =
-        Arrays.stream(UserGender.values())
-            .filter(
-                gender ->
-                    gender == UserGender.OTHER
-                        || gender == UserGender.PREFER_NOT_TO_SAY
-                        || currentUser.getGenderPreference() == GenderPreference.ANYONE
-                        || gender
-                            == switch (currentUser.getGenderPreference()) {
-                              case MALE -> UserGender.MALE;
-                              case FEMALE -> UserGender.FEMALE;
-                              case NON_BINARY -> UserGender.NON_BINARY;
-                              case BINARY -> UserGender.BINARY;
-                              default -> throw new RuntimeException("should not reach");
-                            })
-            .toList();
-
-    List<UserRelationshipType> preferredRelationshipTypes =
-        Arrays.stream(UserRelationshipType.values())
-            .filter(
-                relType ->
-                    currentUser.getRelationshipType() == UserRelationshipType.OPEN_TO_ANYTHING
-                        || relType == UserRelationshipType.OPEN_TO_ANYTHING
-                        || currentUser.getRelationshipType() == relType)
-            .toList();
-
     return userRepository.getRandomUser(
-        currentUser.getEmail(), preferredGenders, preferredRelationshipTypes);
+        currentUser.getEmail(),
+        getPreferredGenders(currentUser),
+        getPreferredRelationshipTypes(currentUser));
+  }
+
+  private static List<UserGender> getPreferredGenders(User user) {
+    return Arrays.stream(UserGender.values())
+        .filter(
+            gender ->
+                gender == UserGender.OTHER
+                    || gender == UserGender.PREFER_NOT_TO_SAY
+                    || user.getGenderPreference() == GenderPreference.ANYONE
+                    || gender
+                        == switch (user.getGenderPreference()) {
+                          case MALE -> UserGender.MALE;
+                          case FEMALE -> UserGender.FEMALE;
+                          case NON_BINARY -> UserGender.NON_BINARY;
+                          case BINARY -> UserGender.BINARY;
+                          default -> throw new RuntimeException("should not reach");
+                        })
+        .toList();
+  }
+
+  private List<UserRelationshipType> getPreferredRelationshipTypes(User user) {
+    return Arrays.stream(UserRelationshipType.values())
+        .filter(
+            relType ->
+                user.getRelationshipType() == UserRelationshipType.OPEN_TO_ANYTHING
+                    || relType == UserRelationshipType.OPEN_TO_ANYTHING
+                    || user.getRelationshipType() == relType)
+        .toList();
   }
 
   public User save(
