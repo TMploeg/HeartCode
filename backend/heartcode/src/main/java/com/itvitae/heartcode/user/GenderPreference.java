@@ -7,21 +7,21 @@ import java.util.Optional;
 
 @Getter
 public enum GenderPreference {
-    MALE("male"),
-    FEMALE("female"),
-    NON_BINARY("non-binary"),
-    BINARY("binary"),
-    ANYONE("anyone");
+  MALE("Men"),
+  FEMALE("Women"),
+  NON_BINARY("Non-binary"),
+  BINARY("Binary"),
+  ANYONE("Anyone");
 
-    private final String name;
+  private final String name;
 
-    GenderPreference(String name) {
-        this.name = name;
-    }
+  GenderPreference(String name) {
+    this.name = name;
+  }
 
-    public static Optional<GenderPreference> parse(String value) {
-        return Arrays.stream(GenderPreference.values())
-                .filter(g -> g.getName().equalsIgnoreCase(value))
-                .findFirst();
-    }
+  public static Optional<GenderPreference> parse(String value) {
+    return Arrays.stream(GenderPreference.values())
+        .filter(g -> g.getName().equalsIgnoreCase(value))
+        .findFirst();
+  }
 }

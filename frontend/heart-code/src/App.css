@@ -1,8 +1,6 @@
 body {
   margin: 0;
   user-select: none;
-  background-image: url("./background-img.jpg");
-  background-size: cover;
 }
 
 .app {
@@ -18,6 +16,10 @@ body {
 
   display: flex;
   flex-direction: column;
+}
+.app-container.loaded {
+  background-image: url("./background-img.jpg");
+  background-size: cover;
 }
 
 .page {
