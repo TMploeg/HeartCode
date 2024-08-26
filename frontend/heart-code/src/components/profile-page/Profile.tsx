@@ -60,18 +60,4 @@ export default function Profile({ user, isPersonalPage }: Props) {
       ? "gender not specified"
       : gender;
   }
-
-  function convertAgePreference(
-    agePreference: AgePreference
-  ): string | undefined {
-    if (!agePreference.minAge) {
-      return undefined;
-    }
-
-    return (
-      "preferred age: " +
-      agePreference.minAge +
-      (agePreference.maxAge ? `-${agePreference.maxAge}` : "+")
-    );
-  }
 }
