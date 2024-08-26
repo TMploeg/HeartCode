@@ -24,8 +24,7 @@ public class MatchService {
     }
 
     Optional<Evaluation> possibleEvaluation =
-        evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(
-            evaluatee, evaluator);
+        evaluationRepository.findByEvaluatorAndEvaluatee(evaluatee, evaluator);
 
     if (!isLiked || possibleEvaluation.filter(evaluation1 -> evaluation1.isLiked()).isEmpty()) {
       return Optional.empty();

@@ -33,7 +33,6 @@ public class EvaluationService {
   }
 
   public Optional<Evaluation> getEvaluation(User evaluator, User evaluatee) {
-    return evaluationRepository.findByEvaluationIdEvaluatorAndEvaluationIdEvaluatee(
-        evaluator, evaluatee);
+    return evaluationRepository.findByEvaluatorAndEvaluatee(evaluator, evaluatee);
   }
 }
