@@ -157,7 +157,7 @@ function isValidAgePreference(
   }
 
   if (agePreference.minAge < MINIMUM_ACCEPTABLE_AGE) {
-    return { minAgeError: "Min age must be 18+" };
+    return { minAgeError: "Minimum age must be over 18" };
   }
 
   if (!agePreference.maxAge) {
@@ -165,7 +165,9 @@ function isValidAgePreference(
   }
 
   if (agePreference.maxAge < agePreference.minAge) {
-    return { maxAgeError: "Max age must be greater than or equals to min age" };
+    return {
+      maxAgeError: "Maximum age must be greater than or equal to min age",
+    };
   }
 
   return undefined;
