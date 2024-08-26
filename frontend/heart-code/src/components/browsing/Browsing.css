@@ -3,28 +3,36 @@
 }
 
 .profile {
-  height: 95%;
+  height: 90%;
 }
 
 .evaluationButton {
-  position: relative;
-  border-radius: 50px !important;
-  width: 40%;
-  height: 35px !important;
-  margin-left: 7%;
-  margin-top: 10px;
-  font-size: 23px !important;
-  line-height: 17px !important;
+  width: 50px;
+  height: 50px;
+  border-radius: 50% !important;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-bottom: 8px;
+  background-color: #c4256a !important;
+  border-color: #c4256a !important;
+  color: white !important;
+  font-size: 26px !important;
 }
 
 .buttonContainer {
-  position: absolute;
   width: 100%;
-  bottom: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 10%;
+  margin-top: 12px;
 }
 
 .noMoreUsersError {
   font-size: 25px;
+  color: #c4256a;
   width: 100%;
   text-align: center;
   margin: 0;
@@ -36,8 +44,7 @@
 
 .errorImage {
   font-size: 110px;
-  color: black;
-  background-color: yellow;
+  color: #c4256a;
   padding: 10px;
   border-radius: 20px;
 }
