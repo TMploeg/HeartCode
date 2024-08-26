@@ -21,8 +21,11 @@ public interface UserRepository
           + "FROM u.reveivedEvaluations e "
           + "WHERE e.evaluator.email = :currentUserEmail) "
           + "AND u.gender IN :currentUserPreferredGenders "
+          + "AND u.relationshipType IN :currentUserPreferredRelationshipTypes "
           + "ORDER BY RANDOM() LIMIT 1")
   Optional<User> getRandomUser(
       @Param("currentUserEmail") String currentUserEmail,
-      @Param("currentUserPreferredGenders") List<UserGender> preferredGenders);
+      @Param("currentUserPreferredGenders") List<UserGender> preferredGenders,
+      @Param("currentUserPreferredRelationshipTypes")
+          List<UserRelationshipType> preferredRelationShipTypes);
 }

@@ -49,7 +49,17 @@ public class UserService implements UserDetailsService {
                             })
             .toList();
 
-    return userRepository.getRandomUser(currentUser.getEmail(), preferredGenders);
+    List<UserRelationshipType> preferredRelationshipTypes =
+        Arrays.stream(UserRelationshipType.values())
+            .filter(
+                relType ->
+                    currentUser.getRelationshipType() == UserRelationshipType.OPEN_TO_ANYTHING
+                        || relType == UserRelationshipType.OPEN_TO_ANYTHING
+                        || currentUser.getRelationshipType() == relType)
+            .toList();
+
+    return userRepository.getRandomUser(
+        currentUser.getEmail(), preferredGenders, preferredRelationshipTypes);
   }
 
   public User save(
