@@ -8,5 +8,6 @@ export enum AppRoute {
   CHAT = "/chat",
   REGISTER = "/register",
   LOGIN = "/login",
+  START = "/start",
   ANY = "*",
 }
