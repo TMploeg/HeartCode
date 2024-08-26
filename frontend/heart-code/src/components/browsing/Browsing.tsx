@@ -4,9 +4,13 @@ import { useEffect, useState } from "react";
 import { User } from "../../models/User";
 import { useApi } from "../../hooks";
 import {
-  BsHandThumbsUpFill,
-  BsHandThumbsDownFill,
-  BsArrowThroughHeartFill,
+  BsFillPlugFill,
+  BsHeartFill,
+  BsHeartbreakFill,
+  BsPower,
+  BsPlugFill,
+  BsHeart,
+  BsX,
   BsBalloonHeartFill,
 } from "react-icons/bs";
 import "./Browsing.css";
@@ -53,17 +57,17 @@ export default function Browsing() {
           <div className="buttonContainer">
             <Button
               className="evaluationButton"
+              variant="outline-secondary"
               onClick={() => createEvaluation(false)}
-              variant="danger"
             >
-              <BsHandThumbsDownFill />
+              X
             </Button>
             <Button
               className="evaluationButton"
+              variant="outline-secondary"
               onClick={() => createEvaluation(true)}
-              variant="success"
             >
-              <BsHandThumbsUpFill />
+              <BsHeart />
             </Button>
           </div>
         </div>
