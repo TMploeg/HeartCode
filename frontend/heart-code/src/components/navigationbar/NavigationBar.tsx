@@ -2,7 +2,12 @@ import NavigationBarButton from "./NavigationBarButton";
 import "./NavigationBar.css";
 import { IconType } from "react-icons";
 import { AppRoute } from "../../enums/AppRoute";
-import { BsFillPersonFill, BsChat, BsSearch } from "react-icons/bs";
+import {
+  BsFillPersonFill,
+  BsChat,
+  BsSearch,
+  BsSearchHeart,
+} from "react-icons/bs";
 
 interface Props {
   currentPage: String;
@@ -36,6 +41,10 @@ export default function NavigationBar({ currentPage }: Props) {
       {
         path: AppRoute.HOME,
         icon: BsSearch,
+      },
+      {
+        path: AppRoute.LIKED,
+        icon: BsSearchHeart,
       },
       {
         path: AppRoute.MATCHES,
