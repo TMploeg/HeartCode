@@ -62,214 +62,226 @@ export default function RegisterPage({ onRegister }: Props) {
 
   return (
     <div className="auth-form">
-      <ProfilePictureInput
-        value={profilePictureData}
-        onChange={setProfilePictureData}
-      />
-      <InputGroup>
-        <Form.Control
-          placeholder="Email Address"
-          value={registerData.email.value}
-          onChange={(event) => registerData.email.set(event.target.value)}
-          isInvalid={
-            registerValidityState.email.touched &&
-            registerValidityState.email.error !== undefined
-          }
-          onBlur={() =>
-            setRegisterValidityState((data) => ({
-              ...data,
-              email: { ...data.email, touched: true },
-            }))
-          }
+      <div className="user-info">
+        <ProfilePictureInput
+          value={profilePictureData}
+          onChange={setProfilePictureData}
         />
-        <Form.Control.Feedback type="invalid">
-          {registerValidityState.email.error}
-        </Form.Control.Feedback>
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          placeholder="Alias"
-          value={registerData.alias.value}
-          onChange={(event) => registerData.alias.set(event.target.value)}
-          isInvalid={
-            registerValidityState.alias.touched &&
-            registerValidityState.alias.error !== undefined
-          }
-          onBlur={() =>
-            setRegisterValidityState((data) => ({
-              ...data,
-              alias: { ...data.alias, touched: true },
-            }))
-          }
-        />
-        <Form.Control.Feedback type="invalid">
-          {registerValidityState.alias.error}
-        </Form.Control.Feedback>
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          placeholder="Password"
-          value={registerData.password.value}
-          type={passwordVisible ? "text" : "password"}
-          onChange={(event) => registerData.password.set(event.target.value)}
-          isInvalid={
-            registerValidityState.password.touched &&
-            registerValidityState.password.error !== undefined
-          }
-          onBlur={() =>
-            setRegisterValidityState((data) => ({
-              ...data,
-              password: { ...data.password, touched: true },
-            }))
-          }
-        />
-        <Button
-          tabIndex={-1}
-          variant="outline-secondary"
-          className="visibility-button"
-          onClick={() => setPasswordVisible((visible) => !visible)}
-        >
-          <div className="icon-button-content">
-            {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
-          </div>
-        </Button>
-        <Form.Control.Feedback type="invalid">
-          {registerValidityState.password.error}
-        </Form.Control.Feedback>
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          placeholder="Confirm Password"
-          value={registerData.passwordConfirmation.value}
-          type={passwordConfirmationVisible ? "text" : "password"}
-          onChange={(event) =>
-            registerData.passwordConfirmation.set(event.target.value)
-          }
-          isInvalid={
-            registerValidityState.passwordConfirmation.touched &&
-            registerValidityState.passwordConfirmation.error !== undefined
-          }
-          onBlur={() =>
-            setRegisterValidityState((data) => ({
-              ...data,
-              passwordConfirmation: {
-                ...data.passwordConfirmation,
-                touched: true,
-              },
-            }))
-          }
-        />
-        <Button
-          tabIndex={-1}
-          variant="outline-secondary"
-          className="visibility-button"
-          onClick={() => setPasswordConfirmationVisible((visible) => !visible)}
-        >
-          <div className="icon-button-content">
-            {passwordConfirmationVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
-          </div>
-        </Button>
-        <Form.Control.Feedback type="invalid">
-          {registerValidityState.passwordConfirmation.error}
-        </Form.Control.Feedback>
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          placeholder="Birthday DD/MM/YYYY"
-          value={registerData.dateOfBirth.value}
-          onChange={(event) => registerData.dateOfBirth.set(event.target.value)}
-          isInvalid={
-            registerValidityState.dateOfBirth.touched &&
-            registerValidityState.dateOfBirth.error !== undefined
-          }
-          onBlur={() =>
-            setRegisterValidityState((data) => ({
-              ...data,
-              dateOfBirth: { ...data.dateOfBirth, touched: true },
-            }))
-          }
-        />
-        <Form.Control.Feedback type="invalid">
-          {registerValidityState.dateOfBirth.error}
-        </Form.Control.Feedback>
-      </InputGroup>
-      <InputGroup>
-        <Form.Select
-          onChange={(event) => registerData.gender.set(event.target.value)}
-          onBlur={() =>
-            setRegisterValidityState((data) => ({
-              ...data,
-              gender: { ...data.gender, touched: true },
-            }))
-          }
-        >
-          {genders.map((gender) => (
-            <option key={gender}>{gender}</option>
-          ))}
-        </Form.Select>
-      </InputGroup>
-      <InputGroup>
-        <Form.Control
-          as="textarea"
-          rows={5}
-          className="bio-field"
-          placeholder="Bio"
-          value={registerData.bio.value}
-          onChange={(event) => registerData.bio.set(event.target.value)}
-          onBlur={() =>
-            setRegisterValidityState((data) => ({
-              ...data,
-              bio: { ...data.bio, touched: true },
-            }))
-          }
-        />
-      </InputGroup>
-      <h6>Preferences</h6>
-      <InputGroup>
-        <Form.Select
-          onChange={(event) =>
-            registerData.relationshipType.set(event.target.value)
-          }
-          onBlur={() =>
-            setRegisterValidityState((data) => ({
-              ...data,
-              relationshipType: { ...data.relationshipType, touched: true },
-            }))
-          }
-        >
-          {relationshipTypes.map((relationshipType) => (
-            <option key={relationshipType}>{relationshipType}</option>
-          ))}
-        </Form.Select>
-      </InputGroup>
-      <InputGroup>
-        <Form.Select
-          onChange={(event) =>
-            registerData.genderPreference.set(event.target.value)
-          }
-          onBlur={() =>
-            setRegisterValidityState((data) => ({
-              ...data,
-              genderPreference: { ...data.genderPreference, touched: true },
-            }))
-          }
-        >
-          {genderPreferences.map((genderPreference) => (
-            <option key={genderPreference}>{genderPreference}</option>
-          ))}
-        </Form.Select>
-      </InputGroup>
-      <AgePreferenceInput
-        onChange={(newValue) => registerData.agePreference.set(newValue)}
-        validationState={registerValidityState.agePreference.error}
-        onBlur={() =>
-          setRegisterValidityState((data) => ({
-            ...data,
-            agePreference: { ...data.agePreference, touched: true },
-          }))
-        }
-        touched={registerValidityState.agePreference.touched}
-      />
+        <InputGroup>
+          <Form.Control
+            placeholder="Email Address"
+            value={registerData.email.value}
+            onChange={(event) => registerData.email.set(event.target.value)}
+            isInvalid={
+              registerValidityState.email.touched &&
+              registerValidityState.email.error !== undefined
+            }
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                email: { ...data.email, touched: true },
+              }))
+            }
+          />
+          <Form.Control.Feedback type="invalid">
+            {registerValidityState.email.error}
+          </Form.Control.Feedback>
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            placeholder="Alias"
+            value={registerData.alias.value}
+            onChange={(event) => registerData.alias.set(event.target.value)}
+            isInvalid={
+              registerValidityState.alias.touched &&
+              registerValidityState.alias.error !== undefined
+            }
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                alias: { ...data.alias, touched: true },
+              }))
+            }
+          />
+          <Form.Control.Feedback type="invalid">
+            {registerValidityState.alias.error}
+          </Form.Control.Feedback>
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            placeholder="Password"
+            value={registerData.password.value}
+            type={passwordVisible ? "text" : "password"}
+            onChange={(event) => registerData.password.set(event.target.value)}
+            isInvalid={
+              registerValidityState.password.touched &&
+              registerValidityState.password.error !== undefined
+            }
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                password: { ...data.password, touched: true },
+              }))
+            }
+          />
+          <Button
+            tabIndex={-1}
+            variant="outline-secondary"
+            className="visibility-button"
+            onClick={() => setPasswordVisible((visible) => !visible)}
+          >
+            <div className="icon-button-content">
+              {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
+            </div>
+          </Button>
+          <Form.Control.Feedback type="invalid">
+            {registerValidityState.password.error}
+          </Form.Control.Feedback>
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            placeholder="Confirm Password"
+            value={registerData.passwordConfirmation.value}
+            type={passwordConfirmationVisible ? "text" : "password"}
+            onChange={(event) =>
+              registerData.passwordConfirmation.set(event.target.value)
+            }
+            isInvalid={
+              registerValidityState.passwordConfirmation.touched &&
+              registerValidityState.passwordConfirmation.error !== undefined
+            }
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                passwordConfirmation: {
+                  ...data.passwordConfirmation,
+                  touched: true,
+                },
+              }))
+            }
+          />
+          <Button
+            tabIndex={-1}
+            variant="outline-secondary"
+            className="visibility-button"
+            onClick={() =>
+              setPasswordConfirmationVisible((visible) => !visible)
+            }
+          >
+            <div className="icon-button-content">
+              {passwordConfirmationVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
+            </div>
+          </Button>
+          <Form.Control.Feedback type="invalid">
+            {registerValidityState.passwordConfirmation.error}
+          </Form.Control.Feedback>
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            placeholder="Birthday DD/MM/YYYY"
+            value={registerData.dateOfBirth.value}
+            onChange={(event) =>
+              registerData.dateOfBirth.set(event.target.value)
+            }
+            isInvalid={
+              registerValidityState.dateOfBirth.touched &&
+              registerValidityState.dateOfBirth.error !== undefined
+            }
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                dateOfBirth: { ...data.dateOfBirth, touched: true },
+              }))
+            }
+          />
+          <Form.Control.Feedback type="invalid">
+            {registerValidityState.dateOfBirth.error}
+          </Form.Control.Feedback>
+        </InputGroup>
+        <InputGroup>
+          <Form.Select
+            onChange={(event) => registerData.gender.set(event.target.value)}
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                gender: { ...data.gender, touched: true },
+              }))
+            }
+          >
+            {genders.map((gender) => (
+              <option key={gender}>{gender}</option>
+            ))}
+          </Form.Select>
+        </InputGroup>
+        <InputGroup>
+          <Form.Control
+            as="textarea"
+            rows={5}
+            className="bio-field"
+            placeholder="Bio"
+            value={registerData.bio.value}
+            onChange={(event) => registerData.bio.set(event.target.value)}
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                bio: { ...data.bio, touched: true },
+              }))
+            }
+          />
+        </InputGroup>
+      </div>
+      <div className="preferences">
+        <h6>Preferences</h6>
+        <InputGroup>
+          <Form.Select
+            className="preference"
+            onChange={(event) =>
+              registerData.relationshipType.set(event.target.value)
+            }
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                relationshipType: { ...data.relationshipType, touched: true },
+              }))
+            }
+          >
+            {relationshipTypes.map((relationshipType) => (
+              <option key={relationshipType}>{relationshipType}</option>
+            ))}
+          </Form.Select>
+        </InputGroup>
+        <InputGroup>
+          <Form.Select
+            className="preference"
+            onChange={(event) =>
+              registerData.genderPreference.set(event.target.value)
+            }
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                genderPreference: { ...data.genderPreference, touched: true },
+              }))
+            }
+          >
+            {genderPreferences.map((genderPreference) => (
+              <option key={genderPreference}>{genderPreference}</option>
+            ))}
+          </Form.Select>
+        </InputGroup>
+        <div className="preference">
+          <AgePreferenceInput
+            onChange={(newValue) => registerData.agePreference.set(newValue)}
+            validationState={registerValidityState.agePreference.error}
+            onBlur={() =>
+              setRegisterValidityState((data) => ({
+                ...data,
+                agePreference: { ...data.agePreference, touched: true },
+              }))
+            }
+            touched={registerValidityState.agePreference.touched}
+          />
+        </div>
+      </div>
       <Button
         className="submit-button"
         disabled={isFormInvalid()}

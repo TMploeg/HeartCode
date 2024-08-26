@@ -4,15 +4,44 @@
   flex-direction: column;
   align-items: stretch;
   gap: 10px;
-  background: rgba(255, 255, 255, 0.6);
+  align-items: center;
   width: 80%;
   height: 80%;
   align-self: center;
   justify-self: center;
   width: 100%;
   height: 100%;
+  gap: 6px;
   overflow-y: scroll;
   overflow-x: hidden;
+  overflow-x: hidden;
+}
+
+.user-info {
+  width: 100vw;
+  font-weight: 900;
+  border-radius: 10px;
+  padding: 12px;
+  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.preferences {
+  width: 100vw;
+  color: rgb(115, 113, 113);
+  font-weight: 900;
+  border-radius: 10px;
+  padding: 12px;
+  gap: 8px !important;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.preference {
+  margin-top: 12px;
 }
 
 .input-field {
@@ -21,6 +50,7 @@
 
 .bio-field {
   margin-top: 10px;
+  margin-bottom: 16px;
   background: rgba(255, 255, 255, 0);
 }
 
@@ -39,7 +69,7 @@
 .submit-button {
   width: 100%;
   align-self: center;
-  margin: 8px;
+  margin: 12px;
   background-color: #c4256a !important;
   border-color: #c4256a !important;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;

@@ -31,6 +31,7 @@ export default function LoginPage({ onLogin }: Props) {
       <InputGroup>
         <Form.Control
           placeholder="Email Address"
+          style={{ marginBottom: "8px" }}
           value={loginData.email}
           onChange={(event) =>
             setLoginData((data) => ({ ...data, email: event.target.value }))

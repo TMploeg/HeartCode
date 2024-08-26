@@ -1,9 +1,9 @@
 enum GenderPreference {
-  MALE = "male",
-  FEMALE = "female",
-  NON_BINARY = "non-binary",
-  BINARY = "binary",
-  ANYONE = "anyone",
+  MALE = "Men",
+  FEMALE = "Women",
+  NON_BINARY = "Non-binary",
+  BINARY = "Binary",
+  ANYONE = "Anyone",
 }
 
 export default GenderPreference;
