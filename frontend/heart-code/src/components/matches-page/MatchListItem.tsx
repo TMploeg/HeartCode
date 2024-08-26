@@ -18,8 +18,8 @@ export default function MatchListItem({ match, onClick }: Props) {
 
   useEffect(() => {
     get<ChatMessage>("chat/lastmessage", { matchEmail: match.email }).then(
-      (response) => {
-        setLastmessage(response.data);
+      (response?) => {
+        setLastmessage(response?.data);
       }
     );
   }, []);
@@ -44,7 +44,7 @@ export default function MatchListItem({ match, onClick }: Props) {
               )}
             </div>
           ) : (
-            <div></div>
+            <></>
           )}
         </div>
       </div>

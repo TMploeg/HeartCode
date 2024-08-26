@@ -6,6 +6,8 @@ import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +43,7 @@ public class ChatMessageController {
   }
 
   @GetMapping("/lastmessage")
-  public ChatMessageDTO getLastMessage(@RequestParam String matchEmail) {
+  public Optional<ChatMessageDTO> getLastMessage(@RequestParam String matchEmail) {
     if (userService.isInvalidEmail(matchEmail)) {
       throw new BadRequestException("param 'matchEmail' is not a valid email address");
     }
@@ -59,10 +61,13 @@ public class ChatMessageController {
 
     ChatMessage lastmessage = chatMessageService.getLastMessage(currentUser, targetUser);
 
-    return new ChatMessageDTO(
-        lastmessage.getText(),
-        lastmessage.getSender().getEmail().equals(currentUser.getEmail()),
-        lastmessage.getDateTime());
+    if (lastmessage != null ) {
+      return new ChatMessageDTO(
+              lastmessage.getText(),
+              lastmessage.getSender().getEmail().equals(currentUser.getEmail()),
+              lastmessage.getDateTime());
+    }
+
   }
 
   private List<ChatMessageDTO> convertToDTO(List<ChatMessage> messages, User currentUser) {
