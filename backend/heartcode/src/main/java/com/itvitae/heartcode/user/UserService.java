@@ -1,19 +1,17 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
-import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,22 +29,27 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
-  public User findRandomUser() {
-    Specification<User> spec =
-        Specification.where(UserSpecification.isNotSelf(getCurrentUser().getEmail()))
-            .and(UserSpecification.isNotEvaluated(getCurrentUser()));
+  public Optional<User> findRandomUser() {
+    User currentUser = getCurrentUser();
 
-    List<User> userSet = userRepository.findAll(spec);
-    Random r = new Random();
-    Optional<User> randomUser =
-        switch (userSet.size()) {
-          case 0 -> Optional.empty();
-          case 1 -> Optional.of(userSet.get(0));
-          default -> Optional.of(userSet.get(r.nextInt(userSet.size() - 1)));
-        };
+    List<UserGender> preferredGenders =
+        Arrays.stream(UserGender.values())
+            .filter(
+                gender ->
+                    gender == UserGender.OTHER
+                        || gender == UserGender.PREFER_NOT_TO_SAY
+                        || currentUser.getGenderPreference() == GenderPreference.ANYONE
+                        || gender
+                            == switch (currentUser.getGenderPreference()) {
+                              case MALE -> UserGender.MALE;
+                              case FEMALE -> UserGender.FEMALE;
+                              case NON_BINARY -> UserGender.NON_BINARY;
+                              case BINARY -> UserGender.BINARY;
+                              default -> throw new RuntimeException("should not reach");
+                            })
+            .toList();
 
-    return randomUser.orElseThrow(
-        () -> new NotFoundException("There are no more users left to evaluate"));
+    return userRepository.getRandomUser(currentUser.getEmail(), preferredGenders);
   }
 
   public User save(
