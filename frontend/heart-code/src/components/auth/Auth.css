@@ -72,7 +72,7 @@
   height: 100%;
 }
 
-.checkbox {
+.checkbox:checked {
   background-color: #c4256a !important;
   border-color: #c4256a !important;
 }
