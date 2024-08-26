@@ -75,6 +75,7 @@ export default function AgePreferenceInput({
       <div className="age-preference-fields-container">
         <InputGroup>
           <InputGroup.Checkbox
+            className="checkbox"
             tabIndex={-1}
             checked={isMinAgeEnabled()}
             onChange={(e) =>
@@ -102,7 +103,7 @@ export default function AgePreferenceInput({
             }
             onBlur={onBlur}
           />
-          <Form.Control.Feedback type="invalid">
+          <Form.Control.Feedback className="invalidFeedback" type="invalid">
             {minAgeValid
               ? validationState?.minAgeError
               : INVALID_NUMBER_MESSAGE}
@@ -110,6 +111,7 @@ export default function AgePreferenceInput({
         </InputGroup>
         <InputGroup>
           <InputGroup.Checkbox
+            className="checkbox"
             tabIndex={-1}
             disabled={!isMinAgeEnabled()}
             checked={isMaxAgeEnabled()}
@@ -145,7 +147,7 @@ export default function AgePreferenceInput({
             }
             onBlur={onBlur}
           />
-          <Form.Control.Feedback type="invalid">
+          <Form.Control.Feedback className="invalidFeedback" type="invalid">
             {maxAgeValid
               ? validationState?.maxAgeError
               : INVALID_NUMBER_MESSAGE}

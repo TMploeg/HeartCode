@@ -83,7 +83,7 @@ export default function RegisterPage({ onRegister }: Props) {
               }))
             }
           />
-          <Form.Control.Feedback type="invalid">
+          <Form.Control.Feedback className="invalidFeedback" type="invalid">
             {registerValidityState.email.error}
           </Form.Control.Feedback>
         </InputGroup>
@@ -103,7 +103,7 @@ export default function RegisterPage({ onRegister }: Props) {
               }))
             }
           />
-          <Form.Control.Feedback type="invalid">
+          <Form.Control.Feedback className="invalidFeedback" type="invalid">
             {registerValidityState.alias.error}
           </Form.Control.Feedback>
         </InputGroup>
@@ -134,7 +134,7 @@ export default function RegisterPage({ onRegister }: Props) {
               {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
             </div>
           </Button>
-          <Form.Control.Feedback type="invalid">
+          <Form.Control.Feedback className="invalidFeedback" type="invalid">
             {registerValidityState.password.error}
           </Form.Control.Feedback>
         </InputGroup>
@@ -172,7 +172,7 @@ export default function RegisterPage({ onRegister }: Props) {
               {passwordConfirmationVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
             </div>
           </Button>
-          <Form.Control.Feedback type="invalid">
+          <Form.Control.Feedback className="invalidFeedback" type="invalid">
             {registerValidityState.passwordConfirmation.error}
           </Form.Control.Feedback>
         </InputGroup>
@@ -194,7 +194,7 @@ export default function RegisterPage({ onRegister }: Props) {
               }))
             }
           />
-          <Form.Control.Feedback type="invalid">
+          <Form.Control.Feedback className="invalidFeedback" type="invalid">
             {registerValidityState.dateOfBirth.error}
           </Form.Control.Feedback>
         </InputGroup>
