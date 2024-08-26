@@ -54,10 +54,6 @@
   background: rgba(255, 255, 255, 0);
 }
 
-.invalidFeedback {
-  color: #c4256a !important;
-}
-
 .submit-button {
   width: 100%;
   align-self: center;

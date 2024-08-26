@@ -103,7 +103,7 @@ export default function AgePreferenceInput({
             }
             onBlur={onBlur}
           />
-          <Form.Control.Feedback className="invalidFeedback" type="invalid">
+          <Form.Control.Feedback type="invalid">
             {minAgeValid
               ? validationState?.minAgeError
               : INVALID_NUMBER_MESSAGE}
@@ -147,7 +147,7 @@ export default function AgePreferenceInput({
             }
             onBlur={onBlur}
           />
-          <Form.Control.Feedback className="invalidFeedback" type="invalid">
+          <Form.Control.Feedback type="invalid">
             {maxAgeValid
               ? validationState?.maxAgeError
               : INVALID_NUMBER_MESSAGE}
