@@ -69,7 +69,9 @@ export default function LoginPage({ onLogin }: Props) {
           <div key={index}>{err}</div>
         ))}
       </div>
-      <Link to="/register">or register if you do not yet have an account</Link>
+      <Link style={{ color: "#c4256a" }} to="/register">
+        Register
+      </Link>
     </div>
   );
 
