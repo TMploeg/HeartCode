@@ -114,8 +114,9 @@ public class Seeder implements CommandLineRunner {
     UserRelationshipType relationshipType =
         obj.getEnum(UserRelationshipType.class, SeedDataField.RELATIONSHIP_TYPE.getName());
 
-    String email = name.toLowerCase() + SEED_USER_EMAIL_APPENDIX;
-    String password = passwordEncoder.encode(name + SEED_USER_PASSWORD_APPENDIX);
+    String lowercaseName = name.toLowerCase();
+    String email = lowercaseName + SEED_USER_EMAIL_APPENDIX;
+    String password = passwordEncoder.encode(lowercaseName + SEED_USER_PASSWORD_APPENDIX);
     LocalDate dateOfBirth = parseDateOfBirth(birthday, age);
 
     ProfilePicture profilePicture =
