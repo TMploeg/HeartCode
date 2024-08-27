@@ -1,13 +1,14 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.exceptions.BadRequestException;
-import com.itvitae.heartcode.exceptions.NotFoundException;
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -28,18 +29,41 @@ public class UserService implements UserDetailsService {
     return userRepository.findById(address);
   }
 
-  public User findRandomUser() {
-    User randomUser =
-        userRepository
-            .findRandomUserExcludingCurrentAndEvaluator(getCurrentUser().getEmail())
-            .stream()
-            .findFirst()
-            .orElse(null);
-    if (randomUser != null) {
-      return randomUser;
-    } else {
-      throw new NotFoundException("There are no more users left to evaluate");
-    }
+  public Optional<User> findRandomUser() {
+    User currentUser = getCurrentUser();
+
+    return userRepository.getRandomUser(
+        currentUser.getEmail(),
+        getPreferredGenders(currentUser),
+        getPreferredRelationshipTypes(currentUser));
+  }
+
+  private static List<UserGender> getPreferredGenders(User user) {
+    return Arrays.stream(UserGender.values())
+        .filter(
+            gender ->
+                gender == UserGender.OTHER
+                    || gender == UserGender.PREFER_NOT_TO_SAY
+                    || user.getGenderPreference() == GenderPreference.ANYONE
+                    || gender
+                        == switch (user.getGenderPreference()) {
+                          case MALE -> UserGender.MALE;
+                          case FEMALE -> UserGender.FEMALE;
+                          case NON_BINARY -> UserGender.NON_BINARY;
+                          case BINARY -> UserGender.BINARY;
+                          default -> throw new RuntimeException("should not reach");
+                        })
+        .toList();
+  }
+
+  private List<UserRelationshipType> getPreferredRelationshipTypes(User user) {
+    return Arrays.stream(UserRelationshipType.values())
+        .filter(
+            relType ->
+                user.getRelationshipType() == UserRelationshipType.OPEN_TO_ANYTHING
+                    || relType == UserRelationshipType.OPEN_TO_ANYTHING
+                    || user.getRelationshipType() == relType)
+        .toList();
   }
 
   public User save(

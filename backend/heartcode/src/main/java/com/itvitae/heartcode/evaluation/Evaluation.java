@@ -7,22 +7,18 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
+@Getter
+@IdClass(EvaluationId.class)
 public class Evaluation {
 
-  @EmbeddedId private EvaluationId evaluationId;
+  @Id private User evaluator;
+  @Id private User evaluatee;
 
-  @Getter private boolean liked;
-
-  public User getEvaluator() {
-    return evaluationId.getEvaluator();
-  }
-
-  public User getEvaluatee() {
-    return evaluationId.getEvaluatee();
-  }
+  private boolean liked;
 
   public Evaluation(User evaluator, User evaluatee, boolean liked) {
-    this.evaluationId = new EvaluationId(evaluator, evaluatee);
+    this.evaluator = evaluator;
+    this.evaluatee = evaluatee;
     this.liked = liked;
   }
 }
