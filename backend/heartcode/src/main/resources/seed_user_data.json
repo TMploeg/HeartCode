@@ -1,0 +1,568 @@
+[
+  {
+    "name": "Abdul",
+    "gender": "MALE",
+    "birthday": "04/23",
+    "age": 20,
+    "gender_preference": "FEMALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 18,
+      "max_age": 26
+    }
+  },
+  {
+    "name": "Lewis",
+    "gender": "MALE",
+    "birthday": "02/06",
+    "age": 35,
+    "gender_preference": "FEMALE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 30,
+      "max_age": 40
+    }
+  },
+  {
+    "name": "Leon",
+    "gender": "NON_BINARY",
+    "birthday": "07/22",
+    "age": 27,
+    "gender_preference": "ANYONE",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 20,
+      "max_age": 33
+    }
+  },
+  {
+    "name": "Lucas",
+    "gender": "MALE",
+    "birthday": "05/11",
+    "age": 23,
+    "gender_preference": "MALE",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 18,
+      "max_age": 30
+    }
+  },
+  {
+    "name": "Marcel",
+    "gender": "MALE",
+    "birthday": "06/09",
+    "age": 28,
+    "gender_preference": "FEMALE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 28,
+      "max_age": 30
+    }
+  },
+  {
+    "name": "Laurence",
+    "gender": "OTHER",
+    "birthday": "02/21",
+    "age": 38,
+    "gender_preference": "NON_BINARY",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 30,
+      "max_age": 40
+    }
+  },
+  {
+    "name": "David",
+    "gender": "MALE",
+    "birthday": "12/29",
+    "age": 31,
+    "gender_preference": "FEMALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 30,
+      "max_age": 39
+    }
+  },
+  {
+    "name": "Joseph",
+    "gender": "BINARY",
+    "birthday": "11/09",
+    "age": 23,
+    "gender_preference": "BINARY",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 19,
+      "max_age": 26
+    }
+  },
+  {
+    "name": "Jean",
+    "gender": "NON_BINARY",
+    "birthday": "12/27",
+    "age": 19,
+    "gender_preference": "BINARY",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 18,
+      "max_age": 24
+    }
+  },
+  {
+    "name": "Willard",
+    "gender": "MALE",
+    "birthday": "04/26",
+    "age": 31,
+    "gender_preference": "FEMALE",
+    "relationship_type": "CASUAL"
+  },
+  {
+    "name": "Jodie",
+    "gender": "MALE",
+    "birthday": "02/09",
+    "age": 35,
+    "gender_preference": "MALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 35,
+      "max_age": 30
+    }
+  },
+  {
+    "name": "Mason",
+    "gender": "MALE",
+    "birthday": "03/14",
+    "age": 32,
+    "gender_preference": "NON_BINARY",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 32,
+      "max_age": 36
+    }
+  },
+  {
+    "name": "Terry",
+    "gender": "MALE",
+    "birthday": "05/16",
+    "age": 23,
+    "gender_preference": "ANYONE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 20,
+      "max_age": 29
+    }
+  },
+  {
+    "name": "Maya",
+    "gender": "OTHER",
+    "birthday": "08/28",
+    "age": 29,
+    "gender_preference": "FEMALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 25,
+      "max_age": 32
+    }
+  },
+  {
+    "name": "Jake",
+    "gender": "MALE",
+    "birthday": "07/17",
+    "age": 28,
+    "gender_preference": "MALE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 23,
+      "max_age": 33
+    }
+  },
+  {
+    "name": "Lee",
+    "gender": "MALE",
+    "birthday": "10/17",
+    "age": 26,
+    "gender_preference": "FEMALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 18,
+      "max_age": 34
+    }
+  },
+  {
+    "name": "Bilal",
+    "gender": "NON_BINARY",
+    "birthday": "07/22",
+    "age": 19,
+    "gender_preference": "MALE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 18,
+      "max_age": 24
+    }
+  },
+  {
+    "name": "Stella",
+    "gender": "BINARY",
+    "birthday": "06/27",
+    "age": 32,
+    "gender_preference": "ANYONE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 27,
+      "max_age": 36
+    }
+  },
+  {
+    "name": "Ioan",
+    "gender": "MALE",
+    "birthday": "08/08",
+    "age": 29,
+    "gender_preference": "NON_BINARY",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 25,
+      "max_age": 31
+    }
+  },
+  {
+    "name": "Nicholas",
+    "gender": "MALE",
+    "birthday": "12/23",
+    "age": 34,
+    "gender_preference": "FEMALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 30,
+      "max_age": 38
+    }
+  },
+  {
+    "name": "Spencer",
+    "gender": "NON_BINARY",
+    "birthday": "02/27",
+    "age": 28,
+    "gender_preference": "FEMALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 27,
+      "max_age": 29
+    }
+  },
+  {
+    "name": "Rafael",
+    "gender": "MALE",
+    "birthday": "08/12",
+    "age": 32,
+    "gender_preference": "FEMALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 27,
+      "max_age": 34
+    }
+  },
+  {
+    "name": "Josh",
+    "gender": "MALE",
+    "birthday": "03/16",
+    "age": 25,
+    "gender_preference": "ANYONE",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 21,
+      "max_age": 29
+    }
+  },
+  {
+    "name": "Alex",
+    "gender": "MALE",
+    "birthday": "09/27",
+    "age": 21,
+    "gender_preference": "ANYONE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 18,
+      "max_age": 25
+    }
+  },
+  {
+    "name": "Anthony",
+    "gender": "MALE",
+    "birthday": "01/10",
+    "age": 39,
+    "gender_preference": "FEMALE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 35,
+      "max_age": 44
+    }
+  },
+  {
+    "name": "Jim",
+    "gender": "OTHER",
+    "birthday": "09/01",
+    "age": 38,
+    "gender_preference": "BINARY",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 33,
+      "max_age": 39
+    }
+  },
+  {
+    "name": "Usman",
+    "gender": "MALE",
+    "birthday": "03/15",
+    "age": 19,
+    "gender_preference": "FEMALE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 18,
+      "max_age": 20
+    }
+  },
+  {
+    "name": "Mariam",
+    "gender": "FEMALE",
+    "birthday": "11/09",
+    "age": 31,
+    "gender_preference": "MALE",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 30,
+      "max_age": 38
+    }
+  },
+  {
+    "name": "Kimberly",
+    "gender": "FEMALE",
+    "birthday": "04/06",
+    "age": 29,
+    "gender_preference": "MALE",
+    "relationship_type": "OPEN_TO_ANYTHING"
+  },
+  {
+    "name": "Samantha",
+    "gender": "FEMALE",
+    "birthday": "02/23",
+    "age": 30,
+    "gender_preference": "FEMALE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 28
+    }
+  },
+  {
+    "name": "Taylor",
+    "gender": "NON_BINARY",
+    "birthday": "09/27",
+    "age": 37,
+    "gender_preference": "BINARY",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 35
+    }
+  },
+  {
+    "name": "Annie",
+    "gender": "FEMALE",
+    "birthday": "04/30",
+    "age": 27,
+    "gender_preference": "NON_BINARY",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 22,
+      "max_age": 29
+    }
+  },
+  {
+    "name": "Evie",
+    "gender": "OTHER",
+    "birthday": "02/11",
+    "age": 31,
+    "gender_preference": "ANYONE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 20,
+      "max_age": 28
+    }
+  },
+  {
+    "name": "Ayesha",
+    "gender": "FEMALE",
+    "birthday": "07/08",
+    "age": 31,
+    "gender_preference": "ANYONE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 28,
+      "max_age": 34
+    }
+  },
+  {
+    "name": "Lola",
+    "gender": "FEMALE",
+    "birthday": "08/14",
+    "age": 31,
+    "gender_preference": "MALE",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 30,
+      "max_age": 32
+    }
+  },
+  {
+    "name": "Tiffany",
+    "gender": "BINARY",
+    "birthday": "07/26",
+    "age": 22,
+    "gender_preference": "NON_BINARY",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 18,
+      "max_age": 30
+    }
+  },
+  {
+    "name": "Flora",
+    "gender": "FEMALE",
+    "birthday": "12/18",
+    "age": 23,
+    "gender_preference": "MALE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 20,
+      "max_age": 30
+    }
+  },
+  {
+    "name": "Mia",
+    "gender": "NON_BINARY",
+    "birthday": "08/08",
+    "age": 28,
+    "gender_preference": "FEMALE",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 24,
+      "max_age": 33
+    }
+  },
+  {
+    "name": "Yasmin",
+    "gender": "FEMALE",
+    "birthday": "04/27",
+    "age": 35,
+    "gender_preference": "MALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 32,
+      "max_age": 38
+    }
+  },
+  {
+    "name": "Erica",
+    "gender": "FEMALE",
+    "birthday": "08/19",
+    "age": 37,
+    "gender_preference": "ANYONE",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 30,
+      "max_age": 37
+    }
+  },
+  {
+    "name": "Amina",
+    "gender": "FEMALE",
+    "birthday": "03/13",
+    "age": 22,
+    "gender_preference": "BINARY",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 20,
+      "max_age": 24
+    }
+  },
+  {
+    "name": "Leona",
+    "gender": "OTHER",
+    "birthday": "02/20",
+    "age": 19,
+    "gender_preference": "MALE",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 19,
+      "max_age": 19
+    }
+  },
+  {
+    "name": "Nia",
+    "gender": "NON_BINARY",
+    "birthday": "04/20",
+    "age": 29,
+    "gender_preference": "FEMALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 27,
+      "max_age": 35
+    }
+  },
+  {
+    "name": "Miriam",
+    "gender": "FEMALE",
+    "birthday": "03/27",
+    "age": 32,
+    "gender_preference": "FEMALE",
+    "relationship_type": "OPEN_TO_ANYTHING",
+    "age_preference": {
+      "min_age": 27,
+      "max_age": 36
+    }
+  },
+  {
+    "name": "Jay",
+    "gender": "BINARY",
+    "birthday": "07/02",
+    "age": 35,
+    "gender_preference": "MALE",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 30,
+      "max_age": 36
+    }
+  },
+  {
+    "name": "Hayley",
+    "gender": "NON_BINARY",
+    "birthday": "01/17",
+    "age": 30,
+    "gender_preference": "MALE",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 29,
+      "max_age": 32
+    }
+  },
+  {
+    "name": "Michelle",
+    "gender": "FEMALE",
+    "birthday": "07/25",
+    "age": 26,
+    "gender_preference": "NON_BINARY",
+    "relationship_type": "SERIOUS_COMMITMENT",
+    "age_preference": {
+      "min_age": 25,
+      "max_age": 30
+    }
+  },
+  {
+    "name": "Daisy",
+    "gender": "FEMALE",
+    "birthday": "06/15",
+    "age": 18,
+    "gender_preference": "BINARY",
+    "relationship_type": "CASUAL",
+    "age_preference": {
+      "min_age": 18,
+      "max_age": 27
+    }
+  }
+]

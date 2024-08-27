@@ -1,14 +1,17 @@
 package com.itvitae.heartcode.user;
 
 import com.itvitae.heartcode.evaluation.Evaluation;
+import com.itvitae.heartcode.match.Match;
 import com.itvitae.heartcode.profilepictures.ProfilePicture;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -53,8 +56,14 @@ public class User implements UserDetails {
   @Setter
   @Enumerated(EnumType.ORDINAL)
   private UserRelationshipType relationshipType;
-  
+
   @Setter @Embedded private AgePreference agePreference;
+
+  @OneToMany(mappedBy = "user1")
+  private Set<Match> matches1;
+
+  @OneToMany(mappedBy = "user2")
+  private Set<Match> matches2;
 
   public User(
       String email,
@@ -86,6 +95,11 @@ public class User implements UserDetails {
 
   public Optional<AgePreference> getAgePreference() {
     return Optional.ofNullable(this.agePreference);
+  }
+
+  public Set<Match> getMatches() {
+    return Stream.concat(this.matches1.stream(), this.matches2.stream())
+        .collect(Collectors.toSet());
   }
 
   @Override
