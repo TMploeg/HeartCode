@@ -17,11 +17,11 @@ export default function MatchListItem({ match, onClick }: Props) {
   const [lastMessage, setLastmessage] = useState<ChatMessage>();
 
   useEffect(() => {
-    get<ChatMessage>("chat/lastmessage", { matchEmail: match.email }).then(
-      (response?) => {
-        setLastmessage(response?.data);
-      }
-    );
+    get<ChatMessage>("chat/lastmessage", { matchEmail: match.email })
+      .then((response) => {
+        setLastmessage(response.data);
+      })
+      .catch((error) => console.log(error.response.data));
   }, []);
 
   return (
@@ -33,13 +33,13 @@ export default function MatchListItem({ match, onClick }: Props) {
       <div>
         <div className="match-alias-display">{match.alias}</div>
         <div className="last-message">
-          {lastMessage !== undefined && lastMessage !== null ? (
+          {lastMessage?.text !== undefined && lastMessage?.text !== null ? (
             <div>
               {lastMessage.owned ? (
-                <p>You: {lastMessage.text}</p>
+                <p>You: {lastMessage?.text}</p>
               ) : (
                 <p>
-                  {match.alias}: {lastMessage.text}
+                  {match.alias}: {lastMessage?.text}
                 </p>
               )}
             </div>

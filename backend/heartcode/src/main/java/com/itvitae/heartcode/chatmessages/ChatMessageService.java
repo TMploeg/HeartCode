@@ -5,8 +5,6 @@ import com.itvitae.heartcode.user.UserService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +19,7 @@ public class ChatMessageService {
     return chatMessageRepository.getAllForUsers(user1, user2);
   }
 
-  public Optional<ChatMessage> getLastMessage(User user1, User user2) {
+  public ChatMessage getLastMessage(User user1, User user2) {
     return chatMessageRepository.getLastMessage(user1, user2);
   }
 

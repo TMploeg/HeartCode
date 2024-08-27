@@ -59,14 +59,16 @@ public class ChatMessageController {
             .findById(matchEmail)
             .orElseThrow(() -> new BadRequestException("user '" + matchEmail + "' not found"));
 
-    Optional<ChatMessage> lastMessage = chatMessageService.getLastMessage(currentUser, targetUser);
+    ChatMessage lastMessage = chatMessageService.getLastMessage(currentUser, targetUser);
 
-    if (lastMessage.isPresent()) {
-      return new ChatMessageDTO(
-          lastMessage.getText(),
-          lastMessage.getSender().getEmail().equals(currentUser.getEmail()),
-          lastMessage.getDateTime());
+    if (lastMessage == null) {
+      throw new BadRequestException("No message to show");
     }
+
+    return new ChatMessageDTO(
+        lastMessage.getText(),
+        lastMessage.getSender().getEmail().equals(currentUser.getEmail()),
+        lastMessage.getDateTime());
   }
 
   private List<ChatMessageDTO> convertToDTO(List<ChatMessage> messages, User currentUser) {
