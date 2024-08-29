@@ -98,6 +98,7 @@ export default function LoginPage({ onLogin }: Props) {
               email: { ...data.email, touched: true },
             }))
           }
+          onKeyUp={handleInputKeyUp}
         />
         <Form.Control.Feedback type="invalid">
           {loginFieldState.email.error}
@@ -125,6 +126,7 @@ export default function LoginPage({ onLogin }: Props) {
               password: { ...data.password, touched: true },
             }))
           }
+          onKeyUp={handleInputKeyUp}
         />
         <Button
           variant="outline-secondary"
@@ -166,5 +168,11 @@ export default function LoginPage({ onLogin }: Props) {
     login(loginData)
       .then(onLogin)
       .catch(() => setLoginFailed(true));
+  }
+
+  function handleInputKeyUp(event: React.KeyboardEvent) {
+    if (canSubmit() && event.key === "Enter") {
+      submit();
+    }
   }
 }
