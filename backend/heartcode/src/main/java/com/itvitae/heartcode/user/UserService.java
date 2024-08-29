@@ -32,10 +32,31 @@ public class UserService implements UserDetailsService {
   public Optional<User> findRandomUser() {
     User currentUser = getCurrentUser();
 
+    AgePreference agePreference = getNonNullAgePreference(currentUser);
+
+    System.out.println(
+        "AGE_PREFERENCE: { minAge: "
+            + agePreference.getMinAge()
+            + ", maxAge: "
+            + agePreference.getMaxAge()
+            + " }");
     return userRepository.getRandomUser(
         currentUser.getEmail(),
         getPreferredGenders(currentUser),
-        getPreferredRelationshipTypes(currentUser));
+        getPreferredRelationshipTypes(currentUser),
+        agePreference.getMinAge(),
+        agePreference.getMaxAge());
+  }
+
+  private AgePreference getNonNullAgePreference(User user) {
+    return user.getAgePreference()
+        .map(
+            pref ->
+                new AgePreference(
+                    pref.getMinAge() != null ? pref.getMinAge() : userRepository.getLowestAge(),
+                    pref.getMaxAge() != null ? pref.getMaxAge() : userRepository.getHighestAge()))
+        .orElseGet(
+            () -> new AgePreference(userRepository.getLowestAge(), userRepository.getHighestAge()));
   }
 
   private static List<UserGender> getPreferredGenders(User user) {
