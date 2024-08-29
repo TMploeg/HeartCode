@@ -37,3 +37,9 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin: 150px;
+}

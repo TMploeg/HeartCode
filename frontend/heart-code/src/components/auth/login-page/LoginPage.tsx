@@ -64,12 +64,14 @@ export default function LoginPage({ onLogin }: Props) {
       >
         Login
       </Button>
+      <Link style={{ color: "#c4256a" }} to="/register">
+        Register
+      </Link>
       <div className="auth-form-errors">
         {formErrors.map((err, index) => (
           <div key={index}>{err}</div>
         ))}
       </div>
-      <Link to="/register">or register if you do not yet have an account</Link>
     </div>
   );
 

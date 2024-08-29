@@ -18,8 +18,6 @@ export default function Profile({ user, isPersonalPage }: Props) {
   const getProfilePictureURL = useProfilePicture();
   const { logout } = useAuthentication();
 
-  const agePreferenceDisplay = convertAgePreference(user.agePreference);
-
   return (
     <div className="profile-page">
       <Card className="profile-card">
@@ -33,9 +31,6 @@ export default function Profile({ user, isPersonalPage }: Props) {
             {convertGender(user.gender)}, {user.age}
           </Card.Subtitle>
           <Card.Subtitle>{user.relationshipType}</Card.Subtitle>
-          {agePreferenceDisplay && (
-            <Card.Subtitle>{agePreferenceDisplay}</Card.Subtitle>
-          )}
           <Card className="bio">
             <Card.Text>{user.bio}</Card.Text>
           </Card>
@@ -64,19 +59,5 @@ export default function Profile({ user, isPersonalPage }: Props) {
     return gender === Gender.PREFER_NOT_TO_SAY
       ? "gender not specified"
       : gender;
-  }
-
-  function convertAgePreference(
-    agePreference: AgePreference
-  ): string | undefined {
-    if (!agePreference.minAge) {
-      return undefined;
-    }
-
-    return (
-      "preferred age: " +
-      agePreference.minAge +
-      (agePreference.maxAge ? `-${agePreference.maxAge}` : "+")
-    );
   }
 }
