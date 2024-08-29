@@ -1,13 +1,20 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import "../Auth.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthentication } from "../../../hooks";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import LoginData from "../../../models/LoginData";
 
-interface LoginData {
-  email: string;
-  password: string;
+interface LoginFieldData {
+  email: LoginFieldState;
+  password: LoginFieldState;
+}
+
+interface LoginFieldState {
+  invalid: boolean;
+  error?: string;
+  touched: boolean;
 }
 
 interface Props {
@@ -19,12 +26,54 @@ export default function LoginPage({ onLogin }: Props) {
     email: "",
     password: "",
   });
-  const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
+  const [loginFieldState, setLoginFieldState] = useState<LoginFieldData>({
+    email: {
+      invalid: false,
+      touched: false,
+    },
+    password: {
+      invalid: false,
+      touched: false,
+    },
+  });
 
-  const navigate = useNavigate();
+  const [passwordVisible, setPasswordVisible] = useState<Boolean>(false);
+  const [loginFailed, setLoginFailed] = useState<boolean>(false);
+
   const { login } = useAuthentication();
 
-  const formErrors = getFormErrors();
+  useEffect(() => {
+    const emailInvalid = loginData.email.length === 0;
+    const passwordInvalid = loginData.password.length === 0;
+
+    setLoginFieldState((data) => ({
+      ...data,
+      email: {
+        ...data.email,
+        invalid: emailInvalid,
+        error: emailInvalid ? "Email is required" : undefined,
+      },
+      password: {
+        ...data.password,
+        invalid: passwordInvalid,
+        error: passwordInvalid ? "Password is required" : undefined,
+      },
+    }));
+  }, [loginData]);
+
+  useEffect(() => {
+    setLoginFieldState((data) => ({
+      ...data,
+      email: {
+        ...data.email,
+        touched: false,
+      },
+      password: {
+        ...data.password,
+        touched: false,
+      },
+    }));
+  }, [loginFailed]);
 
   return (
     <div className="auth-form">
@@ -34,9 +83,25 @@ export default function LoginPage({ onLogin }: Props) {
           style={{ marginBottom: "8px" }}
           value={loginData.email}
           onChange={(event) =>
-            setLoginData((data) => ({ ...data, email: event.target.value }))
+            setLoginData((data) => ({
+              ...data,
+              email: event.target.value,
+            }))
+          }
+          isInvalid={
+            (loginFieldState.email.touched && loginFieldState.email.invalid) ||
+            (!loginFieldState.email.touched && loginFailed)
+          }
+          onBlur={() =>
+            setLoginFieldState((data) => ({
+              ...data,
+              email: { ...data.email, touched: true },
+            }))
           }
         />
+        <Form.Control.Feedback type="invalid">
+          {loginFieldState.email.error}
+        </Form.Control.Feedback>
       </InputGroup>
       <InputGroup>
         <Form.Control
@@ -44,7 +109,21 @@ export default function LoginPage({ onLogin }: Props) {
           type={passwordVisible ? "text" : "password"}
           value={loginData.password}
           onChange={(event) =>
-            setLoginData((data) => ({ ...data, password: event.target.value }))
+            setLoginData((data) => ({
+              ...data,
+              password: event.target.value,
+            }))
+          }
+          isInvalid={
+            (loginFieldState.password.touched &&
+              loginFieldState.password.invalid) ||
+            (!loginFieldState.password.touched && loginFailed)
+          }
+          onBlur={() =>
+            setLoginFieldState((data) => ({
+              ...data,
+              password: { ...data.password, touched: true },
+            }))
           }
         />
         <Button
@@ -56,10 +135,13 @@ export default function LoginPage({ onLogin }: Props) {
             {passwordVisible ? <BsEyeFill /> : <BsEyeSlashFill />}
           </div>
         </Button>
+        <Form.Control.Feedback type="invalid">
+          {loginFieldState.password.error}
+        </Form.Control.Feedback>
       </InputGroup>
       <Button
         className="submit-button"
-        disabled={formErrors.length > 0}
+        disabled={!canSubmit()}
         onClick={submit}
       >
         Login
@@ -67,36 +149,22 @@ export default function LoginPage({ onLogin }: Props) {
       <Link style={{ color: "#c4256a" }} to="/register">
         Register
       </Link>
-      <div className="auth-form-errors">
-        {formErrors.map((err, index) => (
-          <div key={index}>{err}</div>
-        ))}
-      </div>
+      {loginFailed && (
+        <div className="error">
+          Login failed, username or password is incorrect
+        </div>
+      )}
     </div>
   );
 
-  function getFormErrors(): String[] {
-    const errors: String[] = [];
-
-    if (loginData.email.length === 0) {
-      errors.push("email is required");
-    }
-
-    if (loginData.password.length === 0) {
-      errors.push("password is required");
-    }
-
-    return errors;
+  function canSubmit(): boolean {
+    return !loginFieldState.email.invalid && !loginFieldState.password.invalid;
   }
 
   function submit() {
+    setLoginFailed(false);
     login(loginData)
       .then(onLogin)
-      .catch((error) => showError(error.response.data.detail));
-  }
-
-  function showError(errorMessage: string): void {
-    alert(errorMessage);
-    console.log(errorMessage);
+      .catch(() => setLoginFailed(true));
   }
 }
