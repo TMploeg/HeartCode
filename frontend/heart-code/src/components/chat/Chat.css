@@ -47,10 +47,19 @@
 
 .chat-message {
   background: rgba(255, 255, 255, 0.6) !important;
-  align-self: flex-start;
-  display: flex;
   max-width: 80%;
-  padding: 10px;
+
+  align-self: flex-start;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+
   border-top-left-radius: 0px;
   border-top-right-radius: var(--message-border-radius);
   border-bottom-left-radius: var(--message-border-radius);
@@ -77,14 +86,13 @@
 }
 
 .message {
-  float: left;
+  align-self: flex-start;
   padding-right: 5px;
 }
 
 .timestamp {
-  float: right;
   font-size: small;
   color: rgb(82, 82, 82);
   align-self: flex-end;
-  width: 50px;
+  width: max-content;
 }
