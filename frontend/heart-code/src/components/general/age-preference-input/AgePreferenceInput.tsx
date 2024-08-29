@@ -36,29 +36,29 @@ export default function AgePreferenceInput({
     },
   });
 
+  const [agePreferenceEnabled, setAgePreferenceEnabled] = useState<boolean>(!!initialValues?.minAge || !!initialValues?.maxAge);
+
   useEffect(() => {
     if (onChange === undefined) {
       return;
     }
-    const parsedMinAge = parseInt(agePreference.minAge.value);
-    const parsedMaxAge = parseInt(agePreference.maxAge.value);
 
-    onChange({
-      minAge: isNaN(parsedMinAge) ? undefined : parsedMinAge,
-      maxAge: isNaN(parsedMaxAge) ? undefined : parsedMaxAge,
-    });
+    onChange(parseAgePreferences());
   }, [agePreference]);
 
   if (changed !== undefined && initialValues !== undefined) {
     changed =
       changed &&
       !(
+        !agePreferenceEnabled &&
         !!initialValues.minAge &&
-        !isMinAgeEnabled() &&
-        !!initialValues.maxAge &&
-        !isMaxAgeEnabled()
+        !!initialValues.maxAge 
       );
   }
+
+  useEffect(() => {
+    onChange?.(agePreferenceEnabled ? parseAgePreferences() : {});
+  }, [agePreferenceEnabled])
 
   const minAgeValid = !isNaN(parseInt(agePreference.minAge.value));
   const maxAgeValid = !isNaN(parseInt(agePreference.maxAge.value));
@@ -73,23 +73,13 @@ export default function AgePreferenceInput({
         </Form.Label>
       )}
       <div className="age-preference-fields-container">
+        <Form.Check type="switch" checked={agePreferenceEnabled} onChange={(event) => setAgePreferenceEnabled(event.target.checked)}/>
         <InputGroup>
-          <InputGroup.Checkbox
-            className="checkbox"
-            tabIndex={-1}
-            checked={isMinAgeEnabled()}
-            onChange={(e) =>
-              setAgePreference((data) => ({
-                ...data,
-                minAge: { ...data.minAge, enabled: e.target.checked },
-              }))
-            }
-          />
           <Form.Control
-            disabled={!isMinAgeEnabled()}
+            disabled={!agePreferenceEnabled}
             placeholder="Prefered min age"
             type="number"
-            value={isMinAgeEnabled() ? agePreference.minAge.value : ""}
+            value={agePreferenceEnabled ? agePreference.minAge.value : ""}
             onChange={(e) =>
               setAgePreference((data) => ({
                 ...data,
@@ -98,7 +88,7 @@ export default function AgePreferenceInput({
             }
             isInvalid={
               touched &&
-              isMinAgeEnabled() &&
+              agePreferenceEnabled &&
               (!minAgeValid || validationState?.minAgeError !== undefined)
             }
             onBlur={onBlur}
@@ -110,24 +100,12 @@ export default function AgePreferenceInput({
           </Form.Control.Feedback>
         </InputGroup>
         <InputGroup>
-          <InputGroup.Checkbox
-            className="checkbox"
-            tabIndex={-1}
-            disabled={!isMinAgeEnabled()}
-            checked={isMaxAgeEnabled()}
-            onChange={(e) =>
-              setAgePreference((data) => ({
-                ...data,
-                maxAge: { ...data.maxAge, enabled: e.target.checked },
-              }))
-            }
-          />
           <Form.Control
-            disabled={!isMaxAgeEnabled() || !isMinAgeEnabled()}
+            disabled={!agePreferenceEnabled}
             placeholder="Prefered max age"
             type="number"
             value={
-              isMaxAgeEnabled() && isMinAgeEnabled()
+              agePreferenceEnabled
                 ? agePreference.maxAge.value
                 : ""
             }
@@ -142,7 +120,7 @@ export default function AgePreferenceInput({
             }
             isInvalid={
               touched &&
-              isMaxAgeEnabled() &&
+              agePreferenceEnabled &&
               (!maxAgeValid || validationState?.maxAgeError !== undefined)
             }
             onBlur={onBlur}
@@ -155,13 +133,15 @@ export default function AgePreferenceInput({
         </InputGroup>
       </div>
     </div>
-  );
+  )
 
-  function isMinAgeEnabled(): boolean {
-    return agePreference.minAge.enabled;
-  }
+  function parseAgePreferences() : AgePreference {
+    const parsedMinAge = parseInt(agePreference.minAge.value);
+    const parsedMaxAge = parseInt(agePreference.maxAge.value);
 
-  function isMaxAgeEnabled(): boolean {
-    return agePreference.maxAge.enabled && isMinAgeEnabled();
+    return {
+      minAge: isNaN(parsedMinAge) ? undefined : parsedMinAge,
+      maxAge: isNaN(parsedMaxAge) ? undefined : parsedMaxAge,
+    };
   }
 }
