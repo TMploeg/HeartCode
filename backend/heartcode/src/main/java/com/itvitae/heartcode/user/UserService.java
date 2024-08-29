@@ -63,9 +63,7 @@ public class UserService implements UserDetailsService {
     return Arrays.stream(UserGender.values())
         .filter(
             gender ->
-                gender == UserGender.OTHER
-                    || gender == UserGender.PREFER_NOT_TO_SAY
-                    || user.getGenderPreference() == GenderPreference.ANYONE
+                user.getGenderPreference() == GenderPreference.ANYONE
                     || gender
                         == switch (user.getGenderPreference()) {
                           case MALE -> UserGender.MALE;
@@ -171,7 +169,6 @@ public class UserService implements UserDetailsService {
 
     Period period = Period.between(dateOfBirthString, localToday);
 
-    System.out.println(period.getYears());
     if (period.getYears() >= 18) {
       return true;
     }
