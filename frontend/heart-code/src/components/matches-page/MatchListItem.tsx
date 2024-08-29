@@ -33,13 +33,13 @@ export default function MatchListItem({ match, onClick }: Props) {
       <div>
         <div className="match-alias-display">{match.alias}</div>
         <div className="last-message">
-          {lastMessage?.text !== undefined && lastMessage?.text !== null ? (
+          {lastMessage !== undefined && lastMessage !== null ? (
             <div>
               {lastMessage.owned ? (
-                <p>You: {lastMessage?.text}</p>
+                <p>You: {lastMessage.text}</p>
               ) : (
                 <p>
-                  {match.alias}: {lastMessage?.text}
+                  {match.alias}: {lastMessage.text}
                 </p>
               )}
             </div>
