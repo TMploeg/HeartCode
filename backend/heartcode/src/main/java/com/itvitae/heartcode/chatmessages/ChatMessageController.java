@@ -5,7 +5,11 @@ import com.itvitae.heartcode.match.MatchService;
 import com.itvitae.heartcode.user.User;
 import com.itvitae.heartcode.user.UserService;
 import jakarta.transaction.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,12 +61,16 @@ public class ChatMessageController {
             .findById(matchEmail)
             .orElseThrow(() -> new BadRequestException("user '" + matchEmail + "' not found"));
 
-    ChatMessage lastmessage = chatMessageService.getLastMessage(currentUser, targetUser);
+    ChatMessage lastMessage = chatMessageService.getLastMessage(currentUser, targetUser);
+
+    if (lastMessage == null) {
+      return new ChatMessageDTO("", false, LocalDateTime.now());
+    }
 
     return new ChatMessageDTO(
-        lastmessage.getText(),
-        lastmessage.getSender().getEmail().equals(currentUser.getEmail()),
-        lastmessage.getDateTime());
+        lastMessage.getText(),
+        lastMessage.getSender().getEmail().equals(currentUser.getEmail()),
+        lastMessage.getDateTime());
   }
 
   private List<ChatMessageDTO> convertToDTO(List<ChatMessage> messages, User currentUser) {

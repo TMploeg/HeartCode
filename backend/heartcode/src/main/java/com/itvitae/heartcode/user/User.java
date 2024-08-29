@@ -7,8 +7,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.Optional;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -53,7 +53,7 @@ public class User implements UserDetails {
   @Setter
   @Enumerated(EnumType.ORDINAL)
   private UserRelationshipType relationshipType;
-  
+
   @Setter @Embedded private AgePreference agePreference;
 
   public User(
