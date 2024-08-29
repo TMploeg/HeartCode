@@ -35,4 +35,8 @@ public class EvaluationService {
   public Optional<Evaluation> getEvaluation(User evaluator, User evaluatee) {
     return evaluationRepository.findByEvaluatorAndEvaluatee(evaluator, evaluatee);
   }
+
+  public long count() {
+    return evaluationRepository.count();
+  }
 }
