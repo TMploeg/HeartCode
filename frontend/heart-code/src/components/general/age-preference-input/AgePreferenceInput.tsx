@@ -60,8 +60,8 @@ export default function AgePreferenceInput({
     onChange?.(agePreferenceEnabled ? parseAgePreferences() : {});
   }, [agePreferenceEnabled])
 
-  const minAgeValid = !isNaN(parseInt(agePreference.minAge.value));
-  const maxAgeValid = !isNaN(parseInt(agePreference.maxAge.value));
+  const minAgeValid = agePreference.minAge.value === "" || !isNaN(parseInt(agePreference.minAge.value));
+  const maxAgeValid = agePreference.maxAge.value === "" || !isNaN(parseInt(agePreference.maxAge.value));
 
   return (
     <div>
