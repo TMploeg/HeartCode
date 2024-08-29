@@ -169,7 +169,6 @@ public class UserService implements UserDetailsService {
 
     Period period = Period.between(dateOfBirthString, localToday);
 
-    System.out.println(period.getYears());
     if (period.getYears() >= 18) {
       return true;
     }
