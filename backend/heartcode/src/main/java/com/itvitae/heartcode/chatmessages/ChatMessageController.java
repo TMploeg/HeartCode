@@ -61,10 +61,6 @@ public class ChatMessageController {
 
     ChatMessage lastMessage = chatMessageService.getLastMessage(currentUser, targetUser);
 
-    if (lastMessage == null) {
-      throw new BadRequestException("No message to show");
-    }
-
     return new ChatMessageDTO(
         lastMessage.getText(),
         lastMessage.getSender().getEmail().equals(currentUser.getEmail()),
