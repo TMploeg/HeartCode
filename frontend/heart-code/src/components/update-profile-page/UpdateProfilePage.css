@@ -5,26 +5,31 @@
   align-items: center;
 }
 
-.update-profile-form-container {
-  padding: 20px;
+.edit-profile-page {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-self: center;
+  align-items: center;
   overflow-y: scroll;
+  gap: 6px;
+  width: 100%;
 }
 
-.edit-profile-page {
-  gap: 8px;
-  width: 80dvw !important;
-  background: rgba(255, 255, 255, 0.6) !important;
-  height: fit-content !important;
+.list-group-item {
+  background: rgba(255, 255, 255, 0.4) !important;
+}
+
+.preferences {
+  color: rgb(115, 113, 113);
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .profile-update-save-button {
   border-color: #c4256a !important;
   background-color: #c4256a !important;
   margin-top: 10px;
-  background-color: #c4256a !important;
-  border-color: #c4256a !important;
+  margin-bottom: 8px;
   border-radius: 16px !important;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
