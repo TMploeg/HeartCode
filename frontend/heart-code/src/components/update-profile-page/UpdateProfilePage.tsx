@@ -78,178 +78,172 @@ export default function UpdateProfilePage() {
 
   return (
     <div className="edit-profile-page">
-      <div className="preferences">
-        <ListGroup>
-          <ListGroup.Item>
-            <div
-              className={`profile-picture-input-container ${
-                updateValues.profilePicture.changed ? "changed" : ""
-              }`}
-            >
-              <ProfilePictureInput
-                value={profilePictureData}
-                onChange={setProfilePictureData}
-                initialValueURL={getProfilePictureURL(
-                  userInfo.profilePictureId
-                )}
-              />
-            </div>
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Form.Label
-              className={`profile-field-label ${
-                updateValues.alias.changed ? "changed" : ""
-              }`}
-            >
-              Alias{updateValues.alias.changed ? "*" : ""}
-            </Form.Label>
-            <Form.Control
-              value={updateValues.alias.value}
-              onChange={(event) =>
-                setUpdateValues((values) => ({
-                  ...values,
-                  alias: {
-                    value: event.target.value,
-                    changed: (userInfo.alias ?? "") !== event.target.value,
-                  },
-                }))
-              }
+      <ListGroup className="edit-profile-form-list-group">
+        <ListGroup.Item>
+          <div
+            className={`profile-picture-input-container ${
+              updateValues.profilePicture.changed ? "changed" : ""
+            }`}
+          >
+            <ProfilePictureInput
+              value={profilePictureData}
+              onChange={setProfilePictureData}
+              initialValueURL={getProfilePictureURL(userInfo.profilePictureId)}
             />
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Form.Label
-              className={`profile-field-label ${
-                updateValues.gender.changed ? "changed" : ""
-              }`}
-            >
-              Gender{updateValues.gender.changed ? "*" : ""}
-            </Form.Label>
-            <Form.Select
-              defaultValue={userInfo.gender}
-              onChange={(event) =>
-                setUpdateValues((values) => ({
-                  ...values,
-                  gender: {
-                    value: event.target.value,
-                    changed: userInfo.gender !== event.target.value,
-                  },
-                }))
-              }
-            >
-              {genders.map((gender) => (
-                <option key={gender} value={gender}>
-                  {gender.split("_").join(" ")}
-                </option>
-              ))}
-            </Form.Select>
-          </ListGroup.Item>
+          </div>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Form.Label
+            className={`profile-field-label ${
+              updateValues.alias.changed ? "changed" : ""
+            }`}
+          >
+            Alias{updateValues.alias.changed ? "*" : ""}
+          </Form.Label>
+          <Form.Control
+            value={updateValues.alias.value}
+            onChange={(event) =>
+              setUpdateValues((values) => ({
+                ...values,
+                alias: {
+                  value: event.target.value,
+                  changed: (userInfo.alias ?? "") !== event.target.value,
+                },
+              }))
+            }
+          />
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Form.Label
+            className={`profile-field-label ${
+              updateValues.gender.changed ? "changed" : ""
+            }`}
+          >
+            Gender{updateValues.gender.changed ? "*" : ""}
+          </Form.Label>
+          <Form.Select
+            defaultValue={userInfo.gender}
+            onChange={(event) =>
+              setUpdateValues((values) => ({
+                ...values,
+                gender: {
+                  value: event.target.value,
+                  changed: userInfo.gender !== event.target.value,
+                },
+              }))
+            }
+          >
+            {genders.map((gender) => (
+              <option key={gender} value={gender}>
+                {gender.split("_").join(" ")}
+              </option>
+            ))}
+          </Form.Select>
+        </ListGroup.Item>
 
-          <ListGroup.Item>
-            <Form.Label
-              className={`profile-field-label ${
-                updateValues.bio.changed ? "changed" : ""
-              }`}
-            >
-              Bio{updateValues.bio.changed ? "*" : ""}
-            </Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={5}
-              value={updateValues.bio.value}
-              onChange={(event) =>
-                setUpdateValues((values) => ({
-                  ...values,
-                  bio: {
-                    value: event.target.value,
-                    changed: (userInfo.bio ?? "") !== event.target.value,
-                  },
-                }))
-              }
-            />
-          </ListGroup.Item>
-        </ListGroup>
-      </div>
-      <div className="preferences">
-        <ListGroup>
-          <ListGroup.Item>
-            <Form.Label
-              className={`profile-field-label ${
-                updateValues.genderPreference.changed ? "changed" : ""
-              }`}
-            >
-              Gender Preference
-              {updateValues.genderPreference.changed ? "*" : ""}
-            </Form.Label>
-            <Form.Select
-              defaultValue={userInfo.genderPreference}
-              onChange={(event) =>
-                setUpdateValues((values) => ({
-                  ...values,
-                  genderPreference: {
-                    value: event.target.value,
-                    changed: userInfo.genderPreference !== event.target.value,
-                  },
-                }))
-              }
-            >
-              {genderPreferences.map((genderPreference) => (
-                <option key={genderPreference} value={genderPreference}>
-                  {genderPreference}
-                </option>
-              ))}
-            </Form.Select>
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Form.Label
-              className={`profile-field-label ${
-                updateValues.relationshipType.changed ? "changed" : ""
-              }`}
-            >
-              Relationship Type
-              {updateValues.relationshipType.changed ? "*" : ""}
-            </Form.Label>
-            <Form.Select
-              defaultValue={userInfo.relationshipType}
-              onChange={(event) =>
-                setUpdateValues((values) => ({
-                  ...values,
-                  relationshipType: {
-                    value: event.target.value,
-                    changed: userInfo.relationshipType !== event.target.value,
-                  },
-                }))
-              }
-            >
-              {relationshipTypes.map((relationshipType) => (
-                <option key={relationshipType} value={relationshipType}>
-                  {relationshipType}
-                </option>
-              ))}
-            </Form.Select>
-          </ListGroup.Item>
+        <ListGroup.Item>
+          <Form.Label
+            className={`profile-field-label ${
+              updateValues.bio.changed ? "changed" : ""
+            }`}
+          >
+            Bio{updateValues.bio.changed ? "*" : ""}
+          </Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={5}
+            value={updateValues.bio.value}
+            onChange={(event) =>
+              setUpdateValues((values) => ({
+                ...values,
+                bio: {
+                  value: event.target.value,
+                  changed: (userInfo.bio ?? "") !== event.target.value,
+                },
+              }))
+            }
+          />
+        </ListGroup.Item>
+      </ListGroup>
+      <ListGroup className="edit-profile-form-list-group">
+        <ListGroup.Item>
+          <Form.Label
+            className={`profile-field-label ${
+              updateValues.genderPreference.changed ? "changed" : ""
+            }`}
+          >
+            Gender Preference
+            {updateValues.genderPreference.changed ? "*" : ""}
+          </Form.Label>
+          <Form.Select
+            defaultValue={userInfo.genderPreference}
+            onChange={(event) =>
+              setUpdateValues((values) => ({
+                ...values,
+                genderPreference: {
+                  value: event.target.value,
+                  changed: userInfo.genderPreference !== event.target.value,
+                },
+              }))
+            }
+          >
+            {genderPreferences.map((genderPreference) => (
+              <option key={genderPreference} value={genderPreference}>
+                {genderPreference}
+              </option>
+            ))}
+          </Form.Select>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Form.Label
+            className={`profile-field-label ${
+              updateValues.relationshipType.changed ? "changed" : ""
+            }`}
+          >
+            Relationship Type
+            {updateValues.relationshipType.changed ? "*" : ""}
+          </Form.Label>
+          <Form.Select
+            defaultValue={userInfo.relationshipType}
+            onChange={(event) =>
+              setUpdateValues((values) => ({
+                ...values,
+                relationshipType: {
+                  value: event.target.value,
+                  changed: userInfo.relationshipType !== event.target.value,
+                },
+              }))
+            }
+          >
+            {relationshipTypes.map((relationshipType) => (
+              <option key={relationshipType} value={relationshipType}>
+                {relationshipType}
+              </option>
+            ))}
+          </Form.Select>
+        </ListGroup.Item>
 
-          <ListGroup.Item>
-            <AgePreferenceInput
-              initialValues={userInfo.agePreference}
-              onChange={(newValue) => {
-                setUpdateValues((values) => ({
-                  ...values,
-                  agePreference: {
-                    value: newValue,
-                    changed:
-                      newValue.minAge != userInfo.agePreference.minAge ||
-                      newValue.maxAge != userInfo.agePreference.maxAge,
-                  },
-                }));
-              }}
-              changed={updateValues.agePreference.changed}
-              touched={agePreferenceTouched}
-              onBlur={() => setAgePreferenceTouched(true)}
-              validationState={agePreferenceError}
-            />
-          </ListGroup.Item>
-        </ListGroup>
-      </div>
+        <ListGroup.Item>
+          <AgePreferenceInput
+            initialValues={userInfo.agePreference}
+            onChange={(newValue) => {
+              setUpdateValues((values) => ({
+                ...values,
+                agePreference: {
+                  value: newValue,
+                  changed:
+                    newValue.minAge != userInfo.agePreference.minAge ||
+                    newValue.maxAge != userInfo.agePreference.maxAge,
+                },
+              }));
+            }}
+            changed={updateValues.agePreference.changed}
+            touched={agePreferenceTouched}
+            onBlur={() => setAgePreferenceTouched(true)}
+            validationState={agePreferenceError}
+          />
+        </ListGroup.Item>
+      </ListGroup>
       <Button
         className="profile-update-save-button"
         variant="primary"

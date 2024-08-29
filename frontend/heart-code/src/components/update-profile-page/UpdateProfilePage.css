@@ -11,18 +11,19 @@
   align-self: center;
   align-items: center;
   overflow-y: scroll;
-  gap: 6px;
+  gap: 15px;
   width: 100%;
+  padding-top: 10px;
+}
+
+.edit-profile-form-list-group {
+  width: 90%;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  color: rgb(115, 113, 113);
 }
 
 .list-group-item {
   background: rgba(255, 255, 255, 0.4) !important;
-}
-
-.preferences {
-  color: rgb(115, 113, 113);
-  background: rgba(255, 255, 255, 0.4);
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .profile-update-save-button {
