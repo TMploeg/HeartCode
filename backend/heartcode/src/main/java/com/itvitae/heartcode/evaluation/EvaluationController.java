@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/evaluations")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("${app.cors-allowed-origins}")
 @Transactional
 public class EvaluationController {
   private final EvaluationService evaluationService;
