@@ -63,9 +63,7 @@ public class UserService implements UserDetailsService {
     return Arrays.stream(UserGender.values())
         .filter(
             gender ->
-                gender == UserGender.OTHER
-                    || gender == UserGender.PREFER_NOT_TO_SAY
-                    || user.getGenderPreference() == GenderPreference.ANYONE
+                user.getGenderPreference() == GenderPreference.ANYONE
                     || gender
                         == switch (user.getGenderPreference()) {
                           case MALE -> UserGender.MALE;
