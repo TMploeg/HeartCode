@@ -70,6 +70,7 @@ export default function RegisterPage({ onRegister }: Props) {
         <InputGroup>
           <Form.Control
             placeholder="Email Address"
+            type="email"
             value={registerData.email.value}
             onChange={(event) => registerData.email.set(event.target.value)}
             isInvalid={
