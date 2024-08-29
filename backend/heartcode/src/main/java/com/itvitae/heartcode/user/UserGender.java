@@ -1,10 +1,9 @@
 package com.itvitae.heartcode.user;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 import java.util.Optional;
-import lombok.Getter;
 
-@Getter
 public enum UserGender {
   MALE("Male"),
   FEMALE("Female"),
@@ -23,5 +22,10 @@ public enum UserGender {
     return Arrays.stream(UserGender.values())
         .filter(g -> g.getName().equalsIgnoreCase(value))
         .findFirst();
+  }
+
+  @JsonValue
+  public String getName() {
+    return this.name;
   }
 }
