@@ -7,34 +7,14 @@ import { BsHeart, BsXLg, BsBalloonHeartFill } from "react-icons/bs";
 import "./Browsing.css";
 
 export default function Browsing({ user }: { user?: User }) {
-  //const [user, setUser] = useState<User>();
   const [currentUser, setCurrentUser] = useState<User>();
   const { get, post } = useApi();
 
   useEffect(() => {
-    //getRandomUser();
-
     get<User>("users/account").then((response) => {
       setCurrentUser(response.data);
     });
   }, []);
-
-  // async function getRandomUser() {
-  //   let response;
-
-  //   if (window.location.pathname === "/") {
-  //     response = await get<User>("users/get-random-user");
-  //   } else {
-  //     response = await get<User>("users/get-random-liked-user");
-  //   }
-  //   switch (response?.status) {
-  //     case 200:
-  //       setUser(response.data);
-  //       break;
-  //     case 204:
-  //       console.warn("There are no more users left to evaluate");
-  //   }
-  // }
 
   async function createEvaluation(likedBool: boolean) {
     await post("evaluations/create-evaluation-and-check", {
@@ -43,10 +23,6 @@ export default function Browsing({ user }: { user?: User }) {
       liked: likedBool,
     }).catch((error) => console.log(error.response.data));
 
-    //setUser(undefined);
-
-    // I have no clue how to return this to the corresponding page
-    //await getRandomUser();
     const event = new CustomEvent("onGetRandomUserEvent");
     window.dispatchEvent(event);
   }
