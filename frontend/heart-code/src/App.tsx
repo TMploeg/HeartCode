@@ -17,6 +17,7 @@ import BrowsingPage from "./components/browsing/BrowsingPage";
 import { useAuthentication } from "./hooks";
 import { useEffect, useState } from "react";
 import { AppRoute } from "./enums/AppRoute";
+import BrowseLikedPage from "./components/browsing/BrowseLikedPage";
 import StartPage from "./components/start-page/StartPage";
 import Spinner from "react-bootstrap/Spinner";
 
@@ -72,6 +73,7 @@ export default function App() {
         <Route path={AppRoute.CHAT} element={<ChatPage />} />
         <Route path={AppRoute.ACCOUNT} element={<ProfilePage />} />
         <Route path={AppRoute.ACCOUNT_UPDATE} element={<UpdateProfilePage />} />
+        <Route path={AppRoute.LIKED} element={<BrowseLikedPage />} />
       </>
     ) : (
       <>

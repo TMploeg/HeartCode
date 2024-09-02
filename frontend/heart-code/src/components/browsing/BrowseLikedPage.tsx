@@ -3,7 +3,7 @@ import Browsing from "./Browsing.tsx";
 import { User } from "../../models/User.ts";
 import useApi from "../../hooks/useApi.ts";
 
-export default function BrowsingPage() {
+export default function BrowseLikedPage() {
   useEffect(() => {
     const handleGetRandomUserEvent = async () => {
       await getRandomUser();
@@ -23,7 +23,7 @@ export default function BrowsingPage() {
     setLoading(true);
     setUser(undefined);
 
-    const response = await get<User>("users/get-random-user");
+    const response = await get<User>("users/get-random-liked-user");
     switch (response.status) {
       case 200:
         setUser(response.data);
@@ -31,7 +31,6 @@ export default function BrowsingPage() {
       case 204:
         console.warn("There are no more users left to evaluate");
     }
-
     setLoading(false);
   }
 

@@ -85,6 +85,13 @@ public class UserService implements UserDetailsService {
         .toList();
   }
 
+  public Optional<User> findRandomLikedUser() {
+    User currentUser = getCurrentUser();
+
+    var result = userRepository.getRandomLikedUser(currentUser.getEmail());
+    return result;
+  }
+
   public User save(
       String email,
       String alias,

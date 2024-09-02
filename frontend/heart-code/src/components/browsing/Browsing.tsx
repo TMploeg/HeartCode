@@ -7,10 +7,14 @@ import { BsHeart, BsXLg, BsBalloonHeartFill } from "react-icons/bs";
 import "./Browsing.css";
 import AppSpinner from "../general/app-spinner/AppSpinner";
 
-export default function Browsing() {
-  const [user, setUser] = useState<User>();
+interface BrowsingProps {
+  user?: User;
+  loading: boolean;
+}
+
+export default function Browsing({ user, loading }: BrowsingProps) {
   const [currentUser, setCurrentUser] = useState<User>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const event = new CustomEvent("onGetRandomUserEvent");
 
   const { get, post } = useApi();
 
@@ -23,19 +27,7 @@ export default function Browsing() {
   }, []);
 
   async function getRandomUser() {
-    setLoading(true);
-
-    const response = await get<User>("users/get-random-user");
-
-    switch (response.status) {
-      case 200:
-        setUser(response.data);
-        break;
-      case 204:
-        console.warn("There are no more users left to evaluate");
-    }
-
-    setLoading(false);
+    window.dispatchEvent(event);
   }
 
   async function createEvaluation(likedBool: boolean) {
@@ -45,8 +37,7 @@ export default function Browsing() {
       liked: likedBool,
     }).catch((error) => console.log(error.response.data));
 
-    setUser(undefined);
-    await getRandomUser();
+    window.dispatchEvent(event);
   }
 
   const pageContent = loading ? (
