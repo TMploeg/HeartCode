@@ -68,7 +68,11 @@ public class UserService implements UserDetailsService {
 
   public Optional<User> findRandomLikedUser() {
     User currentUser = getCurrentUser();
-    var result = userRepository.getRandomLikedUser(currentUser.getEmail(), getPreferredGenders(currentUser), getPreferredRelationshipTypes(currentUser));
+    var result =
+        userRepository.getRandomLikedUser(
+            currentUser.getEmail(),
+            getPreferredGenders(currentUser),
+            getPreferredRelationshipTypes(currentUser));
     return result;
   }
 
