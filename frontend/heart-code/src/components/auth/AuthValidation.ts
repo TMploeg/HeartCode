@@ -106,7 +106,7 @@ function passwordIsStrong(password: string) {
     numOfLowercase >= 1 &&
     numOfDigits >= 1 &&
     numOfSpecialChars >= 1 &&
-    password.length > 7
+    password.length >= 7
   );
 }
 
