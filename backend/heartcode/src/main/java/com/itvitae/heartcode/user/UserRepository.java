@@ -43,17 +43,8 @@ public interface UserRepository extends JpaRepository<User, String> {
           + "SELECT e.evaluatee "
           + "FROM u.reveivedEvaluations e "
           + "WHERE e.evaluator.email = :email) "
-          + "AND u.gender IN :preferredGenders "
-          + "AND u.relationshipType IN :preferredRelationshipTypes "
-          + "AND DATE_PART('year', AGE(u.dateOfBirth)) >= :minPreferredAge "
-          + "AND DATE_PART('year', AGE(u.dateOfBirth)) <= :maxPreferredAge "
           + "ORDER BY RANDOM() LIMIT 1")
-  Optional<User> getRandomLikedUser(
-      @Param("email") String currentUserEmail,
-      @Param("preferredGenders") List<UserGender> preferredGenders,
-      @Param("preferredRelationshipTypes") List<UserRelationshipType> preferredRelationShipTypes,
-      @Param("minPreferredAge") int minPreferredAge,
-      @Param("maxPreferredAge") int maxPreferredAge);
+  Optional<User> getRandomLikedUser(@Param("email") String currentUserEmail);
 
   @Query(
       "SELECT DATE_PART('year', AGE(u.dateOfBirth)) "
