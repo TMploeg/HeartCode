@@ -14,6 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EvaluationId {
-  @ManyToOne User evaluator;
-  @ManyToOne User evaluatee;
+  @ManyToOne private User evaluator;
+  @ManyToOne private User evaluatee;
 }

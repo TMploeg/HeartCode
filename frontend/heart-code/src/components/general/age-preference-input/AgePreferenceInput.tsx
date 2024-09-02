@@ -75,6 +75,7 @@ export default function AgePreferenceInput({
       <div className="age-preference-fields-container">
         <InputGroup>
           <InputGroup.Checkbox
+            className="checkbox"
             tabIndex={-1}
             checked={isMinAgeEnabled()}
             onChange={(e) =>
@@ -110,6 +111,7 @@ export default function AgePreferenceInput({
         </InputGroup>
         <InputGroup>
           <InputGroup.Checkbox
+            className="checkbox"
             tabIndex={-1}
             disabled={!isMinAgeEnabled()}
             checked={isMaxAgeEnabled()}

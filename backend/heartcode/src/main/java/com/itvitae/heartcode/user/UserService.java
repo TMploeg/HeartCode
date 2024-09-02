@@ -32,19 +32,38 @@ public class UserService implements UserDetailsService {
   public Optional<User> findRandomUser() {
     User currentUser = getCurrentUser();
 
+    AgePreference agePreference = getNonNullAgePreference(currentUser);
+
+    System.out.println(
+        "AGE_PREFERENCE: { minAge: "
+            + agePreference.getMinAge()
+            + ", maxAge: "
+            + agePreference.getMaxAge()
+            + " }");
     return userRepository.getRandomUser(
         currentUser.getEmail(),
         getPreferredGenders(currentUser),
-        getPreferredRelationshipTypes(currentUser));
+        getPreferredRelationshipTypes(currentUser),
+        agePreference.getMinAge(),
+        agePreference.getMaxAge());
+  }
+
+  private AgePreference getNonNullAgePreference(User user) {
+    return user.getAgePreference()
+        .map(
+            pref ->
+                new AgePreference(
+                    pref.getMinAge() != null ? pref.getMinAge() : userRepository.getLowestAge(),
+                    pref.getMaxAge() != null ? pref.getMaxAge() : userRepository.getHighestAge()))
+        .orElseGet(
+            () -> new AgePreference(userRepository.getLowestAge(), userRepository.getHighestAge()));
   }
 
   private static List<UserGender> getPreferredGenders(User user) {
     return Arrays.stream(UserGender.values())
         .filter(
             gender ->
-                gender == UserGender.OTHER
-                    || gender == UserGender.PREFER_NOT_TO_SAY
-                    || user.getGenderPreference() == GenderPreference.ANYONE
+                user.getGenderPreference() == GenderPreference.ANYONE
                     || gender
                         == switch (user.getGenderPreference()) {
                           case MALE -> UserGender.MALE;
@@ -160,7 +179,6 @@ public class UserService implements UserDetailsService {
 
     Period period = Period.between(dateOfBirthString, localToday);
 
-    System.out.println(period.getYears());
     if (period.getYears() >= 18) {
       return true;
     }

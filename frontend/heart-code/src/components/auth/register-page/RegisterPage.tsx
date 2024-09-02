@@ -289,7 +289,9 @@ export default function RegisterPage({ onRegister }: Props) {
       >
         Register
       </Button>
-      <Link to="/login">or login if you already have an account</Link>
+      <Link style={{ color: "#c4256a" }} to="/login">
+        Log in if you already have an account
+      </Link>
     </div>
   );
 
@@ -365,7 +367,7 @@ export default function RegisterPage({ onRegister }: Props) {
 
     register(finalRegisterData)
       .then(onRegister)
-      .catch((error) => showError(error.response.data.detail));
+      .catch(() => showError("registration failed"));
   }
 
   function showError(errorMessage: string): void {

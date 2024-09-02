@@ -45,7 +45,9 @@ export default function App() {
       }`}
     >
       {loggedIn === null ? (
-        <Spinner />
+        <div className="spinner">
+          <Spinner />
+        </div>
       ) : (
         <>
           <div className="page">
