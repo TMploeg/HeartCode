@@ -5,11 +5,7 @@ import useApi from "../../hooks/useApi.ts";
 
 export default function BrowseLikedPage() {
   useEffect(() => {
-    getRandomUser();
-
     const handleGetRandomUserEvent = async () => {
-      setUser(undefined);
-      console.log("BrowseLikedPage: event received from child");
       await getRandomUser();
     };
 
@@ -21,8 +17,12 @@ export default function BrowseLikedPage() {
 
   const [user, setUser] = useState<User>();
   const { get } = useApi();
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function getRandomUser() {
+    setLoading(true);
+    setUser(undefined);
+
     const response = await get<User>("users/get-random-liked-user");
     switch (response.status) {
       case 200:
@@ -31,7 +31,8 @@ export default function BrowseLikedPage() {
       case 204:
         console.warn("There are no more users left to evaluate");
     }
+    setLoading(false);
   }
 
-  return <Browsing user={user}></Browsing>;
+  return <Browsing user={user} loading={loading}></Browsing>;
 }

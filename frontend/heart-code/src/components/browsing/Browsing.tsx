@@ -7,19 +7,18 @@ import { BsHeart, BsXLg, BsBalloonHeartFill } from "react-icons/bs";
 import "./Browsing.css";
 import AppSpinner from "../general/app-spinner/AppSpinner";
 
-export default function Browsing({ user }: { user?: User }) {
+interface BrowsingProps {
+  user?: User;
+  loading: boolean;
+}
+
+export default function Browsing({ user, loading }: BrowsingProps) {
   const [currentUser, setCurrentUser] = useState<User>();
-  const [loading, setLoading] = useState<boolean>(false);
   const event = new CustomEvent("onGetRandomUserEvent");
 
   const { get, post } = useApi();
 
   useEffect(() => {
-    //   get<User>("users/account").then((response) => {
-    //     setCurrentUser(response.data);
-    //   });
-    // }, []);
-
     get<User>("users/account")
       .then((response) => {
         setCurrentUser(response.data);
@@ -28,11 +27,7 @@ export default function Browsing({ user }: { user?: User }) {
   }, []);
 
   async function getRandomUser() {
-    setLoading(true);
-
     window.dispatchEvent(event);
-
-    setLoading(false);
   }
 
   async function createEvaluation(likedBool: boolean) {
