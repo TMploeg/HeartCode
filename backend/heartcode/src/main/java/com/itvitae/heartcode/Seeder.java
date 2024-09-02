@@ -41,7 +41,7 @@ public class Seeder implements CommandLineRunner {
   private final EvaluationService evaluationService;
 
   private static final String SEED_DATA_FILE_NAME = "seed_user_data.json";
-  private static final String SEED_USER_EMAIL_APPENDIX = "@heartcode.com";
+  private static final String SEED_USER_EMAIL_APPENDIX = "@heartcode.ai";
   private static final String SEED_USER_PASSWORD_APPENDIX = "_password";
 
   private static final String PLACEHOLDER_PROFILE_PICTURE_FILE_NAME = "placeholder_profile_picture";
