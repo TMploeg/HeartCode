@@ -26,7 +26,9 @@ public interface UserRepository extends JpaRepository<User, String> {
   Optional<User> getRandomUser(
       @Param("email") String currentUserEmail,
       @Param("preferredGenders") List<UserGender> preferredGenders,
-      @Param("preferredRelationshipTypes") List<UserRelationshipType> preferredRelationShipTypes);
+      @Param("preferredRelationshipTypes") List<UserRelationshipType> preferredRelationShipTypes,
+      @Param("minPreferredAge") int minPreferredAge,
+      @Param("maxPreferredAge") int maxPreferredAge);
 
   @Query(
       "SELECT u "
@@ -43,6 +45,8 @@ public interface UserRepository extends JpaRepository<User, String> {
           + "WHERE e.evaluator.email = :email) "
           + "AND u.gender IN :preferredGenders "
           + "AND u.relationshipType IN :preferredRelationshipTypes "
+          + "AND DATE_PART('year', AGE(u.dateOfBirth)) >= :minPreferredAge "
+          + "AND DATE_PART('year', AGE(u.dateOfBirth)) <= :maxPreferredAge "
           + "ORDER BY RANDOM() LIMIT 1")
   Optional<User> getRandomLikedUser(
       @Param("email") String currentUserEmail,
